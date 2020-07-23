@@ -1,0 +1,54 @@
+<html>
+    <head>
+    <title>NASA</title>
+        <script src="javascript.js"></script>
+    </head>
+<body>
+   
+<!--    <input type="date" id="dateText">-->
+<!--        <button id="searchButton" onclick="getDate()">Get Data</button>-->
+    <input tye="text" id="searchBar">
+    <button id="searchBtn" onclick="console.clear();startSearch()">Search</button>
+    
+    <input type="radio" name="media-type" value="image,video" checked>Image&amp;Video
+    <input type="radio" name="media-type" value="image" >Image
+    <input type="radio" name="media-type" value="video">Video
+    
+    
+    <button id="nextBtn" onclick="nextData();" style="display: none">Next</button>
+    <button id="prevBtn" onclick="prevData()" style="display: none">Previous</button>
+    <select id="media-quality-menu"></select>
+    <button id="changeMediaQualityBtn" onclick="changeMediaQuality()" style="display: none">Change Quality</button>
+    <button id="nextPageBtn" onclick="nextPage()" style="display: none">Next Page</button>
+    <button id="prevPageBtn" onclick="prevPage()" style="display: none">Prev Page</button>
+    
+<!--    <button id="resetCount" onclick="resetCount()">Reset Count</button>-->
+<!--    <button id="qualUpBtn" onclick=""></button>-->
+    <h3><div id="message" ></div></h3>
+<!--
+    <div id="next-click-num"></div>
+    <div id="prev-click-num"></div>
+    <div id="next-page-click-num"></div>
+    <div id="prev-page-click-num"></div>
+-->
+    <div id="cosmic-object-num"></div>
+    <div id="date"></div>
+    <div id="title"></div>
+     <div id="resolution"></div>
+    <img id="pic"  >
+    <img id="pic-message" style="width: 100%">
+    
+   
+    <video id="vid" autoplay controls style="display: none; width: 100%">
+        <source  type="video/mp4" src="">
+    </video> 
+    <div id="description"></div>
+    <div id="photographer"></div>
+    <div id="location"></div>
+    <div id="test"></div>
+    <img id="thumb">
+    
+    
+   
+    </body>
+</html>
