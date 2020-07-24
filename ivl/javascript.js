@@ -20,30 +20,13 @@ var currentPage = 1;
 var totalPage = 0;
 var selectedMediaType;
 var mediaType;
-var search;
+//stores the searching string
+var search = "";
 
 var nextclicknum = 0;
 var prevclicknum = 0;
 var nextpageclicknum = 0;
 var prevpageclicknum = 0;
-
-function enableBtns() {
-  document.getElementById("nextBtn").disabled = false;
-  document.getElementById("nextPageBtn").disabled = false;
-  document.getElementById("prevBtn").disabled = false;
-  document.getElementById("prevPageBtn").disabled = false;
-  document.getElementById("changeMediaQualityBtn").disabled = false;
-  document.getElementById("searchBtn").disabled = false;
-}
-
-function disableBtns() {
-  document.getElementById("nextBtn").disabled = true;
-  document.getElementById("nextPageBtn").disabled = true;
-  document.getElementById("prevBtn").disabled = true;
-  document.getElementById("prevPageBtn").disabled = true;
-  document.getElementById("changeMediaQualityBtn").disabled = true;
-  document.getElementById("searchBtn").disabled = true;
-}
 
 function sendHttpRequest(method, url, mode) {
   return new Promise((resolve, reject) => {
@@ -65,6 +48,73 @@ function sendHttpRequest(method, url, mode) {
   });
 }
 
+function enableBtns() {
+  document.getElementById("nextBtn").disabled = false;
+  document.getElementById("nextPageBtn").disabled = false;
+  document.getElementById("prevBtn").disabled = false;
+  document.getElementById("prevPageBtn").disabled = false;
+  document.getElementById("changeMediaQualityBtn").disabled = false;
+  document.getElementById("searchBtn").disabled = false;
+  document.getElementsByName("media-type")[0].disabled = false;
+  document.getElementsByName("media-type")[1].disabled = false;
+}
+
+function disableBtns() {
+  document.getElementById("nextBtn").disabled = true;
+  document.getElementById("nextPageBtn").disabled = true;
+  document.getElementById("prevBtn").disabled = true;
+  document.getElementById("prevPageBtn").disabled = true;
+  document.getElementById("changeMediaQualityBtn").disabled = true;
+  document.getElementById("searchBtn").disabled = true;
+  document.getElementsByName("media-type")[0].disabled = true;
+  document.getElementsByName("media-type")[1].disabled = true;
+}
+function showControls() {
+  document.getElementById("nextBtn").style.display = "inline";
+  document.getElementById("prevBtn").style.display = "inline";
+  disableBtns();
+  document.getElementById("nextPageBtn").style.display = "inline";
+  document.getElementById("prevPageBtn").style.display = "inline";
+
+  document.getElementById("changeMediaQualityBtn").style.display = "inline";
+}
+
+function displayVideo() {
+  document.getElementById("vid").style.display = "inline-block";
+}
+function hideVideo() {
+  document.getElementById("vid").style.display = "none";
+}
+function displayImage() {
+  document.getElementById("pic").style.display = "inline-block";
+}
+function hideImage() {
+  document.getElementById("pic").style.display = "none";
+}
+function showPicMessage(picSrc) {
+  document.getElementById("pic-message").src = picSrc;
+  document.getElementById("pic-message").style.display = "inline-block";
+}
+function hidePicMessage() {
+  //  document.getElementById("pic-message").src="";
+  document.getElementById("pic-message").style.display = "none";
+}
+function listenToMediaChange() {
+  var buttons = document.getElementsByName("media-type");
+  for (var i = 0; i < buttons.length; i++) {
+    buttons[i].onchange = () => {
+      startSearch();
+    };
+  }
+}
+function getSelectedMediaType() {
+  var buttons = document.getElementsByName("media-type");
+  for (var i = 0; i < buttons.length; i++) {
+    if (buttons[i].checked) {
+      selectedMediaType = buttons[i].value;
+    }
+  }
+}
 function hitNumReset() {
   hitNum = 0;
 }
@@ -100,15 +150,6 @@ function calTotalPage() {
   }
 }
 
-function getSelectedMediaType() {
-  var buttons = document.getElementsByName("media-type");
-  for (var i = 0; i < buttons.length; i++) {
-    if (buttons[i].checked) {
-      selectedMediaType = buttons[i].value;
-    }
-  }
-}
-
 function isNextPageAvailable() {
   if (currentPage + 1 > totalPage) {
     return false;
@@ -125,36 +166,6 @@ function isPrevPageAvailable() {
   }
 }
 
-function showControls() {
-  document.getElementById("nextBtn").style.display = "inline";
-  document.getElementById("prevBtn").style.display = "inline";
-  disableBtns();
-  document.getElementById("nextPageBtn").style.display = "inline";
-  document.getElementById("prevPageBtn").style.display = "inline";
-
-  document.getElementById("changeMediaQualityBtn").style.display = "inline";
-}
-
-function displayVideo() {
-  document.getElementById("vid").style.display = "inline-block";
-}
-function hideVideo() {
-  document.getElementById("vid").style.display = "none";
-}
-function displayImage() {
-  document.getElementById("pic").style.display = "inline-block";
-}
-function hideImage() {
-  document.getElementById("pic").style.display = "none";
-}
-function showPicMessage(picSrc) {
-  document.getElementById("pic-message").src = picSrc;
-  document.getElementById("pic-message").style.display = "inline-block";
-}
-function hidePicMessage() {
-  //  document.getElementById("pic-message").src="";
-  document.getElementById("pic-message").style.display = "none";
-}
 function showApod(data) {
   //console.log(data);
   document.getElementById("date").innerHTML = data.date;
@@ -561,22 +572,25 @@ function getSearchUrl() {
 //retrives user search input
 function startSearch() {
   // document.getElementById("message").innerHTML = "Loading...";
-
-  hideVideo();
-  hideImage();
-  showPicMessage("loading.jpg");
-
   //get the searching string
   search = document.getElementById("searchBar").value;
-  //get selected media type
-  getSelectedMediaType();
+  if (search != "") {
+    listenToMediaChange();
+    hideVideo();
+    hideImage();
 
-  pageReset();
-  hitNum = 0;
+    showPicMessage("loading.jpg");
 
-  //getting url and fetching query results (initial data)
-  getIvl(getSearchUrl());
-  showControls();
+    //get selected media type
+    getSelectedMediaType();
+
+    pageReset();
+    hitNum = 0;
+
+    //getting url and fetching query results (initial data)
+    getIvl(getSearchUrl());
+    showControls();
+  }
 }
 
 //fetches media urls of a specific hit and calls showIvl()
