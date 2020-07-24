@@ -11,10 +11,9 @@ var mediaUrls;
 //current url index
 var urlNum;
 
-// the next two contains an object with key as quality and value as the index number of the url in mediaUrls
-// eg. imageQualityIndices={"orig":0,"large":1}
-var imageQualityIndices = {};
-var videoQualityIndices = {};
+// contains an object with key as quality and value as the index number of the url in mediaUrls
+// eg. qualityIndices={"orig":0,"large":1}
+var qualityIndices = {};
 
 var currentPage = 1;
 var totalPage = 0;
@@ -296,13 +295,95 @@ function getFileExtension() {
   return extension;
 }
 
+//CREATES QUALITY OPTIONS (SELECT)
+function createMediaQualityOptions() {
+  const select = document.getElementById("quality-selector");
+  //contains all the keys inside qualityIndices
+  const keys = Object.keys(qualityIndices);
+
+  //bypass this statement the first time this function is called as there is nothing
+  // to remove.
+  if (select.length > 0) {
+    //it removes all the options in select. IMPORTANT: WE HAVE TO START FROM THE LAST
+    // AND NOT FROM THE BEGINNING. OTHERWISE IT WILL NOT WORK. DONT. ASK. WHY.
+    // I.DONT.CARE.WHY.NOW.
+    //I NOW KNOW WHY. THAT'S BECAUSE:
+    // It's important to remove the options backwards;
+    // as the remove() method rearranges the options collection.
+    // This way, it's guaranteed that the element to be removed still exists!
+    for (var i = select.length; i >= 0; i--) {
+      select.remove(i);
+    }
+    select.length = 0;
+  }
+  //runs a function on each key inside qualityIndices
+  // and then creates an option for that key(quality)
+  keys.forEach((key) => {
+    var option = document.createElement("OPTION");
+    option.value = qualityIndices[key];
+    option.text = key;
+    select.add(option);
+  });
+}
+
+//FINDS ALL THE MEDIA QUALITIES AVAILABLE AND THEN STORES IT IN qualityIndices
+// IN THE FORMAT qualityIndices={"quality_name":indexOfTheUrl}
+function findMediaQualities() {
+  var extension, urlStr, firstIndex, lastIndex, qualityName;
+  var urlNumBackup = urlNum;
+  qualityIndices = {};
+  if (mediaType == "video") {
+    for (var i = 0; i < mediaUrls.length; i++) {
+      urlNum = i;
+      //stores the file extension of the current urlNum
+      extension = getFileExtension();
+      if (extension == ".mp4" || extension == ".ogg" || extension == "mpeg") {
+        //extracting quality name. eg: orig
+        urlStr = mediaUrls[urlNum].href;
+        firstIndex = urlStr.lastIndexOf("~");
+        lastIndex = urlStr.lastIndexOf(".");
+        qualityName = urlStr.slice(firstIndex + 1, lastIndex);
+        qualityIndices[qualityName] = urlNum;
+      }
+    }
+    console.log(qualityIndices);
+  }
+  //for image
+  else {
+    for (var i = 0; i < mediaUrls.length; i++) {
+      urlNum = i;
+      //stores the file extension of the current urlNum
+      extension = getFileExtension();
+      if (
+        extension == ".apng" ||
+        extension == ".bmp" ||
+        extension == ".gif" ||
+        extension == ".jpg" ||
+        extension == ".jpeg" ||
+        extension == ".jfif" ||
+        extension == ".pjpeg" ||
+        extension == ".pjpg" ||
+        extension == ".pjp" ||
+        extension == ".png" ||
+        extension == ".svg" ||
+        extension == ".webp"
+      ) {
+        //extracting quality name. eg: orig
+        urlStr = mediaUrls[urlNum].href;
+        firstIndex = urlStr.lastIndexOf("~");
+        lastIndex = urlStr.lastIndexOf(".");
+        qualityName = urlStr.slice(firstIndex + 1, lastIndex);
+        qualityIndices[qualityName] = urlNum;
+      }
+    }
+    console.log(qualityIndices);
+  }
+  urlNum = urlNumBackup;
+}
+//SHOWS THE IVL VIDEO
 function showIvlVideo() {
-  //console.log(hitNum);
-
-  //alert("we are here");
-
+  //showing descriptions
   var descriptiveData = queryResponse.collection.items[hitNum].data[0];
-  //document.getElementById("message").innerHTML = "";
   document.getElementById("cosmic-object-num").innerHTML =
     "Cosmic Object: " + getCurrentCosmicObjectNum() + " / " + totalHits;
   document.getElementById("date").innerHTML = descriptiveData.date_created;
@@ -310,10 +391,8 @@ function showIvlVideo() {
   document.getElementById("description").innerHTML =
     descriptiveData.description;
 
-  //mediaUrls contains many urls of images and videos
-
   var vid = document.getElementById("vid");
-  urlNum = 0;
+
   var fileExtension = getFileExtension();
   console.log("url num: " + urlNum + " file extension: " + fileExtension);
   vid.onerror = () => {
@@ -322,9 +401,9 @@ function showIvlVideo() {
       fileExtension = getFileExtension();
       console.log("url num: " + urlNum + " file extension: " + fileExtension);
       while (
-        fileExtension == ".json" ||
-        fileExtension == ".vtt" ||
-        fileExtension == ".srt"
+        fileExtension != ".mp4" &&
+        fileExtension != ".ogg" &&
+        fileExtension != ".mpeg"
       ) {
         if (urlNum < mediaUrls.length - 1) {
           urlNum++;
@@ -339,9 +418,9 @@ function showIvlVideo() {
       urlNum = 0;
       fileExtension = getFileExtension();
       while (
-        fileExtension == ".json" ||
-        fileExtension == ".vtt" ||
-        fileExtension == ".srt"
+        fileExtension != ".mp4" &&
+        fileExtension != ".ogg" &&
+        fileExtension != ".mpeg"
       ) {
         if (urlNum < mediaUrls.length - 1) {
           urlNum++;
@@ -367,9 +446,9 @@ function showIvlVideo() {
   if (mediaUrls.length > 0) {
     //checking if the current urlnum contains .json etc to avoid cross origin read blocking (CORB) error
     while (
-      fileExtension == ".json" ||
-      fileExtension == ".vtt" ||
-      fileExtension == ".srt"
+      fileExtension != ".mp4" &&
+      fileExtension != ".ogg" &&
+      fileExtension != ".mpeg"
     ) {
       if (urlNum < mediaUrls.length - 1) {
         urlNum++;
@@ -382,9 +461,9 @@ function showIvlVideo() {
     }
 
     vid.src = mediaUrls[urlNum].href;
+  } else {
+    showPicMessage("404.jpg");
   }
-
-  //vid.style.display = "inline-block";
 }
 
 function changeMediaQuality() {
@@ -404,9 +483,9 @@ function changeMediaQuality() {
   if (mediaType == "album") {
   } else if (mediaType == "video") {
     while (
-      fileExtension == ".json" ||
-      fileExtension == ".vtt" ||
-      fileExtension == ".srt"
+      fileExtension != ".mp4" &&
+      fileExtension != ".ogg" &&
+      fileExtension != ".mpeg"
     ) {
       if (urlNum < mediaUrls.length - 1) {
         urlNum++;
@@ -420,11 +499,21 @@ function changeMediaQuality() {
 
     var vid = document.getElementById("vid");
     vid.src = mediaUrls[urlNum].href;
-  } else {
+  }
+  //for image
+  else {
     while (
-      fileExtension == ".json" ||
-      fileExtension == ".vtt" ||
-      fileExtension == ".srt"
+      fileExtension != ".apng" &&
+      fileExtension != ".bmp" &&
+      fileExtension != ".gif" &&
+      fileExtension != ".jpg" &&
+      fileExtension != ".jpeg" &&
+      fileExtension != ".jfif" &&
+      fileExtension != ".pjpeg" &&
+      fileExtension != ".pjp" &&
+      fileExtension != ".png" &&
+      fileExtension != ".svg" &&
+      fileExtension != ".webp"
     ) {
       if (urlNum < mediaUrls.length - 1) {
         urlNum++;
@@ -454,7 +543,6 @@ function showIvlImage() {
     descriptiveData.description;
 
   var image = document.getElementById("pic");
-  urlNum = 0;
 
   var fileExtension = getFileExtension();
   console.log("url num: " + urlNum + " file extension: " + fileExtension);
@@ -464,9 +552,17 @@ function showIvlImage() {
       fileExtension = getFileExtension();
       console.log("url num: " + urlNum + " file extension: " + fileExtension);
       while (
-        fileExtension == ".json" ||
-        fileExtension == ".vtt" ||
-        fileExtension == ".srt"
+        fileExtension != ".apng" &&
+        fileExtension != ".bmp" &&
+        fileExtension != ".gif" &&
+        fileExtension != ".jpg" &&
+        fileExtension != ".jpeg" &&
+        fileExtension != ".jfif" &&
+        fileExtension != ".pjpeg" &&
+        fileExtension != ".pjp" &&
+        fileExtension != ".png" &&
+        fileExtension != ".svg" &&
+        fileExtension != ".webp"
       ) {
         if (urlNum < mediaUrls.length - 1) {
           urlNum++;
@@ -481,9 +577,17 @@ function showIvlImage() {
       urlNum = 0;
       fileExtension = getFileExtension();
       while (
-        fileExtension == ".json" ||
-        fileExtension == ".vtt" ||
-        fileExtension == ".srt"
+        fileExtension != ".apng" &&
+        fileExtension != ".bmp" &&
+        fileExtension != ".gif" &&
+        fileExtension != ".jpg" &&
+        fileExtension != ".jpeg" &&
+        fileExtension != ".jfif" &&
+        fileExtension != ".pjpeg" &&
+        fileExtension != ".pjp" &&
+        fileExtension != ".png" &&
+        fileExtension != ".svg" &&
+        fileExtension != ".webp"
       ) {
         if (urlNum < mediaUrls.length - 1) {
           urlNum++;
@@ -509,9 +613,17 @@ function showIvlImage() {
     // console.log("we are here2");
 
     while (
-      fileExtension == ".json" ||
-      fileExtension == ".vtt" ||
-      fileExtension == ".srt"
+      fileExtension != ".apng" &&
+      fileExtension != ".bmp" &&
+      fileExtension != ".gif" &&
+      fileExtension != ".jpg" &&
+      fileExtension != ".jpeg" &&
+      fileExtension != ".jfif" &&
+      fileExtension != ".pjpeg" &&
+      fileExtension != ".pjp" &&
+      fileExtension != ".png" &&
+      fileExtension != ".svg" &&
+      fileExtension != ".webp"
     ) {
       if (urlNum < mediaUrls.length - 1) {
         urlNum++;
@@ -522,6 +634,8 @@ function showIvlImage() {
       console.log("url num: " + urlNum + " file extension: " + fileExtension);
     }
     image.src = mediaUrls[urlNum].href;
+  } else {
+    showPicMessage("404.jpg");
   }
 }
 
@@ -534,6 +648,9 @@ function showMedia() {
     hidePicMessage();
     hideImage();
     displayVideo();
+    urlNum = 0;
+    findMediaQualities();
+    createMediaQualityOptions();
     showIvlVideo();
   }
   //checking if the provided hit num contains an album
@@ -554,6 +671,9 @@ function showMedia() {
     hidePicMessage();
     hideVideo();
     displayImage();
+    urlNum = 0;
+    findMediaQualities();
+    createMediaQualityOptions();
     showIvlImage();
   }
 }
@@ -574,6 +694,7 @@ function startSearch() {
   // document.getElementById("message").innerHTML = "Loading...";
   //get the searching string
   search = document.getElementById("searchBar").value;
+  search = search.trim();
   if (search != "") {
     listenToMediaChange();
     hideVideo();
