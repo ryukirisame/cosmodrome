@@ -56,6 +56,7 @@ function enableBtns() {
   document.getElementById("searchBtn").disabled = false;
   document.getElementsByName("media-type")[0].disabled = false;
   document.getElementsByName("media-type")[1].disabled = false;
+  document.getElementById("quality-selector").disabled = false;
 }
 
 function disableBtns() {
@@ -67,6 +68,7 @@ function disableBtns() {
   document.getElementById("searchBtn").disabled = true;
   document.getElementsByName("media-type")[0].disabled = true;
   document.getElementsByName("media-type")[1].disabled = true;
+  document.getElementById("quality-selector").disabled = true;
 }
 function showControls() {
   document.getElementById("nextBtn").style.display = "inline";
@@ -300,14 +302,13 @@ function createMediaQualityOptions() {
   const select = document.getElementById("quality-selector");
   //contains all the keys inside qualityIndices
   const keys = Object.keys(qualityIndices);
+  //console.log(keys);
 
   //bypass this statement the first time this function is called as there is nothing
   // to remove.
   if (select.length > 0) {
     //it removes all the options in select. IMPORTANT: WE HAVE TO START FROM THE LAST
-    // AND NOT FROM THE BEGINNING. OTHERWISE IT WILL NOT WORK. DONT. ASK. WHY.
-    // I.DONT.CARE.WHY.NOW.
-    //I NOW KNOW WHY. THAT'S BECAUSE:
+    // AND NOT FROM THE BEGINNING. OTHERWISE IT WILL NOT WORK.
     // It's important to remove the options backwards;
     // as the remove() method rearranges the options collection.
     // This way, it's guaranteed that the element to be removed still exists!
@@ -343,6 +344,10 @@ function findMediaQualities() {
         firstIndex = urlStr.lastIndexOf("~");
         lastIndex = urlStr.lastIndexOf(".");
         qualityName = urlStr.slice(firstIndex + 1, lastIndex);
+        qualityName =
+          qualityName.charAt(0).toUpperCase() + qualityName.slice(1);
+        if (qualityName == "Orig") qualityName = "Original";
+
         qualityIndices[qualityName] = urlNum;
       }
     }
@@ -373,6 +378,11 @@ function findMediaQualities() {
         firstIndex = urlStr.lastIndexOf("~");
         lastIndex = urlStr.lastIndexOf(".");
         qualityName = urlStr.slice(firstIndex + 1, lastIndex);
+        qualityName =
+          qualityName.charAt(0).toUpperCase() + qualityName.slice(1);
+        if (qualityName == "Orig") qualityName = "Original";
+
+        if (qualityName == "Thumb") continue;
         qualityIndices[qualityName] = urlNum;
       }
     }
@@ -380,9 +390,7 @@ function findMediaQualities() {
   }
   urlNum = urlNumBackup;
 }
-//SHOWS THE IVL VIDEO
-function showIvlVideo() {
-  //showing descriptions
+function showDescription() {
   var descriptiveData = queryResponse.collection.items[hitNum].data[0];
   document.getElementById("cosmic-object-num").innerHTML =
     "Cosmic Object: " + getCurrentCosmicObjectNum() + " / " + totalHits;
@@ -390,6 +398,11 @@ function showIvlVideo() {
   document.getElementById("title").innerHTML = descriptiveData.title;
   document.getElementById("description").innerHTML =
     descriptiveData.description;
+}
+//SHOWS THE IVL VIDEO
+function showIvlVideo() {
+  //showing descriptions
+  showDescription();
 
   var vid = document.getElementById("vid");
 
@@ -529,18 +542,7 @@ function changeMediaQuality() {
 }
 
 function showIvlImage() {
-  // console.log(hitNum);
-  //hiding video
-  var vid = document.getElementById("vid");
-  vid.style.display = "none";
-  //document.getElementById("message").innerHTML = "";
-  var descriptiveData = queryResponse.collection.items[hitNum].data[0];
-  document.getElementById("cosmic-object-num").innerHTML =
-    "Cosmic Object: " + getCurrentCosmicObjectNum() + " / " + totalHits;
-  document.getElementById("date").innerHTML = descriptiveData.date_created;
-  document.getElementById("title").innerHTML = descriptiveData.title;
-  document.getElementById("description").innerHTML =
-    descriptiveData.description;
+  showDescription();
 
   var image = document.getElementById("pic");
 
@@ -694,7 +696,7 @@ function startSearch() {
   // document.getElementById("message").innerHTML = "Loading...";
   //get the searching string
   search = document.getElementById("searchBar").value;
-  search = search.trim();
+
   if (search != "") {
     listenToMediaChange();
     hideVideo();
@@ -707,7 +709,7 @@ function startSearch() {
 
     pageReset();
     hitNum = 0;
-
+    search = search.trim();
     //getting url and fetching query results (initial data)
     getIvl(getSearchUrl());
     showControls();
