@@ -87,38 +87,34 @@ function date_change() {
     imgDate = document.getElementById("dateText").value;
     sendHttpRequest(method, url + imgDate + front_camera, mode).then((test) => {
         data = test;
-        urlIndex = 0;
-        showFrontImage = showPic();
+       // urlIndex = 0;
+       // showFrontImage = showPic();
     });
     sendHttpRequest(method, url + imgDate + Rear_camera, mode).then((test) => {
         data = test;
-        urlIndex = 0;
-        showRearImage = showPic();
+       // urlIndex = 0;
+       // showRearImage = showPic();
     });
 
 }
-
 function fcam() {
     console.log('front camera is enabled!');
-    date_change();
-    document.getElementById("fornt");
-
-    // sendHttpRequest(method,url + imgDate +front_camera, mode).then((test) => {
-    //     data = test;
-    //     urlIndex = 0;
-    //     showPic();
-    // });
+   // date_change();
+    sendHttpRequest(method,url + imgDate +front_camera, mode).then((test) => {
+        data = test;
+        urlIndex = 0;
+        showPic();
+    });
 }
 
 function rcam() {
     console.log('Rear camera is enabled!');
     date_change();
-    document.getElementById("rear");
-    // sendHttpRequest(method,url + imgDate +Rear_camera, mode).then((test) => {
-    //     data = test;
-    //     urlIndex = 0;
-    //     showPic();
-    // });
+    sendHttpRequest(method,url + imgDate +Rear_camera, mode).then((test) => {
+        data = test;
+        urlIndex = 0;
+        showPic();
+    });
 }
 
 document.addEventListener("change", date_change, true);
