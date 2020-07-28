@@ -7,6 +7,8 @@ var date;
 var data;
 var front_camera = "&camera=FHAZ";
 var Rear_camera = "&camera=RHAZ";
+var showFrontImage;
+var showRearImage;
 
 var urlIndex = 0;
 
@@ -80,47 +82,50 @@ function prevPic() {
     }
 }
 
-function date_change()
-{
+function date_change() {
 
     imgDate = document.getElementById("dateText").value;
-    sendHttpRequest(method,url + imgDate +front_camera, mode).then((test) => {
-        data = test;
-    });
-    sendHttpRequest(method,url + imgDate +Rear_camera, mode).then((test) => {
-        data = test;
-    });
-    
-}
-
-function fcam()
-{
-    console.log('front camera is enabled!');
-    date_change();
-    sendHttpRequest(method,url + imgDate +front_camera, mode).then((test) => {
+    sendHttpRequest(method, url + imgDate + front_camera, mode).then((test) => {
         data = test;
         urlIndex = 0;
-        showPic();
+        showFrontImage = showPic();
     });
-}
-
-function rcam()
-{
-    console.log('front camera is enabled!');
-    date_change();
-    sendHttpRequest(method,url + imgDate +Rear_camera, mode).then((test) => {
+    sendHttpRequest(method, url + imgDate + Rear_camera, mode).then((test) => {
         data = test;
         urlIndex = 0;
-        showPic();
+        showRearImage = showPic();
     });
+
 }
 
-document.addEventListener("change",date_change,true);
+function fcam() {
+    console.log('front camera is enabled!');
+    date_change();
+    document.getElementById("fornt");
+
+    // sendHttpRequest(method,url + imgDate +front_camera, mode).then((test) => {
+    //     data = test;
+    //     urlIndex = 0;
+    //     showPic();
+    // });
+}
+
+function rcam() {
+    console.log('Rear camera is enabled!');
+    date_change();
+    document.getElementById("rear");
+    // sendHttpRequest(method,url + imgDate +Rear_camera, mode).then((test) => {
+    //     data = test;
+    //     urlIndex = 0;
+    //     showPic();
+    // });
+}
+
+document.addEventListener("change", date_change, true);
 // document.addEventListener("click",date_change,true);
 
-function changeEvent(change)
-{
+function changeEvent(change) {
     document.getElementById("toggle").style.visibility = "visible";
 }
 
-document.addEventListener("change",changeEvent);
+document.addEventListener("change", changeEvent);
