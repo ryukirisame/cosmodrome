@@ -18,9 +18,24 @@
       checked
       
     />Image&amp;Video -->
-    <input type="radio" name="media-type" value="image" checked />Image
-    <input type="radio" name="media-type" value="video" />Video
-    <select id="quality-selector"></select>
+    <input
+      type="radio"
+      name="media-type"
+      value="image"
+      checked
+      onchange="startSearch();"
+    />Image
+    <input
+      type="radio"
+      name="media-type"
+      value="video"
+      onchange="startSearch();"
+    />Video
+    <select
+      id="quality-selector"
+      style="display: none;"
+      onchange="changeMediaQuality(document.getElementById('quality-selector').value);"
+    ></select>
 
     <!-- <button id="nextBtn" onclick="nextData();" style="display: none;">
       Next
@@ -37,13 +52,13 @@
     </button>
 
     <!-- <select id="media-quality-menu"></select> -->
-    <button
+    <!-- <button
       id="changeMediaQualityBtn"
       onclick="changeMediaQuality()"
       style="display: none;"
     >
       Change Quality
-    </button>
+    </button> -->
 
     <!-- <button id="nextPageBtn" onclick="nextPage()" style="display: none">Next Page</button> -->
 

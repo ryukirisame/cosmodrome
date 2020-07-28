@@ -1,15 +1,14 @@
 var method = "GET";
 const key = "U0PqJ5UprbVQExkXc7ZgsGVfIM7Z1O8Uiv7g2hOO";
-var apodUrl = "https://api.nasa.gov/planetary/apod?api_key=" + key + "&date=";
+
 var mode = true;
-var date;
+
 var hitNum = 0;
 var totalHits = 0;
+//contains initial search response
 var queryResponse;
 //mediaUrls is an array of urls of a specific hit media
 var mediaUrls;
-//current url index
-var urlNum;
 
 // contains an object with key as quality and value as the index number of the url in mediaUrls
 // eg. qualityIndices={"orig":0,"large":1}
@@ -17,15 +16,12 @@ var qualityIndices = {};
 
 var currentPage = 1;
 var totalPage = 0;
+//the selected media type from radio button
 var selectedMediaType;
+//media type of the current hit num
 var mediaType;
 //stores the searching string
 var search = "";
-
-var nextclicknum = 0;
-var prevclicknum = 0;
-var nextpageclicknum = 0;
-var prevpageclicknum = 0;
 
 function sendHttpRequest(method, url, mode) {
   return new Promise((resolve, reject) => {
@@ -36,10 +32,7 @@ function sendHttpRequest(method, url, mode) {
           var data = JSON.parse(this.response);
           //console.log(data);
           resolve(data);
-        }
-        if (this.status == 404) {
-          reject(this.status);
-        }
+        } else reject(this.status);
       }
     };
     req.open(method, url, mode);
@@ -52,7 +45,7 @@ function enableBtns() {
   document.getElementById("nextPageBtn").disabled = false;
   document.getElementById("prevBtn").disabled = false;
   document.getElementById("prevPageBtn").disabled = false;
-  document.getElementById("changeMediaQualityBtn").disabled = false;
+  // document.getElementById("changeMediaQualityBtn").disabled = false;
   document.getElementById("searchBtn").disabled = false;
   document.getElementsByName("media-type")[0].disabled = false;
   document.getElementsByName("media-type")[1].disabled = false;
@@ -64,7 +57,7 @@ function disableBtns() {
   document.getElementById("nextPageBtn").disabled = true;
   document.getElementById("prevBtn").disabled = true;
   document.getElementById("prevPageBtn").disabled = true;
-  document.getElementById("changeMediaQualityBtn").disabled = true;
+  // document.getElementById("changeMediaQualityBtn").disabled = true;
   document.getElementById("searchBtn").disabled = true;
   document.getElementsByName("media-type")[0].disabled = true;
   document.getElementsByName("media-type")[1].disabled = true;
@@ -73,11 +66,11 @@ function disableBtns() {
 function showControls() {
   document.getElementById("nextBtn").style.display = "inline";
   document.getElementById("prevBtn").style.display = "inline";
-  disableBtns();
+  // disableBtns();
   document.getElementById("nextPageBtn").style.display = "inline";
   document.getElementById("prevPageBtn").style.display = "inline";
 
-  document.getElementById("changeMediaQualityBtn").style.display = "inline";
+  // document.getElementById("changeMediaQualityBtn").style.display = "inline";
 }
 
 function displayVideo() {
@@ -100,24 +93,29 @@ function hidePicMessage() {
   //  document.getElementById("pic-message").src="";
   document.getElementById("pic-message").style.display = "none";
 }
-function listenToMediaChange() {
-  var buttons = document.getElementsByName("media-type");
-  for (var i = 0; i < buttons.length; i++) {
-    buttons[i].onchange = () => {
-      startSearch();
-    };
-  }
+function showQualitySelector() {
+  document.getElementById("quality-selector").style.display = "inline-block";
 }
+function hideQualitySelector() {
+  document.getElementById("quality-selector").style.display = "none";
+}
+// function listenToMediaChange() {
+//   var buttons = document.getElementsByName("media-type");
+//   for (var i = 0; i < buttons.length; i++) {
+//     buttons[i].onchange = () => {
+
+//       startSearch();
+//     };
+//   }
+// }
 function getSelectedMediaType() {
   var buttons = document.getElementsByName("media-type");
   for (var i = 0; i < buttons.length; i++) {
     if (buttons[i].checked) {
       selectedMediaType = buttons[i].value;
+      break;
     }
   }
-}
-function hitNumReset() {
-  hitNum = 0;
 }
 
 function pageReset() {
@@ -167,22 +165,6 @@ function isPrevPageAvailable() {
   }
 }
 
-function showApod(data) {
-  //console.log(data);
-  document.getElementById("date").innerHTML = data.date;
-  document.getElementById("title").innerHTML = data.title;
-  document.getElementById("pic").src = data.url;
-  document.getElementById("description").innerHTML = data.explanation;
-}
-/*function getDate() {
-    date = document.getElementById("dateText").value;
-    sendHttpRequest(method, url + date, mode).then(data => {
-        //console.log(data);
-        showApod(data);
-    });
-}
-*/
-
 function nextData() {
   disableBtns();
   document.getElementById("vid").pause();
@@ -213,7 +195,9 @@ function nextData() {
     hideVideo();
     showPicMessage("loading.jpg");
     // document.getElementById("pic").src = "loading.gif";
+
     fetchMediaUrl();
+    showDescription();
   }
 }
 
@@ -265,6 +249,7 @@ function prevData() {
     showPicMessage("loading.jpg");
     //document.getElementById("pic").src = "loading.gif";
     fetchMediaUrl();
+    showDescription();
   }
 }
 //tries going to previous page. shows error if its the first page
@@ -290,7 +275,7 @@ function prevPage() {
 }
 
 //returns the file extension of current urlNum (url index) of mediaUrls
-function getFileExtension() {
+function getFileExtension(urlNum) {
   var urlStr = mediaUrls[urlNum].href;
   var lastIndex = urlStr.lastIndexOf(".");
   var extension = urlStr.slice(lastIndex);
@@ -321,26 +306,32 @@ function createMediaQualityOptions() {
   // and then creates an option for that key(quality)
   keys.forEach((key) => {
     var option = document.createElement("OPTION");
-    option.value = qualityIndices[key];
+    option.value = key;
     option.text = key;
+
+    option.id = key;
+
     select.add(option);
   });
+  //console.log(select.value);
+  // for (var i = 0; i < select.length; i++) {
+  //   console.log(select[i]);
+  // }
 }
 
 //FINDS ALL THE MEDIA QUALITIES AVAILABLE AND THEN STORES IT IN qualityIndices
 // IN THE FORMAT qualityIndices={"quality_name":indexOfTheUrl}
 function findMediaQualities() {
   var extension, urlStr, firstIndex, lastIndex, qualityName;
-  var urlNumBackup = urlNum;
+
   qualityIndices = {};
   if (mediaType == "video") {
     for (var i = 0; i < mediaUrls.length; i++) {
-      urlNum = i;
       //stores the file extension of the current urlNum
-      extension = getFileExtension();
+      extension = getFileExtension(i);
       if (extension == ".mp4" || extension == ".ogg" || extension == "mpeg") {
         //extracting quality name. eg: orig
-        urlStr = mediaUrls[urlNum].href;
+        urlStr = mediaUrls[i].href;
         firstIndex = urlStr.lastIndexOf("~");
         lastIndex = urlStr.lastIndexOf(".");
         qualityName = urlStr.slice(firstIndex + 1, lastIndex);
@@ -348,17 +339,17 @@ function findMediaQualities() {
           qualityName.charAt(0).toUpperCase() + qualityName.slice(1);
         if (qualityName == "Orig") qualityName = "Original";
 
-        qualityIndices[qualityName] = urlNum;
+        qualityIndices[qualityName] = i;
       }
     }
+    console.log("qualityIndices:");
     console.log(qualityIndices);
   }
   //for image
   else {
     for (var i = 0; i < mediaUrls.length; i++) {
-      urlNum = i;
       //stores the file extension of the current urlNum
-      extension = getFileExtension();
+      extension = getFileExtension(i);
       if (
         extension == ".apng" ||
         extension == ".bmp" ||
@@ -374,7 +365,7 @@ function findMediaQualities() {
         extension == ".webp"
       ) {
         //extracting quality name. eg: orig
-        urlStr = mediaUrls[urlNum].href;
+        urlStr = mediaUrls[i].href;
         firstIndex = urlStr.lastIndexOf("~");
         lastIndex = urlStr.lastIndexOf(".");
         qualityName = urlStr.slice(firstIndex + 1, lastIndex);
@@ -383,12 +374,11 @@ function findMediaQualities() {
         if (qualityName == "Orig") qualityName = "Original";
 
         if (qualityName == "Thumb") continue;
-        qualityIndices[qualityName] = urlNum;
+        qualityIndices[qualityName] = i;
       }
     }
     console.log(qualityIndices);
   }
-  urlNum = urlNumBackup;
 }
 function showDescription() {
   var descriptiveData = queryResponse.collection.items[hitNum].data[0];
@@ -406,46 +396,11 @@ function showIvlVideo() {
 
   var vid = document.getElementById("vid");
 
-  var fileExtension = getFileExtension();
-  console.log("url num: " + urlNum + " file extension: " + fileExtension);
   vid.onerror = () => {
-    if (urlNum < mediaUrls.length - 1) {
-      urlNum++;
-      fileExtension = getFileExtension();
-      console.log("url num: " + urlNum + " file extension: " + fileExtension);
-      while (
-        fileExtension != ".mp4" &&
-        fileExtension != ".ogg" &&
-        fileExtension != ".mpeg"
-      ) {
-        if (urlNum < mediaUrls.length - 1) {
-          urlNum++;
-        } else {
-          urlNum = 0;
-        }
-        fileExtension = getFileExtension();
-        console.log("url num: " + urlNum + " file extension: " + fileExtension);
-      }
-      vid.src = mediaUrls[urlNum].href;
-    } else {
-      urlNum = 0;
-      fileExtension = getFileExtension();
-      while (
-        fileExtension != ".mp4" &&
-        fileExtension != ".ogg" &&
-        fileExtension != ".mpeg"
-      ) {
-        if (urlNum < mediaUrls.length - 1) {
-          urlNum++;
-        } else {
-          urlNum = 0;
-        }
-
-        fileExtension = getFileExtension();
-        console.log("url num: " + urlNum + " file extension: " + fileExtension);
-      }
-      vid.src = mediaUrls[urlNum].href;
-    }
+    hideVideo();
+    hideImage();
+    showPicMessage("onerror.jpg");
+    enableBtns();
   };
   vid.onloadedmetadata = () => {
     document.getElementById("resolution").innerHTML =
@@ -457,87 +412,64 @@ function showIvlVideo() {
 
   //console.log(mediaUrls[0]);
   if (mediaUrls.length > 0) {
-    //checking if the current urlnum contains .json etc to avoid cross origin read blocking (CORB) error
-    while (
-      fileExtension != ".mp4" &&
-      fileExtension != ".ogg" &&
-      fileExtension != ".mpeg"
-    ) {
-      if (urlNum < mediaUrls.length - 1) {
-        urlNum++;
-      } else {
-        urlNum = 0;
-      }
-
-      fileExtension = getFileExtension();
-      console.log("url num: " + urlNum + " file extension: " + fileExtension);
+    if (qualityIndices.hasOwnProperty("Large")) {
+      document.getElementById("Large").selected = "true";
+      vid.src = mediaUrls[qualityIndices["Large"]].href;
+      console.log("Quality: Large url num: " + qualityIndices["Large"]);
+    } else if (qualityIndices.hasOwnProperty("Medium")) {
+      document.getElementById("Medium").selected = true;
+      vid.src = mediaUrls[qualityIndices["Medium"]].href;
+      console.log("Quality: Medium url num: " + qualityIndices["Medium"]);
+    } else if (qualityIndices.hasOwnProperty("Original")) {
+      document.getElementById("Original").selected = true;
+      vid.src = mediaUrls[qualityIndices["Original"]].href;
+      console.log("Quality: Original url num: " + qualityIndices["Original"]);
+    } else if (qualityIndices.hasOwnProperty("Small")) {
+      document.getElementById("Small").selected = true;
+      vid.src = mediaUrls[qualityIndices["Small"]].href;
+      console.log("Quality: Preview url num: " + qualityIndices["Small"]);
+    } else if (qualityIndices.hasOwnProperty("Preview")) {
+      document.getElementById("Preview").selected = true;
+      vid.src = mediaUrls[qualityIndices["Preview"]].href;
+      console.log("Quality: Small url num: " + qualityIndices["Preview"]);
+    } else if (qualityIndices.hasOwnProperty("Mobile")) {
+      document.getElementById("Mobile").selected = true;
+      vid.src = mediaUrls[qualityIndices["Mobile"]].href;
+      console.log("Quality: Mobile url num: " + qualityIndices["Mobile"]);
+    } else {
+      showPicMessage("404.jpg");
     }
-
-    vid.src = mediaUrls[urlNum].href;
   } else {
     showPicMessage("404.jpg");
   }
 }
 
-function changeMediaQuality() {
+// function listenToQualityChange() {
+//   var quality = document.getElementById("quality-selector");
+//   quality.onchange = () => {
+//     //alert("we are in listentoqualitychange");
+//     changeMediaQuality(document.getElementById("quality-selector").value);
+//   };
+// }
+function changeMediaQuality(qualityKey) {
   disableBtns();
 
-  if (urlNum < mediaUrls.length - 1) {
-    urlNum++;
-  } else {
-    urlNum = 0;
-  }
-  // console.log("urlNum: " + urlNum);
-  //finding file extension
-  var fileExtension = getFileExtension();
-
-  console.log("url num: " + urlNum + " file extension: " + fileExtension);
-
-  if (mediaType == "album") {
-  } else if (mediaType == "video") {
-    while (
-      fileExtension != ".mp4" &&
-      fileExtension != ".ogg" &&
-      fileExtension != ".mpeg"
-    ) {
-      if (urlNum < mediaUrls.length - 1) {
-        urlNum++;
-      } else {
-        urlNum = 0;
-      }
-      fileExtension = getFileExtension();
-      console.log("url num: " + urlNum + " file extension: " + fileExtension);
-      // console.log(fileExtension);
-    }
-
+  // if (mediaType == "album") {
+  // } else
+  if (mediaType == "video") {
     var vid = document.getElementById("vid");
-    vid.src = mediaUrls[urlNum].href;
+    vid.src = mediaUrls[qualityIndices[qualityKey]].href;
+    console.log(
+      "Quality: " + qualityKey + " url num: " + qualityIndices[qualityKey]
+    );
   }
   //for image
   else {
-    while (
-      fileExtension != ".apng" &&
-      fileExtension != ".bmp" &&
-      fileExtension != ".gif" &&
-      fileExtension != ".jpg" &&
-      fileExtension != ".jpeg" &&
-      fileExtension != ".jfif" &&
-      fileExtension != ".pjpeg" &&
-      fileExtension != ".pjp" &&
-      fileExtension != ".png" &&
-      fileExtension != ".svg" &&
-      fileExtension != ".webp"
-    ) {
-      if (urlNum < mediaUrls.length - 1) {
-        urlNum++;
-      } else {
-        urlNum = 0;
-      }
-      fileExtension = getFileExtension();
-      console.log("url num: " + urlNum + " file extension: " + fileExtension);
-    }
     var image = document.getElementById("pic");
-    image.src = mediaUrls[urlNum].href;
+    image.src = mediaUrls[qualityIndices[qualityKey]].href;
+    console.log(
+      "Quality: " + qualityKey + " url num: " + qualityIndices[qualityKey]
+    );
   }
 }
 
@@ -546,96 +478,40 @@ function showIvlImage() {
 
   var image = document.getElementById("pic");
 
-  var fileExtension = getFileExtension();
-  console.log("url num: " + urlNum + " file extension: " + fileExtension);
   image.onerror = () => {
-    if (urlNum < mediaUrls.length - 1) {
-      urlNum++;
-      fileExtension = getFileExtension();
-      console.log("url num: " + urlNum + " file extension: " + fileExtension);
-      while (
-        fileExtension != ".apng" &&
-        fileExtension != ".bmp" &&
-        fileExtension != ".gif" &&
-        fileExtension != ".jpg" &&
-        fileExtension != ".jpeg" &&
-        fileExtension != ".jfif" &&
-        fileExtension != ".pjpeg" &&
-        fileExtension != ".pjp" &&
-        fileExtension != ".png" &&
-        fileExtension != ".svg" &&
-        fileExtension != ".webp"
-      ) {
-        if (urlNum < mediaUrls.length - 1) {
-          urlNum++;
-        } else {
-          urlNum = 0;
-        }
-        fileExtension = getFileExtension();
-        console.log("url num: " + urlNum + " file extension: " + fileExtension);
-      }
-      image.src = mediaUrls[urlNum].href;
-    } else {
-      urlNum = 0;
-      fileExtension = getFileExtension();
-      while (
-        fileExtension != ".apng" &&
-        fileExtension != ".bmp" &&
-        fileExtension != ".gif" &&
-        fileExtension != ".jpg" &&
-        fileExtension != ".jpeg" &&
-        fileExtension != ".jfif" &&
-        fileExtension != ".pjpeg" &&
-        fileExtension != ".pjp" &&
-        fileExtension != ".png" &&
-        fileExtension != ".svg" &&
-        fileExtension != ".webp"
-      ) {
-        if (urlNum < mediaUrls.length - 1) {
-          urlNum++;
-        } else {
-          urlNum = 0;
-        }
-        fileExtension = getFileExtension();
-        console.log("url num: " + urlNum + " file extension: " + fileExtension);
-      }
-      image.src = mediaUrls[urlNum].href;
-    }
+    hideVideo();
+    hideImage();
+    showPicMessage("onerror.jpg");
+    enableBtns();
   };
   image.onload = () => {
     document.getElementById("resolution").innerHTML =
       "Resolution: " + image.naturalWidth + " x " + image.naturalHeight;
     document.getElementById("message").innerHTML = "";
-    //       image.height=image.naturalHeight;
-    //        image.width=image.naturalWidth;
+
     enableBtns();
   };
 
   if (mediaUrls.length > 0) {
-    // console.log("we are here2");
-
-    while (
-      fileExtension != ".apng" &&
-      fileExtension != ".bmp" &&
-      fileExtension != ".gif" &&
-      fileExtension != ".jpg" &&
-      fileExtension != ".jpeg" &&
-      fileExtension != ".jfif" &&
-      fileExtension != ".pjpeg" &&
-      fileExtension != ".pjp" &&
-      fileExtension != ".png" &&
-      fileExtension != ".svg" &&
-      fileExtension != ".webp"
-    ) {
-      if (urlNum < mediaUrls.length - 1) {
-        urlNum++;
-      } else {
-        urlNum = 0;
-      }
-      fileExtension = getFileExtension();
-      console.log("url num: " + urlNum + " file extension: " + fileExtension);
+    if (qualityIndices.hasOwnProperty("Large")) {
+      document.getElementById("Large").selected = "true";
+      image.src = mediaUrls[qualityIndices["Large"]].href;
+      console.log("Quality: Large url num: " + qualityIndices["Large"]);
+    } else if (qualityIndices.hasOwnProperty("Original")) {
+      document.getElementById("Original").selected = true;
+      image.src = mediaUrls[qualityIndices["Original"]].href;
+      console.log("Quality: Original url num: " + qualityIndices["Original"]);
+    } else if (qualityIndices.hasOwnProperty("Medium")) {
+      document.getElementById("Medium").selected = true;
+      image.src = mediaUrls[qualityIndices["Medium"]].href;
+      console.log("Quality: Medium url num: " + qualityIndices["Medium"]);
+    } else if (qualityIndices.hasOwnProperty("Small")) {
+      document.getElementById("Small").selected = true;
+      image.src = mediaUrls[qualityIndices["Small"]].href;
+      console.log("Quality: Preview url num: " + qualityIndices["Small"]);
+    } else {
+      showPicMessage("404.jpg");
     }
-    image.src = mediaUrls[urlNum].href;
   } else {
     showPicMessage("404.jpg");
   }
@@ -650,32 +526,38 @@ function showMedia() {
     hidePicMessage();
     hideImage();
     displayVideo();
-    urlNum = 0;
+    // urlNum = 0;
+    // listenToQualityChange();
     findMediaQualities();
     createMediaQualityOptions();
+    showQualitySelector();
+    enableBtns();
+    showControls();
     showIvlVideo();
   }
   //checking if the provided hit num contains an album
-  else if (mediaType == "album") {
-    //                console.log(retriedMediaUrls);
-    enableBtns();
+  // else if (mediaType == "album") {
+  //   // enableBtns();
 
-    //showing dummy image for now
+  //   // showPicMessage("sigh.jpg");
 
-    showPicMessage("sigh.jpg");
-
-    document.getElementById("cosmic-object-num").innerHTML =
-      "Cosmic Object: " + getCurrentCosmicObjectNum();
-    +" / " + totalHits;
-  }
+  //   // document.getElementById("cosmic-object-num").innerHTML =
+  //   //   "Cosmic Object: " + getCurrentCosmicObjectNum();
+  //   // +" / " + totalHits;
+  //   nextData();
+  // }
   //contains image
   else {
     hidePicMessage();
     hideVideo();
     displayImage();
-    urlNum = 0;
+    // urlNum = 0;
+    // listenToQualityChange();
     findMediaQualities();
     createMediaQualityOptions();
+    showQualitySelector();
+    enableBtns();
+    showControls();
     showIvlImage();
   }
 }
@@ -698,7 +580,8 @@ function startSearch() {
   search = document.getElementById("searchBar").value;
 
   if (search != "") {
-    listenToMediaChange();
+    // listenToMediaChange();
+    disableBtns();
     hideVideo();
     hideImage();
 
@@ -712,7 +595,6 @@ function startSearch() {
     search = search.trim();
     //getting url and fetching query results (initial data)
     getIvl(getSearchUrl());
-    showControls();
   }
 }
 
@@ -723,20 +605,20 @@ function fetchMediaUrl() {
 
   document.getElementById("vid").pause();
   //checking if the current hit num contains an album then set media_type and prepare the required url
-  if (queryResponse.collection.items[hitNum].data[0].album) {
-    var album_name = queryResponse.collection.items[hitNum].data[0].album;
-    url = "https://images-api.nasa.gov/album/" + album_name + "?page=1";
-    mediaType = "album";
-  }
+  // if (queryResponse.collection.items[hitNum].data[0].album) {
+  //   var album_name = queryResponse.collection.items[hitNum].data[0].album;
+  //   url = "https://images-api.nasa.gov/album/" + album_name + "?page=1";
+  //   mediaType = "album";
+  // }
   //contains a video or image
-  else {
-    //getting nasa_id
-    var nasa_id = queryResponse.collection.items[hitNum].data[0].nasa_id;
-    //appending it to url
-    url = "https://images-api.nasa.gov/asset/" + nasa_id;
-    //getting media type
-    mediaType = queryResponse.collection.items[hitNum].data[0].media_type;
-  }
+  // else {
+  //getting nasa_id
+  var nasa_id = queryResponse.collection.items[hitNum].data[0].nasa_id;
+  //appending it to url
+  url = "https://images-api.nasa.gov/asset/" + nasa_id;
+  //getting media type
+  mediaType = queryResponse.collection.items[hitNum].data[0].media_type;
+  // }
 
   //sending http request for media links
   sendHttpRequest(method, url, mode)
@@ -753,19 +635,31 @@ function fetchMediaUrl() {
       );
       console.log(fetchedMediaUrls);
       mediaUrls = fetchedMediaUrls.collection.items;
-      // console.log(mediaUrls);
-      // alert("we are here");
+
       showMedia();
     })
     .catch((errCode) => {
-      //console.log(err);
-      var errMsg;
+      console.log("error code: " + errCode);
+      enableBtns();
       if (errCode == 404) {
-        //                errMsg =
-        //                    "404 The cosmic object you are looking for has disappeard beyond the event horizon.";
-        enableBtns();
+        hideVideo();
+        hideImage();
         showPicMessage("404.jpg");
-        //                document.getElementById("message").innerHTML = errMsg;
+      } else if (errCode > 499 && errCode < 600) {
+        hideVideo();
+        hideImage();
+        showPicMessage("serverError.jpg");
+      } else if (errCode == 400) {
+        hideVideo();
+        hideImage();
+        showPicMessage("400.jpg");
+      }
+
+      //for no internet connection
+      else {
+        hideVideo();
+        hideImage();
+        showPicMessage("onerror.jpg");
       }
     });
   //    }
@@ -791,14 +685,34 @@ function getIvl(searchUrl) {
       }
       //if there are no hits
       else {
-        document.getElementById("message").innerHTML =
-          "Sorry! We could not find anything. Perhaps check what you have typed.";
+        hideImage();
+        hideVideo();
+        showPicMessage("nothingFound.jpg");
+        enableBtns();
       }
     })
     .catch((errCode) => {
+      console.log("error code: " + errCode);
       enableBtns();
-      //            document.getElementById("message").innerHTML =
-      //                "404 The cosmic object you are looking for has disappeard beyond the event horizon.";
-      showPicMessage("404");
+      if (errCode == 404) {
+        hideVideo();
+        hideImage();
+        showPicMessage("404.jpg");
+      } else if (errCode > 499 && errCode < 600) {
+        hideVideo();
+        hideImage();
+        showPicMessage("serverError.jpg");
+      } else if (errCode == 400) {
+        hideVideo();
+        hideImage();
+        showPicMessage("400.jpg");
+      }
+
+      //for no internet connection
+      else {
+        hideVideo();
+        hideImage();
+        showPicMessage("onerror.jpg");
+      }
     });
 }
