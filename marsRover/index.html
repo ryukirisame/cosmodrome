@@ -1,34 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="javascript.js"></script>
-    <title>Document</title>
-    
+    <title>Mars Rovers</title>
+
 </head>
+
 <body>
-    <button id="next" onclick="nextPic()"> Next</button>
-    <button id="prev" onclick="prevPic()"> Previous</button>
+    <h2>Which rover would be the best choice for you to mars tour</h2>
+    Curiosity <input type="radio" name="Curiosity" id="Curiosity" value="red" onclick="chooseRover();">
+    Opportunity <input type="radio" name="Curiosity" id="Opportunity" value="blue" onclick="chooseRover();" >
+    Spirit <input type="radio" name="Curiosity" id="Spirit" value="green" onclick="chooseRover();"><br><br>
+    
+    <h2>Enter desired date for Mars Rover's Images</h2>
+    <input type="date" id="dateText" onchange="onChangeDate();">
+    <br>
     <h3>Choose Camera Angle for photos</h3>
     <br>
     <button id="front" onclick="fcam()">Front</button>
     <button id="rear" onclick="rcam()">Rear</button>
-    <h2>Enter desired date for Mars Rover's Images</h2>
-    <input type="date" id="dateText">
+    <button id="nav" onclick="navcam()">NavCam</button>
+   
+    <br><br>
+
+    <button id="next" onclick="nextPic()"> Next</button>
+    <button id="prev" onclick="prevPic()"> Previous</button>
     <div id="toggle" style="visibility: hidden;">toggle camera angel to view photos</div>
     <div>
-        <img src="" alt="" id="pic">
-        <img src="" id="front" alt="">
-        <img src="" id="rear" alt="">
+        <img src="nothingFound.png" id="notFound" style="display: none;" alt="">
+        <img src="" id="pic">
+        <img src="" id="frontImg">
+        <img src="" id="rearImg">
+        <img src="loading.jpg" style="display: none;" id="loadImg" alt="">
     </div>
-    
-       
-    
-    
 </body>
+
 </html>
-
-
-
-
