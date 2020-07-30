@@ -148,7 +148,7 @@ function nextPic() {
 function prevPic() {
     urlIndex--;
     if (urlIndex < 0) {
-        urlIndex = data.photos.length -1;
+        urlIndex = data.photos.length;
     } else {
         showPic();
         console.log(urlIndex);
@@ -169,7 +169,7 @@ function date_change() {
 function fcam() {
     console.log('front camera is enabled!');
     sendHttpRequest(method, update_url + imgDate + front_camera, mode).then((test) => {
-
+        date_change();
         if (data.photos.length < 1) {
             // alert("we are here");
             errorImage('inline');
@@ -232,6 +232,10 @@ function navcam()
     });
 }
 
+document.addEventListener("change", date_change, true);
+// document.addEventListener("click",date_change,true);
+
 function onChangeDate(){
-   // document.getElementById("toggle").style.visibility = "hidden";
+    document.getElementById("toggle").style.visibility = "hidden";
+
 }
