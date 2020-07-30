@@ -14,14 +14,13 @@ var opportunity = "/opportunity/";
 var spirit = "/spirit/";
 var showFrontImage;
 var showRearImage;
-
 var urlIndex = 0;
-
 var Curiosity_box;
 var Opportunity_box;
 var Spirit_box;
 var update_url;
 
+// This function wil allow user to choose the following rovers, there are three rovers available;
 
 function chooseRover()
 {
@@ -48,10 +47,7 @@ console.log(update_url);
 
 }
 
-
-
-
-
+// this function will send the httpRequest to the nasa api server, it takes three arguments, 1. Method (that could be GET or POST),2. url , 3. mode (either true or false).
 
 function sendHttpRequest(method, update_url, mode) {
 
@@ -78,9 +74,13 @@ function sendHttpRequest(method, update_url, mode) {
     })
 }
 
+//it will allow to set loading image as per requirement.
+
 function loadingImg(mode) {
     document.getElementById('loadImg').style.display = mode;
 }
+
+// This function will be used for disable following buttons.
 
 function disablebtn() {
     document.getElementById("next").disabled = true;
@@ -97,19 +97,22 @@ function errorImage(mode) {
     document.getElementById('notFound').style.display = mode;
 }
 
+// for enable main image
+
 function enableImage() {
     document.getElementById("pic").style.display = "inline-block";
 }
-//
+// for disable main image when it will not available
 function disableImage() {
     document.getElementById("pic").style.display = "none";
 
 }
 
+// when image is successfully parsed from the server then, showpic() will allow to show that pictures on the webpage.
+
 function showPic() {
     var image = document.getElementById("pic");
     image.onload = function () {
-        //alert("hello");
         loadingImg('none');
         enableImage();
         enableBtn();
@@ -128,6 +131,8 @@ function showPic() {
 
 }
 
+
+//It will allow user to go to the next image.
 function nextPic() {
     urlIndex++;
     if (urlIndex > data.photos.length) {
@@ -135,14 +140,11 @@ function nextPic() {
 
     }
     if (urlIndex < data.photos.length) {
-       // disableImage();
-      //  loadingImg("inline");
-
         showPic();
         console.log(urlIndex);
     }
 }
-
+// to jump for previous image
 function prevPic() {
     urlIndex--;
     if (urlIndex < 0) {
@@ -153,11 +155,16 @@ function prevPic() {
     }
 }
 
+// date_change will store the information about date choosen by the user each time.
+
 function date_change() {
 
     imgDate = document.getElementById("dateText").value;
+    document.getElementById("toggle").style.visibility = "visible";
 
 }
+// fcam has an important role, it will allow user to toggle the camera angle of respective rovers, after firing this function.
+// a request will be sent that will ask for the image to the server that contains photos with front camera of the rover;
 
 function fcam() {
     console.log('front camera is enabled!');
@@ -179,7 +186,7 @@ function fcam() {
 
     });
 }
-
+// unlike fcam it will ask for rear camera angle photos to the server.
 function rcam() {
     console.log('Rear camera is enabled!');
     // date_change();
@@ -201,7 +208,7 @@ function rcam() {
         }
     });
 }
-
+// this is for another camera angle, that is navigation.
 function navcam()
 {
     console.log('Nav cam is enabled!');
@@ -225,9 +232,6 @@ function navcam()
     });
 }
 
-document.addEventListener("change", date_change, true);
-// document.addEventListener("click",date_change,true);
-
 function onChangeDate(){
-    
+   // document.getElementById("toggle").style.visibility = "hidden";
 }
