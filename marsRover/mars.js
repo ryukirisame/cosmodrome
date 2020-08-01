@@ -163,6 +163,14 @@ function date_change() {
     document.getElementById("toggle").style.visibility = "visible";
 
 }
+
+// function get_sol()
+// {
+//     let sol;
+//     sol = document.getElementById('sol').value;
+//     console.log(sol);
+// }
+
 // fcam has an important role, it will allow user to toggle the camera angle of respective rovers, after firing this function.
 // a request will be sent that will ask for the image to the server that contains photos with front camera of the rover;
 
@@ -239,3 +247,5 @@ function onChangeDate(){
     document.getElementById("toggle").style.visibility = "hidden";
 
 }
+
+
