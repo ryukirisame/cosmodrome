@@ -23,6 +23,9 @@ var mediaType;
 //stores the searching string
 var search = "";
 
+//stores current number of thumbnails shown in cards
+var thumbNum = 0;
+
 function sendHttpRequest(method, url, mode) {
   return new Promise((resolve, reject) => {
     var req = new XMLHttpRequest();
@@ -39,6 +42,10 @@ function sendHttpRequest(method, url, mode) {
     req.send();
   });
 }
+
+document.onload = () => {
+  flexContainer = document.getElementById("flex-container");
+};
 
 function enableBtns() {
   document.getElementById("nextBtn").disabled = false;
@@ -681,7 +688,8 @@ function getIvl(searchUrl) {
         //calculating total page number
         calTotalPage();
         //we are ready to fetch media now
-        fetchMediaUrl();
+        // fetchMediaUrl();
+        showResultCards();
       }
       //if there are no hits
       else {
@@ -715,4 +723,36 @@ function getIvl(searchUrl) {
         showPicMessage("onerror.jpg");
       }
     });
+}
+
+function showResultCards(numImages = 20) {
+  var flexContainer = document.getElementById("flex-container");
+  // var column = document.getElementsByClassName("column");
+
+  hidePicMessage();
+  var imgNum = 0;
+
+  while (imgNum < numImages) {
+    const card = document.createElement("div");
+    card.className = "card";
+    const text = document.createElement("div");
+    text.className = "overlay";
+    text.innerHTML = queryResponse.collection.items[imgNum].data[0].title;
+
+    // card.style.width = "200px";
+    // card.style.height = "200px";
+    var thumbURL = queryResponse.collection.items[imgNum].links[0].href;
+    var a = encodeURI(thumbURL);
+    console.log(a);
+
+    card.style.backgroundImage = `url(${a})`;
+
+    card.style.backgroundSize = "cover";
+
+    card.appendChild(text);
+
+    flexContainer.appendChild(card);
+    imgNum++;
+  }
+  enableBtns();
 }

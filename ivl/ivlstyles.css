@@ -1,0 +1,67 @@
+* {
+  box-sizing: border-box;
+  padding: 0px;
+  margin: 0px;
+}
+body {
+  margin: 0;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 0 4px;
+
+  width: 100%;
+}
+.card {
+  display: inline-block;
+  margin: 12px auto;
+  min-width: 360px;
+  min-height: 240px;
+  border-radius: 4px;
+  position: relative;
+}
+.overlay {
+  position: absolute;
+  bottom: 0;
+  background: rgb(0, 0, 0);
+  background: rgba(0, 0, 0, 0.5); /* Black see-through */
+  color: #f1f1f1;
+  width: 100%;
+  max-height: 240px;
+
+  transition: 0.15s ease-in-out;
+  opacity: 0;
+  color: white;
+  font-size: 13px;
+  padding: 10px;
+  font-family: sans-serif;
+  /* text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap; */
+
+  /* text-align: center; */
+}
+.card:hover .overlay {
+  opacity: 1;
+}
+/* .flex-container div img {
+  margin: 4px;
+  vertical-align: middle;
+  width: 100%;
+} */
+@media (max-width: 800px) {
+  .card {
+    /* flex: 50%; */
+    /* max-width: 50%; */
+  }
+}
+
+@media (max-width: 600px) {
+  .card {
+    /* flex: 100%; */
+    /* max-width: 100%; */
+  }
+}

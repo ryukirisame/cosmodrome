@@ -2,12 +2,13 @@
   <head>
     <title>NASA</title>
     <script src="javascript.js"></script>
+    <link rel="stylesheet" type="text/css" href="ivlstyles.css" />
   </head>
   <body>
     <!--    <input type="date" id="dateText">-->
     <!--        <button id="searchButton" onclick="getDate()">Get Data</button>-->
     <input tye="text" id="searchBar" />
-    <button id="searchBtn" onclick="console.clear();startSearch()">
+    <button id="searchBtn" onclick="console.clear();startSearch();">
       Search
     </button>
 
@@ -22,8 +23,8 @@
       type="radio"
       name="media-type"
       value="image"
-      checked
       onchange="startSearch();"
+      checked
     />Image
     <input
       type="radio"
@@ -83,9 +84,9 @@
     <div id="date"></div>
     <div id="title"></div>
     <div id="resolution"></div>
-    <img id="pic" />
-    <img id="pic-message" />
 
+    <img id="pic-message" />
+    <img id="pic" />
     <video id="vid" autoplay controls style="display: none; width: 100%;">
       <source type="video/mp4" src="" />
     </video>
@@ -94,5 +95,6 @@
     <div id="location"></div>
     <div id="test"></div>
     <img id="thumb" />
+    <div class="flex-container" id="flex-container"></div>
   </body>
 </html>
