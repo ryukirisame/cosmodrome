@@ -22,28 +22,22 @@ var update_url;
 
 // This function wil allow user to choose the following rovers, there are three rovers available;
 
-function chooseRover()
-{
+function chooseRover() {
 
     curiosity_box = document.getElementById('Curiosity').checked;
     Opportunity_box = document.getElementById('Opportunity').checked;
     Spirit_box = document.getElementById('Spirit').checked;
 
-if(curiosity_box === true)
-{
-    rover = curiosity;
-}
-else if(Opportunity_box === true)
-{
-    rover = opportunity;
-}
-else
-{
-    rover = spirit;
-}
+    if (curiosity_box === true) {
+        rover = curiosity;
+    } else if (Opportunity_box === true) {
+        rover = opportunity;
+    } else {
+        rover = spirit;
+    }
 
-update_url  = "https://api.nasa.gov/mars-photos/api/v1/rovers"+rover+"photos?api_key=" + api_key + "&earth_date=";
-console.log(update_url);
+    update_url = "https://api.nasa.gov/mars-photos/api/v1/rovers" + rover + "photos?api_key=" + api_key + "&earth_date=";
+    console.log(update_url);
 
 }
 
@@ -59,20 +53,24 @@ function sendHttpRequest(method, update_url, mode) {
         var req = new XMLHttpRequest();
         req.onload = function () {
             if (req.readyState == 4 && req.status == 200) {
-                    data = JSON.parse(req.response);
-                    resolve(data);
-                    console.log(data)
-                
+                data = JSON.parse(req.response);
+                resolve(data);
+
+
                 if (req.status == 404) {
                     console.log("file not found");
                 }
             }
         };
-       // chooseRover();
+        // chooseRover();
         req.open(method, update_url, mode);
         req.send();
     })
 }
+
+
+
+
 
 //it will allow to set loading image as per requirement.
 
@@ -110,27 +108,77 @@ function disableImage() {
 
 // when image is successfully parsed from the server then, showpic() will allow to show that pictures on the webpage.
 
+// function showPic() {
+//     var id;
+//     var image = document.getElementById("pic");
+//     image.onload = function () {
+//         loadingImg('none');
+//         enableImage();
+//         enableBtn();
+//         document.getElementById("toggle").style.visibility = "hidden";
+//     }
+//     disablebtn();
+//     image.onerror = () => {
+//         loadingImg("none");
+//         disableImage();
+//         errorImage('inline');
+//     }
+//     image.src = data.photos[urlIndex].img_src;
+//     id = data.photos[urlIndex].id;
+//     console.log(id);
+
+// }
+
 function showPic() {
-    var image = document.getElementById("pic");
-    image.onload = function () {
-        loadingImg('none');
-        enableImage();
-        enableBtn();
-        document.getElementById("toggle").style.visibility = "hidden";
+    var i = 0;
+    console.log(data);
+    var imageContainer = document.getElementById("imageContainer");
+    while (i < data.photos.length) {
+        var img = document.createElement("img");
+        img.src = data.photos[i].img_src;
+        img.onload = function () {
+            loadingImg('none');
+            enableImage();
+            enableBtn();
+            document.getElementById("toggle").style.visibility = "hidden";
+        }
+        disablebtn();
+        img.onerror = () => {
+            loadingImg("none");
+            disableImage();
+            errorImage('inline');
+        }
+        imageContainer.appendChild(img);
+        i++;
     }
-    disablebtn();
-    image.onerror = () => {
-        loadingImg("none");
-        disableImage();
-        errorImage('inline');
-    }
+}
 
-    image.src = data.photos[urlIndex].img_src;
+function allImage() {
+    var allImage = document.querySelectorAll(".allImage");
+    var index = 0;
+    var i = 0;
+    var id;
+    console.log("All image is enabled");
+    sendHttpRequest(method, update_url + imgDate, mode).then((test) => {
 
+        var id = data.photos.length;
+        console.log(id);
+
+        for (i = 0; i < allImage.length; i++) {
+            // console.log(i);
+            for (index = 0; index < data.photos.length; index++) {
+                // console.log(index);
+                allImage[i].src = data.photos[index].img_src;
+                console.log(allImage[i].src);
+                id = data.photos[index].id;
+                console.log(id);
+            }
+        }
+
+    })
 
 
 }
-
 
 //It will allow user to go to the next image.
 function nextPic() {
@@ -163,16 +211,6 @@ function date_change() {
     document.getElementById("toggle").style.visibility = "visible";
 
 }
-
-// function get_sol()
-// {
-//     let sol;
-//     sol = document.getElementById('sol').value;
-//     console.log(sol);
-// }
-
-// fcam has an important role, it will allow user to toggle the camera angle of respective rovers, after firing this function.
-// a request will be sent that will ask for the image to the server that contains photos with front camera of the rover;
 
 function fcam() {
     console.log('front camera is enabled!');
@@ -217,8 +255,7 @@ function rcam() {
     });
 }
 // this is for another camera angle, that is navigation.
-function navcam()
-{
+function navcam() {
     console.log('Nav cam is enabled!');
     // date_change();
     sendHttpRequest(method, update_url + imgDate + Nav_camera, mode).then((test) => {
@@ -242,10 +279,8 @@ function navcam()
 
 document.addEventListener("change", date_change, true);
 // document.addEventListener("click",date_change,true);
+function onChangeDate() {
 
-function onChangeDate(){
     document.getElementById("toggle").style.visibility = "hidden";
 
 }
-
-

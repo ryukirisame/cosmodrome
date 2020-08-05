@@ -13,27 +13,20 @@
 
 <body>
 
-    <!-- <div class ="header">
-
-    </div> -->
-
     <h2>Which rover would be the best choice for you to mars tour</h2>
     Curiosity <input type="radio" name="Curiosity" id="Curiosity" value="red" onclick="chooseRover();">
-    Opportunity <input type="radio" name="Curiosity" id="Opportunity" value="blue" onclick="chooseRover();" >
+    Opportunity <input type="radio" name="Curiosity" id="Opportunity" value="blue" onclick="chooseRover();">
     Spirit <input type="radio" name="Curiosity" id="Spirit" value="green" onclick="chooseRover();"><br><br>
-    
+
     <h2>Enter desired date for Mars Rover's Images</h2>
     <input type="date" id="dateText">
-    <h2>or Search Images by SOL(A martian day)</h2>
-    <!-- <input type="number" name="sol" id="sol">
-    <button id="sol_find" onclick="get_sol();"> Find</button> -->
     <br>
     <h3>Choose Camera Angle for photos</h3>
     <br>
     <button id="front" onclick="fcam()">Front</button>
     <button id="rear" onclick="rcam()">Rear</button>
     <button id="nav" onclick="navcam()">NavCam</button>
-   
+
     <br><br>
 
     <button id="next" onclick="nextPic()"> Next</button>
@@ -41,10 +34,17 @@
     <div id="toggle" style="visibility: hidden;">toggle camera angel to view photos</div>
     <div>
         <img src="nothingFound.png" id="notFound" style="display: none;" alt="">
-        <img src="" id="pic">
+        <img src="" id="pic" alt="">
         <img src="" id="frontImg">
         <img src="" id="rearImg">
         <img src="loading.jpg" style="display: none;" id="loadImg" alt="">
+
+        <button onclick="allImage();">All image</button>
+
+        <div id="imageContainer">
+
+
+        </div>
     </div>
 </body>
 
