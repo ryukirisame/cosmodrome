@@ -48,9 +48,11 @@ function sendHttpRequest(method, url, mode) {
 
 function enableBtns() {
   document.getElementById("nextBtn").disabled = false;
-  document.getElementById("nextPageBtn").disabled = false;
+
+  // document.getElementById("nextPageBtn").disabled = false;
   document.getElementById("prevBtn").disabled = false;
-  document.getElementById("prevPageBtn").disabled = false;
+
+  // document.getElementById("prevPageBtn").disabled = false;
   // document.getElementById("changeMediaQualityBtn").disabled = false;
   document.getElementById("searchBtn").disabled = false;
   document.getElementsByName("media-type")[0].disabled = false;
@@ -60,9 +62,11 @@ function enableBtns() {
 
 function disableBtns() {
   document.getElementById("nextBtn").disabled = true;
-  document.getElementById("nextPageBtn").disabled = true;
+
+  // document.getElementById("nextPageBtn").disabled = true;
   document.getElementById("prevBtn").disabled = true;
-  document.getElementById("prevPageBtn").disabled = true;
+
+  // document.getElementById("prevPageBtn").disabled = true;
   // document.getElementById("changeMediaQualityBtn").disabled = true;
   document.getElementById("searchBtn").disabled = true;
   document.getElementsByName("media-type")[0].disabled = true;
@@ -70,11 +74,11 @@ function disableBtns() {
   document.getElementById("quality-selector").disabled = true;
 }
 function showControls() {
-  document.getElementById("nextBtn").style.display = "inline";
-  document.getElementById("prevBtn").style.display = "inline";
+  document.getElementById("nextBtn").style.display = "inline-block";
+  document.getElementById("prevBtn").style.display = "inline-block";
   // disableBtns();
-  document.getElementById("nextPageBtn").style.display = "inline";
-  document.getElementById("prevPageBtn").style.display = "inline";
+  // document.getElementById("nextPageBtn").style.display = "inline-block";
+  // document.getElementById("prevPageBtn").style.display = "inline-block";
 
   // document.getElementById("changeMediaQualityBtn").style.display = "inline";
 }
@@ -84,6 +88,9 @@ function displayVideo() {
 }
 function hideVideo() {
   document.getElementById("vid").style.display = "none";
+}
+function pauseVideo() {
+  document.getElementById("vid").pause();
 }
 function displayImage() {
   document.getElementById("pic").style.display = "block";
@@ -444,6 +451,22 @@ function showIvlVideo() {
 
   var vid = document.getElementById("vid");
 
+  // Get the modal
+  var modal = document.getElementById("myModal");
+
+  // Get the image and insert it inside the modal - use its "alt" text as a caption
+
+  modal.style.display = "block";
+
+  // Get the <span> element that closes the modal
+  var close = document.getElementById("closeButton");
+
+  // When the user clicks on <span> (x), close the modal
+  close.onclick = function () {
+    pauseVideo();
+    modal.style.display = "none";
+  };
+
   vid.onerror = () => {
     hideVideo();
     hideImage();
@@ -523,6 +546,7 @@ function changeMediaQuality(qualityKey) {
 
 function showIvlImage() {
   //  showDescription();
+  var imageHeight = screen.height * 0.775;
 
   var image = document.getElementById("pic");
 
@@ -534,10 +558,10 @@ function showIvlImage() {
   modal.style.display = "block";
 
   // Get the <span> element that closes the modal
-  var span = document.getElementsByClassName("close")[0];
+  var close = document.getElementById("closeButton");
 
   // When the user clicks on <span> (x), close the modal
-  span.onclick = function () {
+  close.onclick = function () {
     modal.style.display = "none";
   };
 
@@ -551,7 +575,7 @@ function showIvlImage() {
     document.getElementById("resolution").innerHTML =
       "Resolution: " + image.naturalWidth + " x " + image.naturalHeight;
     document.getElementById("message").innerHTML = "";
-
+    displayImage();
     enableBtns();
   };
 
@@ -559,18 +583,22 @@ function showIvlImage() {
     if (qualityIndices.hasOwnProperty("Large")) {
       document.getElementById("Large").selected = "true";
       image.src = mediaUrls[qualityIndices["Large"]].href;
+      image.height = imageHeight;
       // console.log("Quality: Large url num: " + qualityIndices["Large"]);
     } else if (qualityIndices.hasOwnProperty("Original")) {
       document.getElementById("Original").selected = true;
       image.src = mediaUrls[qualityIndices["Original"]].href;
+      image.height = imageHeight;
       // console.log("Quality: Original url num: " + qualityIndices["Original"]);
     } else if (qualityIndices.hasOwnProperty("Medium")) {
       document.getElementById("Medium").selected = true;
       image.src = mediaUrls[qualityIndices["Medium"]].href;
+      image.height = imageHeight;
       // console.log("Quality: Medium url num: " + qualityIndices["Medium"]);
     } else if (qualityIndices.hasOwnProperty("Small")) {
       document.getElementById("Small").selected = true;
       image.src = mediaUrls[qualityIndices["Small"]].href;
+      image.height = imageHeight;
       // console.log("Quality: Preview url num: " + qualityIndices["Small"]);
     } else {
       showPicMessage("404.jpg");
@@ -620,7 +648,7 @@ function showMedia() {
   else {
     hidePicMessage();
     hideVideo();
-    displayImage();
+
     // urlNum = 0;
     // listenToQualityChange();
     findMediaQualities();
@@ -666,7 +694,6 @@ function fetchMediaUrl(itemNum, pageNum) {
 
   var url;
 
-  document.getElementById("vid").pause();
   //checking if the current hit num contains an album then set media_type and prepare the required url
   // if (queryResponse.collection.items[hitNum].data[0].album) {
   //   var album_name = queryResponse.collection.items[hitNum].data[0].album;
