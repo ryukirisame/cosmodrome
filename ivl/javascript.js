@@ -29,6 +29,9 @@ var thumbNum = 0;
 //stores current number of pages loaded
 var currentThumbPage = 1;
 
+// loading animation setTimeOut
+var loadingAnimationSetTimeOut;
+
 // message strings
 var connecting = "Connecting to NASA...";
 var loading = "Loading...";
@@ -103,13 +106,51 @@ function showControls() {
 }
 
 function displayVideo() {
-  document.getElementById("vid").style.display = "block";
+  var vid = document.getElementById("vid");
+  if (vid != undefined) vid.style.display = "block";
 }
+
+function createVideoElement(url) {
+  var videoContainer = document.getElementById("videoContainer");
+  var vid = document.createElement("video");
+  var source = document.createElement("source");
+
+  vid.id = "vid";
+  vid.className = "modal-content";
+  vid.autoplay = true;
+  vid.controls = true;
+  vid.style.display = "none";
+  vid.style.width = "100%";
+
+  source.type = "video/mp4";
+  source.src = "";
+
+  videoContainer.appendChild(vid);
+  stopPreviousIvlVideoListeners();
+  startIvlVideoListeners();
+  vid.src = url;
+}
+
 function hideVideo() {
-  document.getElementById("vid").style.display = "none";
+  var vid = document.getElementById("vid");
+
+  var videoContainer = document.getElementById("videoContainer");
+
+  if (vid != undefined) {
+    vid.style.display = "none";
+    stopPreviousIvlVideoListeners();
+    videoContainer.removeChild(vid);
+  }
 }
 function pauseVideo() {
-  document.getElementById("vid").pause();
+  var vid = document.getElementById("vid");
+
+  if (vid != undefined) {
+    vid.pause();
+    vid.currentTime = 0;
+    vid.src = "";
+    vid.load();
+  }
 }
 function displayImage() {
   document.getElementById("pic").style.display = "block";
@@ -121,7 +162,7 @@ function showMessage(message, messageBoxNum) {
   //boxNum=0 means the message box inside modal screen
   // boxNum=1 means the message box outside the modal screen
   document.getElementsByClassName("message")[messageBoxNum].innerHTML = message;
-  console.log("message box: ", messageBoxNum);
+  // console.log("message box: ", messageBoxNum);
   if (messageBoxNum == 1) {
     document.getElementsByClassName("message")[0].style.display = "none";
     document.getElementsByClassName("message")[1].style.display =
@@ -233,6 +274,7 @@ function downloadNextPage(page) {
       console.log("error code: " + errCode);
       enableBtns();
       if (errCode == 404) {
+        pauseVideo();
         hideVideo();
         hideImage();
         if (isModalScreenOpen()) {
@@ -241,6 +283,7 @@ function downloadNextPage(page) {
           showMessage(notFound404, 1);
         }
       } else if (errCode > 499 && errCode < 600) {
+        pauseVideo();
         hideVideo();
         hideImage();
         if (isModalScreenOpen()) {
@@ -249,6 +292,7 @@ function downloadNextPage(page) {
           showMessage(problemWithNasaServer, 1);
         }
       } else if (errCode == 400) {
+        pauseVideo();
         hideVideo();
         hideImage();
         if (isModalScreenOpen()) {
@@ -260,6 +304,7 @@ function downloadNextPage(page) {
 
       //for no internet connection
       else {
+        pauseVideo();
         hideVideo();
         hideImage();
         if (isModalScreenOpen()) {
@@ -272,7 +317,8 @@ function downloadNextPage(page) {
 }
 function nextData() {
   disableBtns();
-  document.getElementById("vid").pause();
+  pauseVideo();
+  hideVideo();
   hitNum++;
   //if hit number exceeds total number of hits in the current page and if there is a next page then transition to next page
   //    but if there is not a next page(eg: first page with less than 100 items, last page with less than 100 items)
@@ -289,13 +335,15 @@ function nextData() {
     //if next page is not available then display message
     else {
       hitNum--;
-      document.getElementById("message").innerHTML = "This is the last page!";
+
+      showMessage("This is the last page!", 0);
       enableBtns();
     }
   }
   //else show next data from the current page
   else {
     hideImage();
+    pauseVideo();
     hideVideo();
     showLoadingAnimation();
     showMessage(loading, 0);
@@ -312,6 +360,7 @@ function nextPage() {
   //if next page exists
   if (isNextPageAvailable()) {
     hideImage();
+    pauseVideo();
     hideVideo();
     showLoadingAnimation();
     showMessage(loading, 0);
@@ -337,7 +386,8 @@ function nextPage() {
 
 function prevData() {
   disableBtns();
-  document.getElementById("vid").pause();
+  pauseVideo();
+  hideVideo();
   hitNum--;
   // document.getElementById("message").innerHTML = "";
   //if hit number becomes less than 0 then transition to prev page
@@ -357,6 +407,7 @@ function prevData() {
   else {
     //document.getElementById("message").innerHTML = "Loading...";
     hideImage();
+    pauseVideo();
     hideVideo();
     showLoadingAnimation();
     showMessage(loading, 0);
@@ -381,6 +432,7 @@ function prevPage() {
     //        hitNumReset();
     // document.getElementById("message").src = "Loading...";
     hideImage();
+    pauseVideo();
     hideVideo();
     showLoadingAnimation();
     showMessage(loading, 0);
@@ -495,29 +547,56 @@ function findMediaQualities() {
     // console.log(qualityIndices);
   }
 }
+function handleVideoLoadingError() {
+  pauseVideo();
+  hideVideo();
+  hideImage();
+  console.log("i was fired");
+  showMessage(onErrorMessage, 0);
 
+  enableBtns();
+}
+function handleVideoLoadedMetaData() {
+  document.getElementById("resolution").innerHTML =
+    "Resolution: " + vid.videoWidth + " x " + vid.videoHeight;
+  document.getElementById("message").innerHTML = "";
+
+  enableBtns();
+}
+function stopPreviousIvlVideoListeners() {
+  var vid = document.getElementById("vid");
+  vid.removeEventListener("error", handleVideoLoadingError);
+  vid.removeEventListener("loadedmetadata", handleVideoLoadedMetaData);
+}
+function startIvlVideoListeners() {
+  var vid = document.getElementById("vid");
+
+  vid.addEventListener("error", handleVideoLoadingError);
+  vid.addEventListener("loadedmetadata", handleVideoLoadedMetaData);
+}
 //SHOWS THE IVL VIDEO
 function showIvlVideo() {
   //showing descriptions
   // showDescription();
 
-  var vid = document.getElementById("vid");
+  // var vid = document.getElementById("vid");
 
-  vid.onErrorMessage = () => {
-    hideVideo();
-    hideImage();
+  // vid.onerror = () => {
+  //   pauseVideo();
+  //   hideVideo();
+  //   hideImage();
 
-    showMessage(onErrorMessage, 0);
+  //   showMessage(onErrorMessage, 0);
 
-    enableBtns();
-  };
-  vid.onloadedmetadata = () => {
-    document.getElementById("resolution").innerHTML =
-      "Resolution: " + vid.videoWidth + " x " + vid.videoHeight;
-    document.getElementById("message").innerHTML = "";
+  //   enableBtns();
+  // };
+  // vid.onloadedmetadata = () => {
+  //   document.getElementById("resolution").innerHTML =
+  //     "Resolution: " + vid.videoWidth + " x " + vid.videoHeight;
+  //   document.getElementById("message").innerHTML = "";
 
-    enableBtns();
-  };
+  //   enableBtns();
+  // };
 
   //console.log(mediaUrls[0]);
   if (mediaUrls.length > 0) {
@@ -525,42 +604,53 @@ function showIvlVideo() {
       document.getElementById("Large").selected = "true";
       hideMessage();
       hideLoadingAnimation();
-      vid.src = mediaUrls[qualityIndices["Large"]].href;
-
+      // vid.src = mediaUrls[qualityIndices["Large"]].href;
+      createVideoElement(mediaUrls[qualityIndices["Large"]].href);
+      displayVideo();
       console.log("Quality: Large url num: " + qualityIndices["Large"]);
     } else if (qualityIndices.hasOwnProperty("Medium")) {
       document.getElementById("Medium").selected = true;
       hideMessage();
       hideLoadingAnimation();
-      vid.src = mediaUrls[qualityIndices["Medium"]].href;
+      // vid.src = mediaUrls[qualityIndices["Medium"]].href;
+      createVideoElement(mediaUrls[qualityIndices["Medium"]].href);
+      displayVideo();
 
       console.log("Quality: Medium url num: " + qualityIndices["Medium"]);
     } else if (qualityIndices.hasOwnProperty("Original")) {
       document.getElementById("Original").selected = true;
       hideMessage();
       hideLoadingAnimation();
-      vid.src = mediaUrls[qualityIndices["Original"]].href;
+      // vid.src = mediaUrls[qualityIndices["Original"]].href;
+      createVideoElement(mediaUrls[qualityIndices["Original"]].href);
+      displayVideo();
 
       console.log("Quality: Original url num: " + qualityIndices["Original"]);
     } else if (qualityIndices.hasOwnProperty("Small")) {
       document.getElementById("Small").selected = true;
       hideMessage();
       hideLoadingAnimation();
-      vid.src = mediaUrls[qualityIndices["Small"]].href;
+      // vid.src = mediaUrls[qualityIndices["Small"]].href;
+      createVideoElement(mediaUrls[qualityIndices["Small"]].href);
+      displayVideo();
 
       console.log("Quality: Preview url num: " + qualityIndices["Small"]);
     } else if (qualityIndices.hasOwnProperty("Preview")) {
       document.getElementById("Preview").selected = true;
       hideMessage();
       hideLoadingAnimation();
-      vid.src = mediaUrls[qualityIndices["Preview"]].href;
+      // vid.src = mediaUrls[qualityIndices["Preview"]].href;
+      createVideoElement(mediaUrls[qualityIndices["Preview"]].href);
+      displayVideo();
 
       console.log("Quality: Small url num: " + qualityIndices["Preview"]);
     } else if (qualityIndices.hasOwnProperty("Mobile")) {
       document.getElementById("Mobile").selected = true;
       hideMessage();
       hideLoadingAnimation();
-      vid.src = mediaUrls[qualityIndices["Mobile"]].href;
+      // vid.src = mediaUrls[qualityIndices["Mobile"]].href;
+      createVideoElement(mediaUrls[qualityIndices["Mobile"]].href);
+      displayVideo();
 
       console.log("Quality: Mobile url num: " + qualityIndices["Mobile"]);
     } else {
@@ -606,7 +696,8 @@ function showIvlImage() {
 
   var image = document.getElementById("pic");
 
-  image.onErrorMessage = () => {
+  image.onerror = () => {
+    pauseVideo();
     hideVideo();
     hideImage();
 
@@ -673,7 +764,7 @@ function getCurrentCosmicObjectNum(itemNum, pageNum) {
 function showMedia() {
   if (mediaType == "video") {
     hideImage();
-    displayVideo();
+    // displayVideo();
     // urlNum = 0;
     // listenToQualityChange();
     findMediaQualities();
@@ -697,6 +788,7 @@ function showMedia() {
   // }
   //contains image
   else {
+    pauseVideo();
     hideVideo();
 
     // urlNum = 0;
@@ -780,26 +872,29 @@ function fetchMediaUrl(itemNum, pageNum) {
       mediaUrls = fetchedMediaUrls.collection.items;
       // console.log(mediaUrls);
       // showDescription(itemNum, pageNum);
-      console.log("then");
+
       showMedia();
     })
     .catch((errCode) => {
       console.log("error code: " + errCode);
-      console.log("catch");
+
       enableBtns();
       if (errCode == 404) {
+        pauseVideo();
         hideVideo();
         hideImage();
 
         hideLoadingAnimation();
         showMessage(notFound404, 0);
       } else if (errCode > 499 && errCode < 600) {
+        pauseVideo();
         hideVideo();
         hideImage();
 
         hideLoadingAnimation();
         showMessage(problemWithNasaServer, 0);
       } else if (errCode == 400) {
+        pauseVideo();
         hideVideo();
         hideImage();
 
@@ -809,10 +904,12 @@ function fetchMediaUrl(itemNum, pageNum) {
 
       //for no internet connection
       else {
+        pauseVideo();
         hideVideo();
         hideImage();
 
         hideLoadingAnimation();
+
         showMessage(onErrorMessage, 0);
       }
     });
@@ -839,12 +936,15 @@ function startSearch() {
   if (search != "") {
     // listenToMediaChange();
     disableBtns();
+    pauseVideo();
     hideVideo();
     hideDescription();
     hideImage();
 
     showLoadingAnimation();
     showMessage(loading, 0);
+
+    queryResponse = [];
 
     //get selected media type
     getSelectedMediaType();
@@ -880,9 +980,11 @@ function getIvl(page) {
       }
       //if there are no hits
       else {
-        hideImage();
-        hideVideo();
         hideLoadingAnimation();
+        hideImage();
+        pauseVideo();
+        hideVideo();
+
         showMessage(nothingFound, 1);
         enableBtns();
       }
@@ -891,27 +993,35 @@ function getIvl(page) {
       console.log("error code: " + errCode);
       enableBtns();
       if (errCode == 404) {
+        hideLoadingAnimation();
+        pauseVideo();
         hideVideo();
         hideImage();
-        hideLoadingAnimation();
+
         showMessage(notFound404, 1);
       } else if (errCode > 499 && errCode < 600) {
+        hideLoadingAnimation();
+        pauseVideo();
         hideVideo();
         hideImage();
-        hideLoadingAnimation();
+
         showMessage(problemWithNasaServer, 1);
       } else if (errCode == 400) {
+        hideLoadingAnimation();
+        pauseVideo();
         hideVideo();
         hideImage();
-        hideLoadingAnimation();
+
         showMessage(badResquest400, 1);
       }
 
       //for no internet connection
       else {
+        hideLoadingAnimation();
+        pauseVideo();
         hideVideo();
         hideImage();
-        hideLoadingAnimation();
+
         showMessage(onErrorMessage, 1);
       }
     });
@@ -1017,6 +1127,7 @@ window.addEventListener("scroll", handleScroll);
 
 function handleCloseButtonClick() {
   pauseVideo();
+  hideVideo();
   var modal = document.getElementById("myModal");
   modal.style.display = "none";
 }
@@ -1038,9 +1149,13 @@ function isModalScreenOpen() {
 
 function showLoadingAnimation() {
   var ripple = document.getElementById("loading-animation");
-  ripple.style.display = "inline-block";
+
+  loadingAnimationSetTimeOut = setTimeout(function () {
+    ripple.style.display = "inline-block";
+  }, 1000);
 }
 function hideLoadingAnimation() {
   var ripple = document.getElementById("loading-animation");
+  clearTimeout(loadingAnimationSetTimeOut);
   ripple.style.display = "none";
 }
