@@ -6,8 +6,60 @@
 body {
   margin: 0;
   padding: 0;
+  background-color: rgb(48, 48, 48);
+  color: white;
 }
 
+/* loading animation */
+
+.lds-ripple {
+  display: inline-block;
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  transform: translate(-50%, -50%);
+  width: 80px;
+  height: 80px;
+}
+.lds-ripple div {
+  position: absolute;
+  border: 4px solid #fff;
+  opacity: 1;
+  border-radius: 50%;
+  animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+.lds-ripple div:nth-child(2) {
+  animation-delay: -0.5s;
+}
+@keyframes lds-ripple {
+  0% {
+    top: 36px;
+    left: 36px;
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+  100% {
+    top: 0px;
+    left: 0px;
+    width: 72px;
+    height: 72px;
+    opacity: 0;
+  }
+}
+
+/* message */
+.message {
+  color: blue;
+  font-family: "Lato", sans-serif;
+  font-size: 24px;
+  position: absolute;
+  left: 50%;
+  top: 55%;
+
+  transform: translate(-50%, -50%);
+}
+/* cards container */
 .flex-container {
   display: flex;
   flex-direction: row;
@@ -24,7 +76,7 @@ body {
   border-radius: 4px;
   position: relative;
   cursor: pointer;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
 .overlay {
   position: absolute;
@@ -147,6 +199,7 @@ body {
   /* height: 90%;*/
   max-width: 95%;
   /* max-height: 90%; */
+  box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
 }
 
 .modal-text {

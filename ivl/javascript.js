@@ -29,6 +29,25 @@ var thumbNum = 0;
 //stores current number of pages loaded
 var currentThumbPage = 1;
 
+// message strings
+var connecting = "Connecting to NASA...";
+var loading = "Loading...";
+
+var notFound404 =
+  "404 The cosmic object you are looking for has disappeared beyond the event horizon.";
+
+var badResquest400 =
+  "400 Bad Request. The server could not understand the request due to invalid syntax.";
+
+var problemWithNasaServer =
+  "There is some problem with NASA servers.\nPlease try again later.";
+
+var nothingFound =
+  "Sorry, we could not find anything,\nperhaps check what you have typed.";
+
+var onErrorMessage =
+  "Error. Check your internet connection\n or change media quality.";
+
 function sendHttpRequest(method, url, mode) {
   return new Promise((resolve, reject) => {
     var req = new XMLHttpRequest();
@@ -98,13 +117,25 @@ function displayImage() {
 function hideImage() {
   document.getElementById("pic").style.display = "none";
 }
-function showPicMessage(picSrc) {
-  document.getElementById("pic-message").src = picSrc;
-  document.getElementById("pic-message").style.display = "block";
+function showMessage(message, messageBoxNum) {
+  //boxNum=0 means the message box inside modal screen
+  // boxNum=1 means the message box outside the modal screen
+  document.getElementsByClassName("message")[messageBoxNum].innerHTML = message;
+  console.log("message box: ", messageBoxNum);
+  if (messageBoxNum == 1) {
+    document.getElementsByClassName("message")[0].style.display = "none";
+    document.getElementsByClassName("message")[1].style.display =
+      "inline-block";
+  }
+  if (messageBoxNum == 0) {
+    document.getElementsByClassName("message")[1].style.display = "none";
+    document.getElementsByClassName("message")[0].style.display =
+      "inline-block";
+  }
 }
-function hidePicMessage() {
-  //  document.getElementById("pic-message").src="";
-  document.getElementById("pic-message").style.display = "none";
+function hideMessage() {
+  document.getElementsByClassName("message")[0].style.display = "none";
+  document.getElementsByClassName("message")[1].style.display = "none";
 }
 function showQualitySelector() {
   document.getElementById("quality-selector").style.display = "inline-block";
@@ -204,22 +235,38 @@ function downloadNextPage(page) {
       if (errCode == 404) {
         hideVideo();
         hideImage();
-        showPicMessage("404.jpg");
+        if (isModalScreenOpen()) {
+          showMessage(notFound404, 0);
+        } else {
+          showMessage(notFound404, 1);
+        }
       } else if (errCode > 499 && errCode < 600) {
         hideVideo();
         hideImage();
-        showPicMessage("serverError.jpg");
+        if (isModalScreenOpen()) {
+          showMessage(problemWithNasaServer, 0);
+        } else {
+          showMessage(problemWithNasaServer, 1);
+        }
       } else if (errCode == 400) {
         hideVideo();
         hideImage();
-        showPicMessage("400.jpg");
+        if (isModalScreenOpen()) {
+          showMessage(badResquest400, 0);
+        } else {
+          showMessage(badResquest400, 1);
+        }
       }
 
       //for no internet connection
       else {
         hideVideo();
         hideImage();
-        showPicMessage("onerror.jpg");
+        if (isModalScreenOpen()) {
+          showMessage(onErrorMessage, 0);
+        } else {
+          showMessage(onErrorMessage, 1);
+        }
       }
     });
 }
@@ -250,9 +297,11 @@ function nextData() {
   else {
     hideImage();
     hideVideo();
-    showPicMessage("loading.jpg");
+    showLoadingAnimation();
+    showMessage(loading, 0);
     // document.getElementById("pic").src = "loading.gif";
 
+    showModalScreen();
     fetchMediaUrl(hitNum, currentPage);
     showDescription(hitNum, currentPage);
   }
@@ -264,14 +313,15 @@ function nextPage() {
   if (isNextPageAvailable()) {
     hideImage();
     hideVideo();
-    showPicMessage("loading.jpg");
+    showLoadingAnimation();
+    showMessage(loading, 0);
     currentPage++;
     //if the next page is not downloaded
     if (queryResponse[currentPage - 1] == undefined) {
       downloadNextPage(currentPage);
     } else {
       hitNum = -1;
-      console.log("using downloaded page");
+      // console.log("using downloaded page");
       nextData();
     }
   }
@@ -308,7 +358,8 @@ function prevData() {
     //document.getElementById("message").innerHTML = "Loading...";
     hideImage();
     hideVideo();
-    showPicMessage("loading.jpg");
+    showLoadingAnimation();
+    showMessage(loading, 0);
     //document.getElementById("pic").src = "loading.gif";
     fetchMediaUrl(hitNum, currentPage);
     showDescription(hitNum, currentPage);
@@ -331,7 +382,8 @@ function prevPage() {
     // document.getElementById("message").src = "Loading...";
     hideImage();
     hideVideo();
-    showPicMessage("loading.jpg");
+    showLoadingAnimation();
+    showMessage(loading, 0);
     hitNum = 100;
     prevData();
   }
@@ -451,26 +503,12 @@ function showIvlVideo() {
 
   var vid = document.getElementById("vid");
 
-  // Get the modal
-  var modal = document.getElementById("myModal");
-
-  // Get the image and insert it inside the modal - use its "alt" text as a caption
-
-  modal.style.display = "block";
-
-  // Get the <span> element that closes the modal
-  var close = document.getElementById("closeButton");
-
-  // When the user clicks on <span> (x), close the modal
-  close.onclick = function () {
-    pauseVideo();
-    modal.style.display = "none";
-  };
-
-  vid.onerror = () => {
+  vid.onErrorMessage = () => {
     hideVideo();
     hideImage();
-    showPicMessage("onerror.jpg");
+
+    showMessage(onErrorMessage, 0);
+
     enableBtns();
   };
   vid.onloadedmetadata = () => {
@@ -485,33 +523,51 @@ function showIvlVideo() {
   if (mediaUrls.length > 0) {
     if (qualityIndices.hasOwnProperty("Large")) {
       document.getElementById("Large").selected = "true";
+      hideMessage();
+      hideLoadingAnimation();
       vid.src = mediaUrls[qualityIndices["Large"]].href;
+
       console.log("Quality: Large url num: " + qualityIndices["Large"]);
     } else if (qualityIndices.hasOwnProperty("Medium")) {
       document.getElementById("Medium").selected = true;
+      hideMessage();
+      hideLoadingAnimation();
       vid.src = mediaUrls[qualityIndices["Medium"]].href;
+
       console.log("Quality: Medium url num: " + qualityIndices["Medium"]);
     } else if (qualityIndices.hasOwnProperty("Original")) {
       document.getElementById("Original").selected = true;
+      hideMessage();
+      hideLoadingAnimation();
       vid.src = mediaUrls[qualityIndices["Original"]].href;
+
       console.log("Quality: Original url num: " + qualityIndices["Original"]);
     } else if (qualityIndices.hasOwnProperty("Small")) {
       document.getElementById("Small").selected = true;
+      hideMessage();
+      hideLoadingAnimation();
       vid.src = mediaUrls[qualityIndices["Small"]].href;
+
       console.log("Quality: Preview url num: " + qualityIndices["Small"]);
     } else if (qualityIndices.hasOwnProperty("Preview")) {
       document.getElementById("Preview").selected = true;
+      hideMessage();
+      hideLoadingAnimation();
       vid.src = mediaUrls[qualityIndices["Preview"]].href;
+
       console.log("Quality: Small url num: " + qualityIndices["Preview"]);
     } else if (qualityIndices.hasOwnProperty("Mobile")) {
       document.getElementById("Mobile").selected = true;
+      hideMessage();
+      hideLoadingAnimation();
       vid.src = mediaUrls[qualityIndices["Mobile"]].href;
+
       console.log("Quality: Mobile url num: " + qualityIndices["Mobile"]);
     } else {
-      showPicMessage("404.jpg");
+      showMessage(notFound404, 0);
     }
   } else {
-    showPicMessage("404.jpg");
+    showMessage(notFound404, 0);
   }
 }
 
@@ -550,31 +606,21 @@ function showIvlImage() {
 
   var image = document.getElementById("pic");
 
-  // Get the modal
-  var modal = document.getElementById("myModal");
-
-  // Get the image and insert it inside the modal - use its "alt" text as a caption
-
-  modal.style.display = "block";
-
-  // Get the <span> element that closes the modal
-  var close = document.getElementById("closeButton");
-
-  // When the user clicks on <span> (x), close the modal
-  close.onclick = function () {
-    modal.style.display = "none";
-  };
-
-  image.onerror = () => {
+  image.onErrorMessage = () => {
     hideVideo();
     hideImage();
-    showPicMessage("onerror.jpg");
+
+    showMessage(onErrorMessage, 0);
     enableBtns();
   };
   image.onload = () => {
     document.getElementById("resolution").innerHTML =
       "Resolution: " + image.naturalWidth + " x " + image.naturalHeight;
     document.getElementById("message").innerHTML = "";
+
+    hideMessage();
+    hideLoadingAnimation();
+
     displayImage();
     enableBtns();
   };
@@ -582,29 +628,34 @@ function showIvlImage() {
   if (mediaUrls.length > 0) {
     if (qualityIndices.hasOwnProperty("Large")) {
       document.getElementById("Large").selected = "true";
+
       image.src = mediaUrls[qualityIndices["Large"]].href;
+
       image.height = imageHeight;
       // console.log("Quality: Large url num: " + qualityIndices["Large"]);
     } else if (qualityIndices.hasOwnProperty("Original")) {
       document.getElementById("Original").selected = true;
+
       image.src = mediaUrls[qualityIndices["Original"]].href;
       image.height = imageHeight;
       // console.log("Quality: Original url num: " + qualityIndices["Original"]);
     } else if (qualityIndices.hasOwnProperty("Medium")) {
       document.getElementById("Medium").selected = true;
+
       image.src = mediaUrls[qualityIndices["Medium"]].href;
       image.height = imageHeight;
       // console.log("Quality: Medium url num: " + qualityIndices["Medium"]);
     } else if (qualityIndices.hasOwnProperty("Small")) {
       document.getElementById("Small").selected = true;
+
       image.src = mediaUrls[qualityIndices["Small"]].href;
       image.height = imageHeight;
       // console.log("Quality: Preview url num: " + qualityIndices["Small"]);
     } else {
-      showPicMessage("404.jpg");
+      showMessage(notFound404, 0);
     }
   } else {
-    showPicMessage("404.jpg");
+    showMessage(notFound404, 0);
   }
 }
 
@@ -621,7 +672,6 @@ function getCurrentCosmicObjectNum(itemNum, pageNum) {
 
 function showMedia() {
   if (mediaType == "video") {
-    hidePicMessage();
     hideImage();
     displayVideo();
     // urlNum = 0;
@@ -631,6 +681,7 @@ function showMedia() {
     showQualitySelector();
     enableBtns();
     showControls();
+
     showIvlVideo();
   }
   //checking if the provided hit num contains an album
@@ -646,7 +697,6 @@ function showMedia() {
   // }
   //contains image
   else {
-    hidePicMessage();
     hideVideo();
 
     // urlNum = 0;
@@ -656,6 +706,7 @@ function showMedia() {
     showQualitySelector();
     enableBtns();
     showControls();
+
     showIvlImage();
   }
 }
@@ -729,30 +780,40 @@ function fetchMediaUrl(itemNum, pageNum) {
       mediaUrls = fetchedMediaUrls.collection.items;
       // console.log(mediaUrls);
       // showDescription(itemNum, pageNum);
+      console.log("then");
       showMedia();
     })
     .catch((errCode) => {
       console.log("error code: " + errCode);
+      console.log("catch");
       enableBtns();
       if (errCode == 404) {
         hideVideo();
         hideImage();
-        showPicMessage("404.jpg");
+
+        hideLoadingAnimation();
+        showMessage(notFound404, 0);
       } else if (errCode > 499 && errCode < 600) {
         hideVideo();
         hideImage();
-        showPicMessage("serverError.jpg");
+
+        hideLoadingAnimation();
+        showMessage(problemWithNasaServer, 0);
       } else if (errCode == 400) {
         hideVideo();
         hideImage();
-        showPicMessage("400.jpg");
+
+        hideLoadingAnimation();
+        showMessage(badResquest400, 0);
       }
 
       //for no internet connection
       else {
         hideVideo();
         hideImage();
-        showPicMessage("onerror.jpg");
+
+        hideLoadingAnimation();
+        showMessage(onErrorMessage, 0);
       }
     });
   //    }
@@ -782,7 +843,8 @@ function startSearch() {
     hideDescription();
     hideImage();
 
-    showPicMessage("loading.jpg");
+    showLoadingAnimation();
+    showMessage(loading, 0);
 
     //get selected media type
     getSelectedMediaType();
@@ -820,7 +882,8 @@ function getIvl(page) {
       else {
         hideImage();
         hideVideo();
-        showPicMessage("nothingFound.jpg");
+        hideLoadingAnimation();
+        showMessage(nothingFound, 1);
         enableBtns();
       }
     })
@@ -830,22 +893,26 @@ function getIvl(page) {
       if (errCode == 404) {
         hideVideo();
         hideImage();
-        showPicMessage("404.jpg");
+        hideLoadingAnimation();
+        showMessage(notFound404, 1);
       } else if (errCode > 499 && errCode < 600) {
         hideVideo();
         hideImage();
-        showPicMessage("serverError.jpg");
+        hideLoadingAnimation();
+        showMessage(problemWithNasaServer, 1);
       } else if (errCode == 400) {
         hideVideo();
         hideImage();
-        showPicMessage("400.jpg");
+        hideLoadingAnimation();
+        showMessage(badResquest400, 1);
       }
 
       //for no internet connection
       else {
         hideVideo();
         hideImage();
-        showPicMessage("onerror.jpg");
+        hideLoadingAnimation();
+        showMessage(onErrorMessage, 1);
       }
     });
 }
@@ -854,7 +921,6 @@ function showResultCards() {
   var flexContainer = document.getElementById("flex-container");
   // var column = document.getElementsByClassName("column");
 
-  hidePicMessage();
   //if we have shown all the thumbs from current page and there is a next page
   if (thumbNum == 100 && currentThumbPage < totalPage) {
     currentThumbPage++;
@@ -894,6 +960,10 @@ function showResultCards() {
           hitNum = itemNum;
           currentPage = pageNum;
           showDescription(itemNum, pageNum);
+          hideImage();
+          showModalScreen();
+          showLoadingAnimation();
+          showMessage(loading, 0);
           fetchMediaUrl(itemNum, pageNum);
         };
 
@@ -944,3 +1014,33 @@ function handleScroll() {
   }
 }
 window.addEventListener("scroll", handleScroll);
+
+function handleCloseButtonClick() {
+  pauseVideo();
+  var modal = document.getElementById("myModal");
+  modal.style.display = "none";
+}
+
+function showModalScreen() {
+  // Get the modal
+  var modal = document.getElementById("myModal");
+
+  // Get the image and insert it inside the modal - use its "alt" text as a caption
+
+  modal.style.display = "block";
+}
+function isModalScreenOpen() {
+  var modal = document.getElementById("myModal");
+  if (modal.style.display == "block") {
+    return true;
+  } else return false;
+}
+
+function showLoadingAnimation() {
+  var ripple = document.getElementById("loading-animation");
+  ripple.style.display = "inline-block";
+}
+function hideLoadingAnimation() {
+  var ripple = document.getElementById("loading-animation");
+  ripple.style.display = "none";
+}

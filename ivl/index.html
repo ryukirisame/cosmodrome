@@ -57,6 +57,7 @@
           class="fas fa-times fa-3x close"
           onmouseover="this.style.color='#ef5350';"
           onmouseout="this.style.color='white';"
+          onclick="handleCloseButtonClick();"
         ></i>
 
         <!-- controls section -->
@@ -99,8 +100,19 @@
 
       <!-- content section -->
       <div class="content-section">
-        <img id="pic-message" class="modal-content" />
+        <!-- loading animation -->
+        <div class="lds-ripple" id="loading-animation">
+          <div></div>
+          <div></div>
+        </div>
+
+        <!-- message -->
+        <div class="message" id="messageInsideModal"></div>
+
+        <!-- image -->
         <img class="modal-content" id="pic" />
+
+        <!-- video -->
         <video
           id="vid"
           class="modal-content"
@@ -110,15 +122,15 @@
         >
           <source type="video/mp4" src="" />
         </video>
+        <!-- video end -->
       </div>
     </div>
     <!-- Modal content end -->
 
-    <h3><div id="message"></div></h3>
-    <!--
-    
--->
+    <!-- displays message -->
+    <div class="message" id="message"></div>
 
+    <!-- contains all the cards -->
     <div class="flex-container" id="flex-container"></div>
   </body>
 </html>
