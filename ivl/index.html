@@ -1,7 +1,17 @@
 <html>
   <head>
     <title>NASA</title>
+
+    <!-- viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- script -->
     <script src="javascript.js"></script>
+
+    <!-- css file -->
+    <link rel="stylesheet" type="text/css" href="ivlstyles.css" />
+
+    <!-- fonts -->
     <link
       href="https://fonts.googleapis.com/css?family=Lato"
       rel="stylesheet"
@@ -10,7 +20,12 @@
       href="https://fonts.googleapis.com/css?family=Open Sans"
       rel="stylesheet"
     />
-    <link rel="stylesheet" type="text/css" href="ivlstyles.css" />
+
+    <!-- icons -->
+    <script
+      src="https://kit.fontawesome.com/bfc0669c41.js"
+      crossorigin="anonymous"
+    ></script>
   </head>
   <body>
     <input tye="text" id="searchBar" />
@@ -34,63 +49,88 @@
 
     <!-- Modal Content start-->
     <div id="myModal" class="modal">
-      <!-- close button -->
-      <span class="close">&times;</span>
+      <!-- header section -->
+      <div class="modal-header-container">
+        <!-- close button -->
+        <i
+          id="closeButton"
+          class="fas fa-times fa-3x close"
+          onmouseover="this.style.color='#ef5350';"
+          onmouseout="this.style.color='white';"
+          onclick="handleCloseButtonClick();"
+        ></i>
 
-      <!-- controls section -->
-      <select
-        id="quality-selector"
-        style="display: none;"
-        onchange="changeMediaQuality(document.getElementById('quality-selector').value);"
-      ></select>
+        <!-- controls section -->
+        <select
+          id="quality-selector"
+          style="display: none;"
+          onchange="changeMediaQuality(document.getElementById('quality-selector').value);"
+        ></select>
 
-      <button id="prevBtn" onclick="prevData()" style="display: none;">
-        Previous
-      </button>
+        <!-- previous and next -->
 
-      <button id="nextBtn" onclick="nextData();" style="display: none;">
-        Next
-      </button>
-      <button id="prevBtn" onclick="prevData()" style="display: none;">
-        Previous
-      </button>
+        <button
+          class="change-item-button"
+          id="prevBtn"
+          onclick="prevData()"
+          style="display: none;"
+          text="previous"
+        >
+          <i class="fas fa-angle-left fa-3x"></i>
+        </button>
+        <button
+          class="change-item-button"
+          id="nextBtn"
+          onclick="nextData()"
+          style="display: none;"
+          text="next"
+        >
+          <i class="fas fa-angle-right fa-3x"></i>
+        </button>
 
-      <button id="nextPageBtn" onclick="nextPage()" style="display: none;">
-        Next Page
-      </button>
-
-      <button id="prevPageBtn" onclick="prevPage()" style="display: none;">
-        Prev Page
-      </button>
-
-      <!-- basic information -->
-      <div id="cosmic-object-num" class="modal-text"></div>
-      <div id="date" class="modal-text"></div>
-      <div id="title" class="modal-text"></div>
-      <div id="resolution" class="modal-text"></div>
+        <!-- basic information -->
+        <div class="know-more">
+          <div id="cosmic-object-num" class="modal-text"></div>
+          <div id="date" class="modal-text"></div>
+          <div id="title" class="modal-text"></div>
+          <div id="resolution" class="modal-text"></div>
+          <div id="description" class="modal-text"></div>
+        </div>
+      </div>
 
       <!-- content section -->
-      <img id="pic-message" class="modal-content" />
-      <img class="modal-content" id="pic" />
-      <video
-        id="vid"
-        class="modal-content"
-        autoplay
-        controls
-        style="display: none; width: 100%;"
-      >
-        <source type="video/mp4" src="" />
-      </video>
+      <div class="content-section">
+        <!-- loading animation -->
+        <div class="lds-ripple" id="loading-animation">
+          <div></div>
+          <div></div>
+        </div>
 
-      <div id="description" class="modal-text"></div>
+        <!-- message -->
+        <div class="message" id="messageInsideModal"></div>
+
+        <!-- image -->
+        <img class="modal-content" id="pic" />
+
+        <!-- video -->
+        <video
+          id="vid"
+          class="modal-content"
+          autoplay
+          controls
+          style="display: none; width: 100%;"
+        >
+          <source type="video/mp4" src="" />
+        </video>
+        <!-- video end -->
+      </div>
     </div>
     <!-- Modal content end -->
 
-    <h3><div id="message"></div></h3>
-    <!--
-    
--->
+    <!-- displays message -->
+    <div class="message" id="message"></div>
 
+    <!-- contains all the cards -->
     <div class="flex-container" id="flex-container"></div>
   </body>
 </html>
