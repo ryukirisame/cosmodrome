@@ -28,7 +28,7 @@
     ></script>
   </head>
   <body>
-    <input tye="text" id="searchBar" />
+    <input tye="text" id="searchBar" onkeyup="handleKeyPress(event)" />
     <button id="searchBtn" onclick="console.clear();startSearch();">
       Search
     </button>
@@ -52,18 +52,32 @@
       <!-- header section -->
       <div class="modal-header-container">
         <!-- close button -->
-        <i
-          id="closeButton"
-          class="fas fa-times fa-3x close"
-          onmouseover="this.style.color='#ef5350';"
-          onmouseout="this.style.color='white';"
-          onclick="handleCloseButtonClick();"
-        ></i>
+        <div id="close-button-container">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="76.569"
+            height="76.568"
+            viewBox="0 0 76.569 76.568"
+            class="close"
+            onmouseover="this.style.color='#ef5350';"
+            onmouseout="this.style.color='white';"
+            onclick="handleCloseButtonClick();"
+          >
+            <g id="close" transform="translate(-742.716 -644.716)">
+              <path
+                id="Union_2"
+                data-name="Union 2"
+                d="M135.213,84.355,114,63.142,92.786,84.355A10,10,0,0,1,78.645,70.214L99.858,49,78.645,27.787A10,10,0,0,1,92.786,13.645L114,34.858l21.213-21.213a10,10,0,1,1,14.142,14.142L128.142,49l21.213,21.213a10,10,0,0,1-14.142,14.142Z"
+                transform="translate(667 634)"
+                fill="#fff"
+              />
+            </g>
+          </svg>
+        </div>
 
         <!-- controls section -->
         <select
           id="quality-selector"
-          style="display: none;"
           onchange="changeMediaQuality(document.getElementById('quality-selector').value);"
         ></select>
 
@@ -73,19 +87,37 @@
           class="change-item-button"
           id="prevBtn"
           onclick="prevData()"
-          style="display: none;"
           text="previous"
         >
-          <i class="fas fa-angle-left fa-3x"></i>
+          <svg width="48.284" height="76.564" viewBox="0 0 48.284 76.564">
+            <g id="prev" transform="translate(-4.142 -4.142)">
+              <path
+                id="Union_1"
+                data-name="Union 1"
+                d="M7.071,77.777a10,10,0,0,1,0-14.142L28.283,42.424,7.071,21.213A10,10,0,0,1,21.213,7.071l28.1,28.1q.092.087.182.178a10.005,10.005,0,0,1,0,14.146q-.09.09-.182.177l-28.1,28.1a10,10,0,0,1-14.142,0Z"
+                transform="translate(56.569 84.848) rotate(180)"
+                fill="#fff"
+              />
+            </g>
+          </svg>
         </button>
         <button
           class="change-item-button"
           id="nextBtn"
           onclick="nextData()"
-          style="display: none;"
           text="next"
         >
-          <i class="fas fa-angle-right fa-3x"></i>
+          <svg width="48.284" height="76.564" viewBox="0 0 48.284 76.564">
+            <g id="next" transform="translate(-804.142 -655.142)">
+              <path
+                id="Union_1"
+                data-name="Union 1"
+                d="M7.071,77.777a10,10,0,0,1,0-14.142L28.283,42.424,7.071,21.213A10,10,0,0,1,21.213,7.071l28.1,28.1q.092.087.182.178a10.005,10.005,0,0,1,0,14.146q-.09.09-.182.177l-28.1,28.1a10,10,0,0,1-14.142,0Z"
+                transform="translate(800 651)"
+                fill="#fff"
+              />
+            </g>
+          </svg>
         </button>
 
         <!-- basic information -->

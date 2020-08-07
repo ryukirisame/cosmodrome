@@ -51,6 +51,8 @@ var nothingFound =
 var onErrorMessage =
   "Error. Check your internet connection\n or change media quality.";
 
+window.addEventListener("scroll", handleScroll);
+
 function sendHttpRequest(method, url, mode) {
   return new Promise((resolve, reject) => {
     var req = new XMLHttpRequest();
@@ -399,7 +401,8 @@ function prevData() {
     //else show message and undo changes to hitNum
     else {
       hitNum++;
-      document.getElementById("message").innerHTML = "This is the first page!";
+      showMessage("This is the first page!", 1);
+
       enableBtns();
     }
   }
@@ -416,7 +419,7 @@ function prevData() {
     showDescription(hitNum, currentPage);
   }
 }
-//tries going to previous page. shows error if its the first page
+//tries going to previous page. shows error if its  first page
 function prevPage() {
   currentPage--;
   document.getElementById("message").innerHTML = "";
@@ -551,7 +554,7 @@ function handleVideoLoadingError() {
   pauseVideo();
   hideVideo();
   hideImage();
-  console.log("i was fired");
+  // console.log("i was fired");
   showMessage(onErrorMessage, 0);
 
   enableBtns();
@@ -576,28 +579,6 @@ function startIvlVideoListeners() {
 }
 //SHOWS THE IVL VIDEO
 function showIvlVideo() {
-  //showing descriptions
-  // showDescription();
-
-  // var vid = document.getElementById("vid");
-
-  // vid.onerror = () => {
-  //   pauseVideo();
-  //   hideVideo();
-  //   hideImage();
-
-  //   showMessage(onErrorMessage, 0);
-
-  //   enableBtns();
-  // };
-  // vid.onloadedmetadata = () => {
-  //   document.getElementById("resolution").innerHTML =
-  //     "Resolution: " + vid.videoWidth + " x " + vid.videoHeight;
-  //   document.getElementById("message").innerHTML = "";
-
-  //   enableBtns();
-  // };
-
   //console.log(mediaUrls[0]);
   if (mediaUrls.length > 0) {
     if (qualityIndices.hasOwnProperty("Large")) {
@@ -702,7 +683,7 @@ function showIvlImage() {
     hideImage();
 
     showMessage(onErrorMessage, 0);
-    enableBtns();
+    // enableBtns();
   };
   image.onload = () => {
     document.getElementById("resolution").innerHTML =
@@ -713,7 +694,7 @@ function showIvlImage() {
     hideLoadingAnimation();
 
     displayImage();
-    enableBtns();
+    // enableBtns();
   };
 
   if (mediaUrls.length > 0) {
@@ -763,41 +744,22 @@ function getCurrentCosmicObjectNum(itemNum, pageNum) {
 
 function showMedia() {
   if (mediaType == "video") {
-    hideImage();
-    // displayVideo();
-    // urlNum = 0;
-    // listenToQualityChange();
     findMediaQualities();
     createMediaQualityOptions();
     showQualitySelector();
     enableBtns();
-    showControls();
+    // showControls();
 
     showIvlVideo();
   }
-  //checking if the provided hit num contains an album
-  // else if (mediaType == "album") {
-  //   // enableBtns();
 
-  //   // showPicMessage("sigh.jpg");
-
-  //   // document.getElementById("cosmic-object-num").innerHTML =
-  //   //   "Cosmic Object: " + getCurrentCosmicObjectNum();
-  //   // +" / " + totalHits;
-  //   nextData();
-  // }
   //contains image
   else {
-    pauseVideo();
-    hideVideo();
-
-    // urlNum = 0;
-    // listenToQualityChange();
     findMediaQualities();
     createMediaQualityOptions();
     showQualitySelector();
     enableBtns();
-    showControls();
+    // showControls();
 
     showIvlImage();
   }
@@ -941,8 +903,8 @@ function startSearch() {
     hideDescription();
     hideImage();
 
-    showLoadingAnimation();
-    showMessage(loading, 0);
+    // showLoadingAnimation();
+    // showMessage(loading, 0);
 
     queryResponse = [];
 
@@ -1123,22 +1085,28 @@ function handleScroll() {
     showResultCards();
   }
 }
-window.addEventListener("scroll", handleScroll);
 
 function handleCloseButtonClick() {
   pauseVideo();
   hideVideo();
-  var modal = document.getElementById("myModal");
-  modal.style.display = "none";
+  hideModalSreen();
 }
 
 function showModalScreen() {
   // Get the modal
   var modal = document.getElementById("myModal");
-
-  // Get the image and insert it inside the modal - use its "alt" text as a caption
-
+  //displaying modal screen
   modal.style.display = "block";
+
+  //starting key press listeners
+  document.addEventListener("keyup", handleArrowKeyPress);
+}
+function hideModalSreen() {
+  var modal = document.getElementById("myModal");
+  //removing event listener of arrow key press
+  document.removeEventListener("keyup", handleArrowKeyPress);
+  //hiding modal screen
+  modal.style.display = "none";
 }
 function isModalScreenOpen() {
   var modal = document.getElementById("myModal");
@@ -1146,7 +1114,20 @@ function isModalScreenOpen() {
     return true;
   } else return false;
 }
-
+function handleArrowKeyPress(event) {
+  var char = event.keyCode;
+  console.log("key pressed: " + char);
+  if (char == 37) {
+    if (document.getElementById("prevBtn").disabled == false) {
+      prevData();
+    }
+  }
+  if (char == 39) {
+    if (document.getElementById("nextBtn").disabled == false) {
+      nextData();
+    }
+  }
+}
 function showLoadingAnimation() {
   var ripple = document.getElementById("loading-animation");
 
@@ -1158,4 +1139,12 @@ function hideLoadingAnimation() {
   var ripple = document.getElementById("loading-animation");
   clearTimeout(loadingAnimationSetTimeOut);
   ripple.style.display = "none";
+}
+
+function handleKeyPress(event) {
+  var char = event.keyCode;
+  // console.log("char code:" + char);
+  if (char == 13) {
+    startSearch();
+  }
 }
