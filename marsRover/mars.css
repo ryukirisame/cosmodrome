@@ -48,13 +48,30 @@
 }
 #close
 {
+    font-family: gotham;
     font-size: 100px;
-    color: blue;
+    color: rgb(201, 204, 201);
     display: none;
 }
 #close.active
 {
-    display: inline;
+    position: absolute;
+    right: 50px;
+    top: 0px;
+    z-index: 1;
+    display: inline-block;
     cursor: pointer;
+}
+#modalHeader
+{
+    position: absolute;
+    height: 100px;
+    width: 100%;
+    top: 0;
+    display: none;
+}
+#modalHeader.active
+{
+    display: inline;
 }
 

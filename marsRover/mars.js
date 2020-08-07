@@ -273,6 +273,7 @@ function modalImage()
 {
 const box = document.createElement('div')
 const closeImage = document.getElementById('close');
+const modalHeader = document.getElementById('modalHeader');
 box.id = "box"
 document.body.appendChild(box);
 
@@ -281,6 +282,7 @@ images.forEach(image => {
     image.addEventListener('click', e => {
         box.classList.add('active');
         closeImage.classList.add('active');
+        modalHeader.classList.add('active');
         const img = document.createElement('img');
         img.src = image.src;
         while(box.firstChild)
@@ -290,6 +292,7 @@ images.forEach(image => {
 
         box.appendChild(img);
         box.appendChild(closeImage);
+        box.appendChild(modalHeader);
     })
 })
 
