@@ -19,6 +19,10 @@ var Curiosity_box;
 var Opportunity_box;
 var Spirit_box;
 var update_url;
+var imageContainer;
+var mainImage;
+var ImgBox;
+var img;
 
 // This function wil allow user to choose the following rovers, there are three rovers available;
 
@@ -108,33 +112,19 @@ function disableImage() {
 
 // when image is successfully parsed from the server then, showpic() will allow to show that pictures on the webpage.
 
-// function showPic() {
-//     var id;
-//     var image = document.getElementById("pic");
-//     image.onload = function () {
-//         loadingImg('none');
-//         enableImage();
-//         enableBtn();
-//         document.getElementById("toggle").style.visibility = "hidden";
-//     }
-//     disablebtn();
-//     image.onerror = () => {
-//         loadingImg("none");
-//         disableImage();
-//         errorImage('inline');
-//     }
-//     image.src = data.photos[urlIndex].img_src;
-//     id = data.photos[urlIndex].id;
-//     console.log(id);
-
-// }
 
 function showPic() {
     var i = 0;
     console.log(data);
-    var imageContainer = document.getElementById("imageContainer");
+    imageContainer = document.getElementById("imageContainer");
     while (i < data.photos.length) {
-        var img = document.createElement("img");
+        ImgBox = document.createElement("div");
+        img = document.createElement('img');
+        img.className = "cardImage";
+        ImgBox.id = "card";
+        ImgBox.appendChild(img);
+        // var img = document.createElement('img');
+        //  var img = document.createElement("img");
         img.src = data.photos[i].img_src;
         img.onload = function () {
             loadingImg('none');
@@ -148,40 +138,30 @@ function showPic() {
             disableImage();
             errorImage('inline');
         }
-        imageContainer.appendChild(img);
-        i++;
+        imageContainer.appendChild(ImgBox);
+        i++; 
+        
+    } 
+    modalImage();
+}
+
+
+
+
+function removeChild()
+{
+    var list = document.getElementById("imageContainer");
+
+    // As long as <ul> has a child node, remove it
+    while (list.hasChildNodes()) {
+        list.removeChild(list.firstChild);
     }
 }
 
-function allImage() {
-    var allImage = document.querySelectorAll(".allImage");
-    var index = 0;
-    var i = 0;
-    var id;
-    console.log("All image is enabled");
-    sendHttpRequest(method, update_url + imgDate, mode).then((test) => {
-
-        var id = data.photos.length;
-        console.log(id);
-
-        for (i = 0; i < allImage.length; i++) {
-            // console.log(i);
-            for (index = 0; index < data.photos.length; index++) {
-                // console.log(index);
-                allImage[i].src = data.photos[index].img_src;
-                console.log(allImage[i].src);
-                id = data.photos[index].id;
-                console.log(id);
-            }
-        }
-
-    })
-
-
-}
 
 //It will allow user to go to the next image.
 function nextPic() {
+    
     urlIndex++;
     if (urlIndex > data.photos.length) {
         urlIndex = 0;
@@ -213,6 +193,7 @@ function date_change() {
 }
 
 function fcam() {
+    modalImage();
     console.log('front camera is enabled!');
     sendHttpRequest(method, update_url + imgDate + front_camera, mode).then((test) => {
         date_change();
@@ -227,7 +208,9 @@ function fcam() {
             errorImage('none');
             data = test;
             urlIndex = 0;
+            removeChild();
             showPic();
+
         }
 
     });
@@ -235,7 +218,6 @@ function fcam() {
 // unlike fcam it will ask for rear camera angle photos to the server.
 function rcam() {
     console.log('Rear camera is enabled!');
-    // date_change();
     sendHttpRequest(method, update_url + imgDate + Rear_camera, mode).then((test) => {
         data = test;
 
@@ -250,6 +232,7 @@ function rcam() {
             errorImage('none');
             data = test;
             urlIndex = 0;
+            removeChild();
             showPic();
         }
     });
@@ -272,6 +255,7 @@ function navcam() {
             errorImage('none');
             data = test;
             urlIndex = 0;
+            removeChild();
             showPic();
         }
     });
@@ -284,3 +268,48 @@ function onChangeDate() {
     document.getElementById("toggle").style.visibility = "hidden";
 
 }
+
+function modalImage()
+{
+const box = document.createElement('div')
+const closeImage = document.getElementById('close');
+box.id = "box"
+document.body.appendChild(box);
+
+const images = document.querySelectorAll('img');
+images.forEach(image => {
+    image.addEventListener('click', e => {
+        box.classList.add('active');
+        closeImage.classList.add('active');
+        const img = document.createElement('img');
+        img.src = image.src;
+        while(box.firstChild)
+        {
+            box.removeChild(box.firstChild)
+        }
+
+        box.appendChild(img);
+        box.appendChild(closeImage);
+    })
+})
+
+closeImage.addEventListener('click',e => {
+    if(e.target == e.closeImage)
+    return
+    box.classList.remove('active');
+})
+
+
+    // box.addEventListener('click',e => {
+    //     if(e.target !== e.currentTarget)
+    //     return;
+    //     box.classList.remove('active');
+    // })
+
+
+
+}
+
+
+
+

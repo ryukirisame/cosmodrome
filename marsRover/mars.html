@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="mars.js"></script>
+    <script defer src="mars.js"></script>
     <title>Mars Rovers</title>
     <link rel="icon" href="favicon.ico">
     <link rel="stylesheet" href="mars.css">
@@ -38,14 +38,19 @@
         <img src="" id="frontImg">
         <img src="" id="rearImg">
         <img src="loading.jpg" style="display: none;" id="loadImg" alt="">
-
-        <button onclick="allImage();">All image</button>
-
-        <div id="imageContainer">
-
-
-        </div>
+        
     </div>
+    <div id="imageContainer" class="imageContainer">
+    
+    </div>
+<!-- Image modal -->
+    <div id="myModal" class="modal">
+        
+        <img class = "modal-content" id = "modal-image">
+    </div>
+
+    <span id="close">&times;</span>
+
 </body>
 
 </html>
