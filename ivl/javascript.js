@@ -52,6 +52,7 @@ var onErrorMessage =
   "Error. Check your internet connection\n or change media quality.";
 
 window.addEventListener("scroll", handleScroll);
+window.onresize = handleWindowResize;
 
 function sendHttpRequest(method, url, mode) {
   return new Promise((resolve, reject) => {
@@ -113,6 +114,17 @@ function displayVideo() {
 }
 
 function createVideoElement(url) {
+  var contentSectionWidth = window.innerWidth;
+  var contentSectionHeight = window.innerHeight * 0.9;
+
+  // console.log("screen height: " + imageHeight + " scren width: " + imageWidth);
+  // console.log(
+  //   "window height: " +
+  //     contentSectionHeight +
+  //     " window width: " +
+  //     contentSectionWidth
+  // );
+
   var videoContainer = document.getElementById("videoContainer");
   var vid = document.createElement("video");
   // var source = document.createElement("source");
@@ -122,8 +134,9 @@ function createVideoElement(url) {
   vid.autoplay = true;
   vid.controls = true;
   vid.style.display = "none";
-  vid.style.width = "100%";
-
+  // vid.style.width = "100%";
+  vid.style.maxHeight = contentSectionHeight * 0.95;
+  vid.style.maxWidth = contentSectionWidth * 0.9;
   // source.type = "video/mp4";
   // source.src = "";
 
@@ -136,10 +149,9 @@ function createVideoElement(url) {
 function hideVideo() {
   var vid = document.getElementById("vid");
 
-  var videoContainer = document.getElementById("videoContainer");
-
   // if there exists a video element with id="vid"
   if (vid != undefined) {
+    var videoContainer = document.getElementById("videoContainer");
     vid.style.display = "none";
     stopPreviousIvlVideoListeners();
     videoContainer.removeChild(vid);
@@ -587,6 +599,7 @@ function startIvlVideoListeners() {
 //SHOWS THE IVL VIDEO
 function showIvlVideo() {
   //console.log(mediaUrls[0]);
+
   if (mediaUrls.length > 0) {
     if (qualityIndices.hasOwnProperty("Large")) {
       document.getElementById("Large").selected = "true";
@@ -664,8 +677,8 @@ function changeMediaQuality(qualityKey) {
   // } else
   if (mediaType == "video") {
     pauseVideo();
-    hideVideo();
-    showLoadingAnimation();
+    // hideVideo();
+    // showLoadingAnimation();
 
     var vid = document.getElementById("vid");
     vid.src = mediaUrls[qualityIndices[qualityKey]].href;
@@ -687,18 +700,8 @@ function changeMediaQuality(qualityKey) {
   }
 }
 function handleWindowResize() {
-  var currentlyOpenedMediaType = document.getElementsByName("media-type");
-
-  //for image
-  if (currentlyOpenedMediaType[0].checked == true) {
-    var image = document.getElementById("pic");
-    var contentSectionWidth = window.innerWidth;
-    var contentSectionHeight = window.innerHeight * 0.9;
-    image.style.maxHeight = contentSectionHeight * 0.95;
-    image.style.maxWidth = contentSectionWidth * 0.9;
-  }
   //for video
-  if (currentlyOpenedMediaType[1].checked == true) {
+  if (mediaType == "video") {
     var video = document.getElementById("vid");
     if (video != undefined) {
       var contentSectionWidth = window.innerWidth;
@@ -706,6 +709,14 @@ function handleWindowResize() {
       video.style.maxHeight = contentSectionHeight * 0.95;
       video.style.maxWidth = contentSectionWidth * 0.9;
     }
+  }
+  //for image
+  if (mediaType == "image") {
+    var image = document.getElementById("pic");
+    var contentSectionWidth = window.innerWidth;
+    var contentSectionHeight = window.innerHeight * 0.9;
+    image.style.maxHeight = contentSectionHeight * 0.95;
+    image.style.maxWidth = contentSectionWidth * 0.9;
   }
 }
 function showIvlImage() {
@@ -1146,8 +1157,11 @@ function handleScroll() {
 }
 
 function handleCloseButtonClick() {
-  pauseVideo();
-  hideVideo();
+  if (mediaType == "video") {
+    pauseVideo();
+    hideVideo();
+  }
+
   hideModalSreen();
 }
 
