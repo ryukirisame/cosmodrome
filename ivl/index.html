@@ -22,12 +22,8 @@
     />
 
     <!-- icons -->
-    <script
-      src="https://kit.fontawesome.com/bfc0669c41.js"
-      crossorigin="anonymous"
-    ></script>
   </head>
-  <body>
+  <body onresize="handleWindowResize();">
     <input tye="text" id="searchBar" onkeyup="handleKeyPress(event)" />
     <button id="searchBtn" onclick="console.clear();startSearch();">
       Search
@@ -49,31 +45,25 @@
 
     <!-- Modal Content start-->
     <div id="myModal" class="modal">
-      <!-- header section -->
+      <!-- HEADER SECTION -->
       <div class="modal-header-container">
-        <!-- close button -->
-        <div id="close-button-container" onclick="handleCloseButtonClick();">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="76.569"
-            height="76.568"
-            viewBox="0 0 76.569 76.568"
-            class="close"
-            onmouseover="this.style.color='#ef5350';"
-            onmouseout="this.style.color='white';"
-          >
-            <g id="close" transform="translate(-742.716 -644.716)">
-              <path
-                id="Union_2"
-                data-name="Union 2"
-                d="M135.213,84.355,114,63.142,92.786,84.355A10,10,0,0,1,78.645,70.214L99.858,49,78.645,27.787A10,10,0,0,1,92.786,13.645L114,34.858l21.213-21.213a10,10,0,1,1,14.142,14.142L128.142,49l21.213,21.213a10,10,0,0,1-14.142,14.142Z"
-                transform="translate(667 634)"
-                fill="#fff"
-              />
-            </g>
-          </svg>
-        </div>
+        <!-- controls section -->
+        <div class="controls-section">
+          <!-- basic information -->
+          <div id="know-more">
+            <div id="cosmic-object-num" class="modal-text"></div>
+            <div id="date" class="modal-text"></div>
+            <div id="title" class="modal-text"></div>
+            <div id="resolution" class="modal-text"></div>
+            <div id="description" class="modal-text"></div>
+          </div>
 
+          <!-- quality selector -->
+          <select
+            id="quality-selector"
+            onchange="changeMediaQuality(document.getElementById('quality-selector').value);"
+          ></select>
+        </div>
         <!-- previous and next -->
 
         <button
@@ -112,23 +102,27 @@
             </g>
           </svg>
         </button>
-
-        <!-- controls section -->
-        <div class="controls-section">
-          <!-- basic information -->
-          <div id="know-more">
-            <div id="cosmic-object-num" class="modal-text"></div>
-            <div id="date" class="modal-text"></div>
-            <div id="title" class="modal-text"></div>
-            <div id="resolution" class="modal-text"></div>
-            <div id="description" class="modal-text"></div>
-          </div>
-
-          <!-- quality selector -->
-          <select
-            id="quality-selector"
-            onchange="changeMediaQuality(document.getElementById('quality-selector').value);"
-          ></select>
+        <!-- close button -->
+        <div id="close-button-container" onclick="handleCloseButtonClick();">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="76.569"
+            height="76.568"
+            viewBox="0 0 76.569 76.568"
+            class="close"
+            onmouseover="this.style.color='#ef5350';"
+            onmouseout="this.style.color='white';"
+          >
+            <g id="close" transform="translate(-742.716 -644.716)">
+              <path
+                id="Union_2"
+                data-name="Union 2"
+                d="M135.213,84.355,114,63.142,92.786,84.355A10,10,0,0,1,78.645,70.214L99.858,49,78.645,27.787A10,10,0,0,1,92.786,13.645L114,34.858l21.213-21.213a10,10,0,1,1,14.142,14.142L128.142,49l21.213,21.213a10,10,0,0,1-14.142,14.142Z"
+                transform="translate(667 634)"
+                fill="#fff"
+              />
+            </g>
+          </svg>
         </div>
       </div>
 
@@ -145,10 +139,13 @@
         <span class="message" id="messageInsideModal"></span>
 
         <!-- image -->
-        <img class="modal-content" id="pic" />
+        <div class="media-container">
+          <img class="modal-content" id="pic" />
+        </div>
 
         <!-- video -->
-        <div class="modal-content" id="videoContainer">
+
+        <div class="media-container" id="videoContainer">
           <!-- <video
             id="vid"
             class="modal-content"

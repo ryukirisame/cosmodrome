@@ -85,7 +85,7 @@ body {
   backdrop-filter: blur(10px);
 }
 .modal-header-container {
-  /* background-color: turquoise; */
+  background-color: turquoise;
   box-sizing: border-box;
   width: 100%;
   min-width: 700px;
@@ -174,7 +174,9 @@ svg {
   position: relative;
   /* display: block; */
   width: 100%;
-  height: 90%;
+  height: 90%; /* the other 10% is taken by the modal header section*/
+  /* overflow: hidden; */
+  background-color: teal;
   /* flex-direction: column; */
 }
 /* loading animation */
@@ -182,7 +184,7 @@ svg {
   display: inline-block;
   position: absolute;
   left: 50%;
-  top: 42.5%;
+  top: 47.75%;
   transform: translate(-50%, -50%);
   width: 80px;
   height: 80px;
@@ -248,12 +250,22 @@ svg {
   font-size: 24px;
 }
 
+/* MODAL CONTENT (image and video) */
+
+.media-container {
+  position: absolute;
+  top: 47.75%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* max-height: 100%;
+  max-width: 100%; */
+}
 .modal-content {
-  margin: auto;
-  margin-top: 0px;
-  display: block;
-  padding: 0px;
-  max-width: 100%;
+  /* margin: auto; */
+  /* margin-top: 0px; */
+  display: inline-block;
+  /* padding: 0px; */
+  /* max-width: 100%; */
 
   /* height: 90%;*/
   /* max-width: 95%; */

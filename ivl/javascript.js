@@ -109,13 +109,13 @@ function showControls() {
 
 function displayVideo() {
   var vid = document.getElementById("vid");
-  if (vid != undefined) vid.style.display = "block";
+  if (vid != undefined) vid.style.display = "inline-block";
 }
 
 function createVideoElement(url) {
   var videoContainer = document.getElementById("videoContainer");
   var vid = document.createElement("video");
-  var source = document.createElement("source");
+  // var source = document.createElement("source");
 
   vid.id = "vid";
   vid.className = "modal-content";
@@ -124,8 +124,8 @@ function createVideoElement(url) {
   vid.style.display = "none";
   vid.style.width = "100%";
 
-  source.type = "video/mp4";
-  source.src = "";
+  // source.type = "video/mp4";
+  // source.src = "";
 
   videoContainer.appendChild(vid);
   stopPreviousIvlVideoListeners();
@@ -156,7 +156,7 @@ function pauseVideo() {
   }
 }
 function displayImage() {
-  document.getElementById("pic").style.display = "block";
+  document.getElementById("pic").style.display = "inline-block";
 }
 function hideImage() {
   document.getElementById("pic").style.display = "none";
@@ -686,17 +686,54 @@ function changeMediaQuality(qualityKey) {
     // );
   }
 }
-// function rePositionImage() {
-//   const image = document.getElementById("pic");
-//   image.style.top = "50%";
-//   image.style.left = "50%";
-//   image.style.transform = "translate(-50%,-50%)";
-// }
+function handleWindowResize() {
+  var currentlyOpenedMediaType = document.getElementsByName("media-type");
+
+  //for image
+  if (currentlyOpenedMediaType[0].checked == true) {
+    var image = document.getElementById("pic");
+    var contentSectionWidth = window.innerWidth;
+    var contentSectionHeight = window.innerHeight * 0.9;
+    image.style.maxHeight = contentSectionHeight * 0.95;
+    image.style.maxWidth = contentSectionWidth * 0.9;
+  }
+  //for video
+  if (currentlyOpenedMediaType[1].checked == true) {
+    var video = document.getElementById("vid");
+    if (video != undefined) {
+      var contentSectionWidth = window.innerWidth;
+      var contentSectionHeight = window.innerHeight * 0.9;
+      video.style.maxHeight = contentSectionHeight * 0.95;
+      video.style.maxWidth = contentSectionWidth * 0.9;
+    }
+  }
+}
 function showIvlImage() {
   //  showDescription();
-  var imageHeight = screen.height * 0.775;
+  // var imageHeight = screen.height;
+  // var imageWidth = screen.width;
+
+  var contentSectionWidth = window.innerWidth;
+  var contentSectionHeight = window.innerHeight * 0.9;
+
+  // console.log("screen height: " + imageHeight + " scren width: " + imageWidth);
+  console.log(
+    "window height: " +
+      contentSectionHeight +
+      " window width: " +
+      contentSectionWidth
+  );
 
   var image = document.getElementById("pic");
+  image.style.maxHeight = contentSectionHeight * 0.95;
+  image.style.maxWidth = contentSectionWidth * 0.9;
+
+  // var contentSection = document.getElementsByClassName("content-section");
+  //  var contentSectionHeight = contentSection[0].style.height;
+  // console.log(contentSection);
+  // image.style.maxHeight = contentSectionHeight * 0.9;
+  // image.style.maxHeight = imageHeight;
+  // image.style.maxWidth = imageWidth;
 
   image.onerror = () => {
     pauseVideo();
@@ -721,26 +758,25 @@ function showIvlImage() {
   if (mediaUrls.length > 0) {
     if (qualityIndices.hasOwnProperty("Large")) {
       document.getElementById("Large").selected = "true";
-      image.style.maxHeight = imageHeight;
 
       image.src = mediaUrls[qualityIndices["Large"]].href;
 
       // console.log("Quality: Large url num: " + qualityIndices["Large"]);
     } else if (qualityIndices.hasOwnProperty("Original")) {
       document.getElementById("Original").selected = true;
-      image.style.maxHeight = imageHeight;
+
       image.src = mediaUrls[qualityIndices["Original"]].href;
 
       // console.log("Quality: Original url num: " + qualityIndices["Original"]);
     } else if (qualityIndices.hasOwnProperty("Medium")) {
       document.getElementById("Medium").selected = true;
-      image.style.maxHeight = imageHeight;
+
       image.src = mediaUrls[qualityIndices["Medium"]].href;
 
       // console.log("Quality: Medium url num: " + qualityIndices["Medium"]);
     } else if (qualityIndices.hasOwnProperty("Small")) {
       document.getElementById("Small").selected = true;
-      image.style.maxHeight = imageHeight;
+
       image.src = mediaUrls[qualityIndices["Small"]].href;
 
       // console.log("Quality: Preview url num: " + qualityIndices["Small"]);
