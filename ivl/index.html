@@ -52,7 +52,7 @@
       <!-- header section -->
       <div class="modal-header-container">
         <!-- close button -->
-        <div id="close-button-container">
+        <div id="close-button-container" onclick="handleCloseButtonClick();">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="76.569"
@@ -61,7 +61,6 @@
             class="close"
             onmouseover="this.style.color='#ef5350';"
             onmouseout="this.style.color='white';"
-            onclick="handleCloseButtonClick();"
           >
             <g id="close" transform="translate(-742.716 -644.716)">
               <path
@@ -74,12 +73,6 @@
             </g>
           </svg>
         </div>
-
-        <!-- controls section -->
-        <select
-          id="quality-selector"
-          onchange="changeMediaQuality(document.getElementById('quality-selector').value);"
-        ></select>
 
         <!-- previous and next -->
 
@@ -120,17 +113,26 @@
           </svg>
         </button>
 
-        <!-- basic information -->
-        <div class="know-more">
-          <div id="cosmic-object-num" class="modal-text"></div>
-          <div id="date" class="modal-text"></div>
-          <div id="title" class="modal-text"></div>
-          <div id="resolution" class="modal-text"></div>
-          <div id="description" class="modal-text"></div>
+        <!-- controls section -->
+        <div class="controls-section">
+          <!-- basic information -->
+          <div id="know-more">
+            <div id="cosmic-object-num" class="modal-text"></div>
+            <div id="date" class="modal-text"></div>
+            <div id="title" class="modal-text"></div>
+            <div id="resolution" class="modal-text"></div>
+            <div id="description" class="modal-text"></div>
+          </div>
+
+          <!-- quality selector -->
+          <select
+            id="quality-selector"
+            onchange="changeMediaQuality(document.getElementById('quality-selector').value);"
+          ></select>
         </div>
       </div>
 
-      <!-- content section -->
+      <!-- CONTENT SECTION -->
       <div class="content-section">
         <!-- loading animation -->
         <div class="lds-ripple" id="loading-animation">
@@ -139,13 +141,14 @@
         </div>
 
         <!-- message -->
-        <div class="message" id="messageInsideModal"></div>
+
+        <span class="message" id="messageInsideModal"></span>
 
         <!-- image -->
         <img class="modal-content" id="pic" />
 
         <!-- video -->
-        <div id="videoContainer">
+        <div class="modal-content" id="videoContainer">
           <!-- <video
             id="vid"
             class="modal-content"
@@ -163,7 +166,8 @@
     <!-- Modal content end -->
 
     <!-- displays message -->
-    <div class="message" id="message"></div>
+
+    <span class="message" id="message"></span>
 
     <!-- contains all the cards -->
     <div class="flex-container" id="flex-container"></div>

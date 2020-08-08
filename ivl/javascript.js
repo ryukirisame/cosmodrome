@@ -37,10 +37,10 @@ var connecting = "Connecting to NASA...";
 var loading = "Loading...";
 
 var notFound404 =
-  "404 The cosmic object you are looking for has disappeared beyond the event horizon.";
+  "404. The cosmic object you are looking for has disappeared beyond the event horizon.";
 
 var badResquest400 =
-  "400 Bad Request. The server could not understand the request due to invalid syntax.";
+  "400. Bad Request. The server could not understand the request due to invalid syntax.";
 
 var problemWithNasaServer =
   "There is some problem with NASA servers.\nPlease try again later.";
@@ -138,6 +138,7 @@ function hideVideo() {
 
   var videoContainer = document.getElementById("videoContainer");
 
+  // if there exists a video element with id="vid"
   if (vid != undefined) {
     vid.style.display = "none";
     stopPreviousIvlVideoListeners();
@@ -146,7 +147,7 @@ function hideVideo() {
 }
 function pauseVideo() {
   var vid = document.getElementById("vid");
-
+  // if there exists a video element with id="vid".
   if (vid != undefined) {
     vid.pause();
     vid.currentTime = 0;
@@ -160,25 +161,27 @@ function displayImage() {
 function hideImage() {
   document.getElementById("pic").style.display = "none";
 }
-function showMessage(message, messageBoxNum) {
+function showMessage(messageString, messageBoxNum) {
   //boxNum=0 means the message box inside modal screen
   // boxNum=1 means the message box outside the modal screen
-  document.getElementsByClassName("message")[messageBoxNum].innerHTML = message;
-  // console.log("message box: ", messageBoxNum);
-  if (messageBoxNum == 1) {
-    document.getElementsByClassName("message")[0].style.display = "none";
-    document.getElementsByClassName("message")[1].style.display =
-      "inline-block";
-  }
+
+  var messageBoxInsideModal = document.getElementById("messageInsideModal");
+  var messageBox = document.getElementById("message");
+  console.log(message);
   if (messageBoxNum == 0) {
-    document.getElementsByClassName("message")[1].style.display = "none";
-    document.getElementsByClassName("message")[0].style.display =
-      "inline-block";
+    messageBoxInsideModal.innerHTML = messageString;
+    messageBox.style.display = "none";
+    messageBoxInsideModal.style.display = "inline";
+  }
+  if (messageBoxNum == 1) {
+    messageBox.innerHTML = messageString;
+    messageBoxInsideModal.style.display = "none";
+    messageBox.style.display = "inline";
   }
 }
 function hideMessage() {
-  document.getElementsByClassName("message")[0].style.display = "none";
-  document.getElementsByClassName("message")[1].style.display = "none";
+  document.getElementById("messageInsideModal").style.display = "none";
+  document.getElementById("message").style.display = "none";
 }
 function showQualitySelector() {
   document.getElementById("quality-selector").style.display = "inline-block";
@@ -332,6 +335,7 @@ function nextData() {
 
     if (isNextPageAvailable()) {
       hitNum = 0;
+      hideMessage();
       nextPage();
     }
     //if next page is not available then display message
@@ -347,8 +351,9 @@ function nextData() {
     hideImage();
     pauseVideo();
     hideVideo();
+    hideMessage();
     showLoadingAnimation();
-    showMessage(loading, 0);
+    // showMessage(loading, 0);
     // document.getElementById("pic").src = "loading.gif";
 
     showModalScreen();
@@ -365,7 +370,7 @@ function nextPage() {
     pauseVideo();
     hideVideo();
     showLoadingAnimation();
-    showMessage(loading, 0);
+    // showMessage(loading, 0);
     currentPage++;
     //if the next page is not downloaded
     if (queryResponse[currentPage - 1] == undefined) {
@@ -413,7 +418,7 @@ function prevData() {
     pauseVideo();
     hideVideo();
     showLoadingAnimation();
-    showMessage(loading, 0);
+    // showMessage(loading, 0);
     //document.getElementById("pic").src = "loading.gif";
     fetchMediaUrl(hitNum, currentPage);
     showDescription(hitNum, currentPage);
@@ -438,7 +443,7 @@ function prevPage() {
     pauseVideo();
     hideVideo();
     showLoadingAnimation();
-    showMessage(loading, 0);
+    // showMessage(loading, 0);
     hitNum = 100;
     prevData();
   }
@@ -554,6 +559,8 @@ function handleVideoLoadingError() {
   pauseVideo();
   hideVideo();
   hideImage();
+
+  hideLoadingAnimation();
   // console.log("i was fired");
   showMessage(onErrorMessage, 0);
 
@@ -563,7 +570,7 @@ function handleVideoLoadedMetaData() {
   document.getElementById("resolution").innerHTML =
     "Resolution: " + vid.videoWidth + " x " + vid.videoHeight;
   document.getElementById("message").innerHTML = "";
-
+  hideLoadingAnimation();
   enableBtns();
 }
 function stopPreviousIvlVideoListeners() {
@@ -651,26 +658,40 @@ function showIvlVideo() {
 // }
 function changeMediaQuality(qualityKey) {
   disableBtns();
+  hideMessage();
 
   // if (mediaType == "album") {
   // } else
   if (mediaType == "video") {
+    pauseVideo();
+    hideVideo();
+    showLoadingAnimation();
+
     var vid = document.getElementById("vid");
     vid.src = mediaUrls[qualityIndices[qualityKey]].href;
-    console.log(
-      "Quality: " + qualityKey + " url num: " + qualityIndices[qualityKey]
-    );
+    enableBtns();
+    // console.log(
+    //   "Quality: " + qualityKey + " url num: " + qualityIndices[qualityKey]
+    // );
   }
   //for image
   else {
+    hideImage();
+    showLoadingAnimation();
     var image = document.getElementById("pic");
     image.src = mediaUrls[qualityIndices[qualityKey]].href;
+    enableBtns();
     // console.log(
     //   "Quality: " + qualityKey + " url num: " + qualityIndices[qualityKey]
     // );
   }
 }
-
+// function rePositionImage() {
+//   const image = document.getElementById("pic");
+//   image.style.top = "50%";
+//   image.style.left = "50%";
+//   image.style.transform = "translate(-50%,-50%)";
+// }
 function showIvlImage() {
   //  showDescription();
   var imageHeight = screen.height * 0.775;
@@ -681,7 +702,7 @@ function showIvlImage() {
     pauseVideo();
     hideVideo();
     hideImage();
-
+    hideLoadingAnimation();
     showMessage(onErrorMessage, 0);
     // enableBtns();
   };
@@ -689,7 +710,7 @@ function showIvlImage() {
     document.getElementById("resolution").innerHTML =
       "Resolution: " + image.naturalWidth + " x " + image.naturalHeight;
     document.getElementById("message").innerHTML = "";
-
+    // rePositionImage();
     hideMessage();
     hideLoadingAnimation();
 
@@ -700,28 +721,28 @@ function showIvlImage() {
   if (mediaUrls.length > 0) {
     if (qualityIndices.hasOwnProperty("Large")) {
       document.getElementById("Large").selected = "true";
+      image.style.maxHeight = imageHeight;
 
       image.src = mediaUrls[qualityIndices["Large"]].href;
 
-      image.height = imageHeight;
       // console.log("Quality: Large url num: " + qualityIndices["Large"]);
     } else if (qualityIndices.hasOwnProperty("Original")) {
       document.getElementById("Original").selected = true;
-
+      image.style.maxHeight = imageHeight;
       image.src = mediaUrls[qualityIndices["Original"]].href;
-      image.height = imageHeight;
+
       // console.log("Quality: Original url num: " + qualityIndices["Original"]);
     } else if (qualityIndices.hasOwnProperty("Medium")) {
       document.getElementById("Medium").selected = true;
-
+      image.style.maxHeight = imageHeight;
       image.src = mediaUrls[qualityIndices["Medium"]].href;
-      image.height = imageHeight;
+
       // console.log("Quality: Medium url num: " + qualityIndices["Medium"]);
     } else if (qualityIndices.hasOwnProperty("Small")) {
       document.getElementById("Small").selected = true;
-
+      image.style.maxHeight = imageHeight;
       image.src = mediaUrls[qualityIndices["Small"]].href;
-      image.height = imageHeight;
+
       // console.log("Quality: Preview url num: " + qualityIndices["Small"]);
     } else {
       showMessage(notFound404, 0);
@@ -1033,9 +1054,11 @@ function showResultCards() {
           currentPage = pageNum;
           showDescription(itemNum, pageNum);
           hideImage();
+          hideVideo();
+          hideMessage();
           showModalScreen();
           showLoadingAnimation();
-          showMessage(loading, 0);
+          // showMessage(loading, 0);
           fetchMediaUrl(itemNum, pageNum);
         };
 
@@ -1133,7 +1156,7 @@ function showLoadingAnimation() {
 
   loadingAnimationSetTimeOut = setTimeout(function () {
     ripple.style.display = "inline-block";
-  }, 1000);
+  }, 250);
 }
 function hideLoadingAnimation() {
   var ripple = document.getElementById("loading-animation");
