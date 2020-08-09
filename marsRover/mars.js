@@ -23,6 +23,9 @@ var imageContainer;
 var mainImage;
 var ImgBox;
 var img;
+var card_image;
+var closeImage;
+var box;
 
 // This function wil allow user to choose the following rovers, there are three rovers available;
 
@@ -168,8 +171,7 @@ function nextPic() {
 
     }
     if (urlIndex < data.photos.length) {
-        showPic();
-        console.log(urlIndex);
+        card_image.src = data.photos[urlIndex].img_src;
     }
 }
 // to jump for previous image
@@ -178,7 +180,7 @@ function prevPic() {
     if (urlIndex < 0) {
         urlIndex = data.photos.length;
     } else {
-        showPic();
+        card_image.src = data.photos[urlIndex].img_src;
         console.log(urlIndex);
     }
 }
@@ -271,46 +273,70 @@ function onChangeDate() {
 
 function modalImage()
 {
-const box = document.createElement('div')
-const closeImage = document.getElementById('close');
+box = document.createElement('div')
+closeImage = document.getElementById('close');
 const modalHeader = document.getElementById('modalHeader');
+
+const next = document.getElementById('next');
 box.id = "box"
 document.body.appendChild(box);
+const images = document.getElementById('imageContainer').querySelectorAll('img');
 
-const images = document.querySelectorAll('img');
-images.forEach(image => {
-    image.addEventListener('click', e => {
-        box.classList.add('active');
-        closeImage.classList.add('active');
-        modalHeader.classList.add('active');
-        const img = document.createElement('img');
-        img.src = image.src;
-        while(box.firstChild)
-        {
-            box.removeChild(box.firstChild)
-        }
 
-        box.appendChild(img);
-        box.appendChild(closeImage);
-        box.appendChild(modalHeader);
+    images.forEach(image => {
+        image.addEventListener('click', e => {
+            box.classList.add('active');
+            // closeImage.classList.add('active');
+            modalHeader.classList.add('active');
+            card_image = document.createElement('img');
+    
+            card_image.src = image.src;
+           
+            while(box.firstChild)
+            {
+                box.removeChild(box.firstChild)
+            }
+    
+            box.appendChild(card_image);
+            // box.appendChild(closeImage);
+            box.appendChild(modalHeader);
+            
+        })
     })
-})
+// closeImage.addEventListener('click',e => {
+//     if(e.target == e.closeImage)
+//     return
+//     box.classList.remove('active');
+// })
+}
+function closeButton()
+{
+    closeImage.addEventListener('click',e => {
+        if(e.target == e.closeImage)
+        return
+        box.classList.remove('active');
+    })
+}
 
-closeImage.addEventListener('click',e => {
-    if(e.target == e.closeImage)
-    return
-    box.classList.remove('active');
-})
+function ripples()
+{
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            let x = e.clientX - e.target.offsetLeft;
+            let y = e.clientY - e.target.offsetTop;
 
+            let ripple = document.createElement('span');
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            this.appendChild(ripple);
 
-    // box.addEventListener('click',e => {
-    //     if(e.target !== e.currentTarget)
-    //     return;
-    //     box.classList.remove('active');
-    // })
+            setTimeout(() => {
+                ripple.remove()
+            }, 1000);
 
-
-
+        });
+    });
 }
 
 
