@@ -9,6 +9,33 @@ body {
   background-color: rgb(48, 48, 48);
   color: white;
 }
+/* button splash effect */
+.splash-effect {
+  position: relative;
+  overflow: hidden;
+}
+.ripple {
+  position: absolute;
+  background-color: white;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  border-radius: 80%;
+  animation: animate 1s linear infinite;
+}
+
+@keyframes animate {
+  0% {
+    width: 0px;
+    height: 0px;
+    opacity: 0.5;
+  }
+
+  100% {
+    width: 500px;
+    height: 500px;
+    opacity: 0;
+  }
+}
 
 /* cards container */
 .flex-container {
@@ -85,7 +112,7 @@ body {
   backdrop-filter: blur(10px);
 }
 .modal-header-container {
-  background-color: turquoise;
+  /* background-color: turquoise; */
   box-sizing: border-box;
   width: 100%;
   min-width: 700px;
@@ -99,6 +126,7 @@ body {
 svg {
   height: 32px;
   width: 32px;
+  fill: white;
 }
 
 #close-button-container {
@@ -124,7 +152,7 @@ svg {
   transform: translate(-50%, -50%);
 }
 
-/* next and close buttons */
+/* next and prev buttons */
 .change-item-button {
   position: absolute;
   padding: 8px 18px;
@@ -176,7 +204,7 @@ svg {
   width: 100%;
   height: 90%; /* the other 10% is taken by the modal header section*/
   /* overflow: hidden; */
-  background-color: teal;
+  /* background-color: teal; */
   /* flex-direction: column; */
 }
 /* loading animation */

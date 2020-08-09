@@ -53,6 +53,28 @@ var onErrorMessage =
 
 window.addEventListener("scroll", handleScroll);
 window.onresize = handleWindowResize;
+window.onload = () => {
+  const buttons = document.querySelectorAll(".splash-effect");
+
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", function (e) {
+      // console.log("i was executed");
+      var elem = btn.getBoundingClientRect();
+      var x = e.clientX - elem.left;
+      var y = e.clientY - elem.top;
+
+      let ripple = document.createElement("span");
+      ripple.className = "ripple";
+      ripple.style.left = x + "px";
+      ripple.style.top = y + "px";
+      this.appendChild(ripple);
+
+      setTimeout(() => {
+        ripple.remove();
+      }, 1000);
+    });
+  });
+};
 
 function sendHttpRequest(method, url, mode) {
   return new Promise((resolve, reject) => {
@@ -179,7 +201,7 @@ function showMessage(messageString, messageBoxNum) {
 
   var messageBoxInsideModal = document.getElementById("messageInsideModal");
   var messageBox = document.getElementById("message");
-  console.log(message);
+  console.log(messageString);
   if (messageBoxNum == 0) {
     messageBoxInsideModal.innerHTML = messageString;
     messageBox.style.display = "none";
@@ -710,6 +732,7 @@ function handleWindowResize() {
       video.style.maxWidth = contentSectionWidth * 0.9;
     }
   }
+
   //for image
   if (mediaType == "image") {
     var image = document.getElementById("pic");
@@ -728,12 +751,12 @@ function showIvlImage() {
   var contentSectionHeight = window.innerHeight * 0.9;
 
   // console.log("screen height: " + imageHeight + " scren width: " + imageWidth);
-  console.log(
-    "window height: " +
-      contentSectionHeight +
-      " window width: " +
-      contentSectionWidth
-  );
+  // console.log(
+  //   "window height: " +
+  //     contentSectionHeight +
+  //     " window width: " +
+  //     contentSectionWidth
+  // );
 
   var image = document.getElementById("pic");
   image.style.maxHeight = contentSectionHeight * 0.95;
