@@ -4,16 +4,20 @@
 
 <head>
     <script src="javascript.js"></script>
+    <script src="mag_script.js"></script>
+    <script defer src="http://use.fontawesome.com/releases/v5.0.7/js/all.js">
+    </script>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
     <div>
-        <input type="date" id="date">
+        <input type="date" id="date" min="2015-07-01" max="2020-08-10">
         <input type="button" value="Find" onclick="getPic();">
     </div>
 
-    <div id="pic-container">
+    <div class="img-magnifier-container">
         <img src="" id="pic" width="400px">
         <img src="" id="hidden-image" width="200px">
     </div>
@@ -21,7 +25,14 @@
     <div id="change-item-container">
         <input type="button" value="previous" onclick="prev();">
         <input type="button" value="next" onclick="next();">
+        <button onclick="magnify('pic', 3);"><i class="fas fa-search-plus"></i></button>
     </div>
 
+    <!-- <script>
+        /* Execute the magnify function: */
+        
+        /* Specify the id of the image, and the strength of the magnifier glass: */
+    </script> -->
+</body>
 
-</body></html>
+</html>
