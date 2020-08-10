@@ -51,9 +51,30 @@ var nothingFound =
 var onErrorMessage =
   "Error. Check your internet connection\n or change media quality.";
 
+var lastPage = "This is the last item!";
+var firstPage = "This is the first item!";
+
 window.addEventListener("scroll", handleScroll);
 window.onresize = handleWindowResize;
 window.onload = () => {
+  //listening to enter key press
+  startListeningToEnterKeyPress();
+
+  //starting button splash effect listeners
+  listenToButtonClickForSplashEffect();
+};
+function startListeningToEnterKeyPress() {
+  var searchBar = document.getElementById("searchBar");
+  searchBar.addEventListener("keyup", (event) => {
+    var char = event.keyCode;
+    // console.log("char code:" + char);
+    if (char == 13) {
+      startSearch();
+    }
+  });
+}
+
+function listenToButtonClickForSplashEffect() {
   const buttons = document.querySelectorAll(".splash-effect");
 
   buttons.forEach((btn) => {
@@ -74,7 +95,21 @@ window.onload = () => {
       }, 1000);
     });
   });
-};
+}
+function handleArrowKeyPress(event) {
+  var char = event.keyCode;
+  console.log("key pressed: " + char);
+  if (char == 37) {
+    if (document.getElementById("prevBtn").disabled == false) {
+      prevData();
+    }
+  }
+  if (char == 39) {
+    if (document.getElementById("nextBtn").disabled == false) {
+      nextData();
+    }
+  }
+}
 
 function sendHttpRequest(method, url, mode) {
   return new Promise((resolve, reject) => {
@@ -193,6 +228,7 @@ function displayImage() {
   document.getElementById("pic").style.display = "inline-block";
 }
 function hideImage() {
+  console.log("hiding image");
   document.getElementById("pic").style.display = "none";
 }
 function showMessage(messageString, messageBoxNum) {
@@ -202,14 +238,16 @@ function showMessage(messageString, messageBoxNum) {
   var messageBoxInsideModal = document.getElementById("messageInsideModal");
   var messageBox = document.getElementById("message");
   console.log(messageString);
+  // message inside modal box
   if (messageBoxNum == 0) {
     messageBoxInsideModal.innerHTML = messageString;
-    messageBox.style.display = "none";
+    // messageBox.style.display = "none";
     messageBoxInsideModal.style.display = "inline";
   }
+  //message outside modal box
   if (messageBoxNum == 1) {
     messageBox.innerHTML = messageString;
-    messageBoxInsideModal.style.display = "none";
+    // messageBoxInsideModal.style.display = "none";
     messageBox.style.display = "inline";
   }
 }
@@ -376,7 +414,7 @@ function nextData() {
     else {
       hitNum--;
 
-      showMessage("This is the last page!", 0);
+      showMessage(lastPage, 0);
       enableBtns();
     }
   }
@@ -420,7 +458,8 @@ function nextPage() {
     //        hitNumReset();
     // document.getElementById("message").innerHTML = "Loading...";
 
-    document.getElementById("message").innerHTML = "This is the last page!";
+    showMessage(lastPage, 0);
+
     enableBtns();
   }
 }
@@ -440,7 +479,7 @@ function prevData() {
     //else show message and undo changes to hitNum
     else {
       hitNum++;
-      showMessage("This is the first page!", 1);
+      showMessage(firstPage, 0);
 
       enableBtns();
     }
@@ -461,10 +500,10 @@ function prevData() {
 //tries going to previous page. shows error if its  first page
 function prevPage() {
   currentPage--;
-  document.getElementById("message").innerHTML = "";
+  // document.getElementById("message").innerHTML = "";
   //if the page we are trying to access is less than 1 then throw error
   if (currentPage < 1) {
-    document.getElementById("message").innerHTML = "This is the first page!";
+    showMessage(firstPage, 0);
     enableBtns();
     //hitNum = 0;
     currentPage++;
@@ -1193,7 +1232,6 @@ function showModalScreen() {
   var modal = document.getElementById("myModal");
   //displaying modal screen
   modal.style.display = "block";
-
   //starting key press listeners
   document.addEventListener("keyup", handleArrowKeyPress);
 }
@@ -1210,20 +1248,7 @@ function isModalScreenOpen() {
     return true;
   } else return false;
 }
-function handleArrowKeyPress(event) {
-  var char = event.keyCode;
-  console.log("key pressed: " + char);
-  if (char == 37) {
-    if (document.getElementById("prevBtn").disabled == false) {
-      prevData();
-    }
-  }
-  if (char == 39) {
-    if (document.getElementById("nextBtn").disabled == false) {
-      nextData();
-    }
-  }
-}
+
 function showLoadingAnimation() {
   var ripple = document.getElementById("loading-animation");
 
@@ -1235,12 +1260,4 @@ function hideLoadingAnimation() {
   var ripple = document.getElementById("loading-animation");
   clearTimeout(loadingAnimationSetTimeOut);
   ripple.style.display = "none";
-}
-
-function handleKeyPress(event) {
-  var char = event.keyCode;
-  // console.log("char code:" + char);
-  if (char == 13) {
-    startSearch();
-  }
 }
