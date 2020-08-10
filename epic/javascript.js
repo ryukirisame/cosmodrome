@@ -43,7 +43,7 @@ function getUrl() {
 
 function getPic() {
 
-  stopDownloadingPic();
+    stopDownloadingPic();
     getDate();
     getUrl();
 
@@ -53,7 +53,7 @@ function getPic() {
         data = response;
 
         //        set the pic src 
-        
+
         showPic(0);
 
         //        starting pic download
@@ -69,7 +69,7 @@ function getPic() {
 
 function downloadPic() {
 
-console.log("itemNum Downloading: " + itemNumToDownload);
+    console.log("itemNum Downloading: " + itemNumToDownload);
     var hiddenImage = document.getElementById("hidden-image");
 
     hiddenImage.addEventListener("load", downloadNextPic);
@@ -83,26 +83,26 @@ console.log("itemNum Downloading: " + itemNumToDownload);
 function downloadNextPic() {
     itemNumToDownload++;
     if (itemNumToDownload < data.length) {
-        
+
         downloadPic();
     }
 }
 
 function stopDownloadingPic() {
-var hiddenImage=document.getElementById("hidden-image");
-    hiddenImage.removeEventListener("load",downloadNextPic);
+    var hiddenImage = document.getElementById("hidden-image");
+    hiddenImage.removeEventListener("load", downloadNextPic);
 
 }
 
 
 // shows the pic of the provided itemNum. we have to provide. it.
 function showPic(itemNum) {
-    
-    currentItemNumber=itemNum;
-    console.log("current item num: "+currentItemNumber);
-    
-//    var details = data[itemNum].image;
-//    console.log(data[itemNum].identifier);
+
+    currentItemNumber = itemNum;
+    console.log("current item num: " + currentItemNumber);
+
+    //    var details = data[itemNum].image;
+    //    console.log(data[itemNum].identifier);
     var cdate = changeFormate(date);
     var img_url = "https://api.nasa.gov/EPIC/archive/natural/" + cdate + "/png/" + data[itemNum].image + ".png?api_key=" + API_KEY;
     document.getElementById('pic').src = img_url;
@@ -112,24 +112,20 @@ function showPic(itemNum) {
 
 
 function prev() {
-   if(currentItemNumber-1<0){
-       currentItemNumber=data.length-1;
-       showPic(currentItemNumber);
-   } 
-    
-    else{
+    if (currentItemNumber - 1 < 0) {
+        currentItemNumber = data.length - 1;
+        showPic(currentItemNumber);
+    } else {
         currentItemNumber--;
         showPic(currentItemNumber);
     }
 }
 
 function next() {
-if(currentItemNumber+1>data.length){
-       currentItemNumber=0;
-    showPic(currentItemNumber);
-   } 
-    
-    else{
+    if (currentItemNumber + 1 > data.length) {
+        currentItemNumber = 0;
+        showPic(currentItemNumber);
+    } else {
         currentItemNumber++;
         showPic(currentItemNumber);
     }
