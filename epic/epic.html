@@ -1,34 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
     <script src="javascript.js"></script>
 </head>
+
 <body>
-    <center>
-        <img src="" alt="image loading" id="pic1" >
-        <img src="" alt="second image loading" id="pic2" style="display: none;">
-        <img src="" alt="third image loading" id="pic3" style="display: none">
-        <img src="" alt="fourh image loading" id="pic4" style="display: none">
-        <img src="" alt="fifth image loading" id="pic5" style="display: none;">
-        <img src="" alt="sixth image loading" id="pic6" style="display: none">
-        <img src="" alt="seventh image loading" id="pic7" style="display: none">
-        <img src="" alt="second image loading" id="pic8" style="display: none;">
-        <img src="" alt="third image loading" id="pic9" style="display: none">
-        <img src="" alt="fourh image loading" id="pic10" style="display: none">
-        <img src="" alt="fifth image loading" id="pic11" style="display: none;">
-        <img src="" alt="sixth image loading" id="pic12" style="display: none">
-        <img src="" alt="seventh image loading" id="pic13" style="display: none">
-        <img src="" alt="second image loading" id="pic14" style="display: none;">
-        <img src="" alt="third image loading" id="pic15" style="display: none">
-        <img src="" alt="fourh image loading" id="pic16" style="display: none">
-       <br><input id="btn_prev" type="button" value="prev" name="" onclick="prev();">
-      <input id="btn_next" type="button" value="next" onclick="next();">
-   
-   
-    </center>
-</body>
-</html>
+
+    <div>
+        <input type="date" id="date">
+        <input type="button" value="Find" onclick="getPic();">
+    </div>
+
+    <div id="pic-container">
+        <img src="" id="pic" width="400px">
+        <img src="" id="hidden-image" width="200px">
+    </div>
+
+    <div id="change-item-container">
+        <input type="button" value="previous" onclick="prev();">
+        <input type="button" value="next" onclick="next();">
+    </div>
+
+
+</body></html>
