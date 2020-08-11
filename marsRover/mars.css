@@ -6,8 +6,124 @@
 }
 
 body {
-    background-color: rgb(48, 48, 48);
 
+   background-color: rgb(97, 97, 97);
+
+}
+
+.button-container
+{
+    position: absolute;
+   top:50%;
+   left:50%;
+   transform: translate(-50%,0);
+/*            background-color: aqua;*/
+}
+
+.button {
+   
+   
+    box-sizing: content-box;
+    display: flex;
+    float: left;
+    margin: 10px;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 32px;
+/*            border: 1px solid rgba(66,165,245 ,1);*/
+    border-radius: 1px;
+    border: none;
+ 
+   background-color:transparent;
+   
+}
+
+
+button:focus {
+    outline: 0;
+}
+
+svg {
+    fill: white;
+    height: 32px;
+    width: 32px;
+
+
+}
+
+
+
+/*        button-background-color */
+.button-background-color-splash {
+    position: relative;
+    
+ 
+    overflow: hidden;
+}
+
+.button-background-color {
+    background-color:rgba(66,165,245 ,1);
+    position: absolute;
+    z-index: -1;
+
+    pointer-events: none;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: animateBackgroundColor 0.5s ease-out;
+    animation-fill-mode: forwards;
+
+}
+
+@keyframes animateBackgroundColor {
+    0% {
+        width: 0px;
+        height: 0px;
+
+    }
+
+    100% {
+        width: 325px;
+        height: 325px;
+
+
+    }
+}
+
+
+/*splash effect*/
+.splash-effect {
+
+    position: relative;
+
+
+    overflow: hidden;
+}
+
+.splash-effect-ripple {
+    position: absolute;
+    background-color: white;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    border-radius: 50%;
+    animation: animate 0.75s ease-out;
+    
+    
+
+}
+
+@keyframes animate {
+    0% {
+        width: 0px;
+        height: 0px;
+        opacity: 0.5;
+    }
+
+    100% {
+        width: 300px;
+        height: 300px;
+        opacity: 0;
+
+    }
 }
 
 .imageContainer {
@@ -38,35 +154,49 @@ body {
     background-color: rgba(0, 0, 0, 0.726);
     z-index: 1000;
     display: none;
+   
 }
 
 #box.active {
     display: flex;
     justify-content: center;
     align-items: center;
+   
 
 }
+
+@keyframes modalImageOpenAnimation
+{
+    0%
+    {
+        transform: scale(0);
+    }
+    100%
+    {
+        transform: scale(1);
+    }
+}
+
+@keyframes modalImageCloseAnimation
+{
+    0%
+    {
+        transform: scale(1);
+    }
+    100%
+    {
+        transform: scale(0);
+    }
+}
+
 
 #box img {
-    max-width: 90%;
+    max-width: 100%;
     max-height: 80%;
+    animation: modalImageOpenAnimation 0.3s linear;
+  
 }
 
-/* #close
-{
-    color: rgb(255, 255, 255);
-    display: inline;
-} */
-/* #close.active
-{
-    font-size: 4em;
-    position: absolute;
-    right: 10px;
-    top: 1px;
-    z-index: 1;
-    display: inline-block;
-    cursor: pointer;
-} */
 #modalHeader {
     position: absolute;
     height: 80px;
@@ -81,6 +211,8 @@ body {
     display: flex;
     flex-direction: row;
     justify-content: center;
+    background-color: rgba(0, 0, 0, 0.096);
+    animation: modalImageOpenAnimation 0.3s linear;
 
 }
 
@@ -93,6 +225,7 @@ body {
     height: 50px;
     font-size: 100px;
     cursor: pointer;
+   
     /* background-color: rgb(0, 225, 255); */
 }
 #next,#prev
@@ -161,7 +294,7 @@ body {
 
 .btn:hover
 {
-    background: linear-gradient(90deg, #0162c8, #55e7fc);
+    background: linear-gradient(90deg, #0162c8, #55e8fc);
    cursor: pointer;
 }
 
@@ -190,3 +323,6 @@ span {
 
     }
 }
+
+
+

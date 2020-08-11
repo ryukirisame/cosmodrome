@@ -9,6 +9,11 @@ var data;
 var front_camera = "&camera=FHAZ";
 var Rear_camera = "&camera=RHAZ";
 var Nav_camera = "&camera=navcam";
+var Chem_camera = "&camera=chemcam";
+var mahli_camera = "&camera=mahli";
+var mardi_camera = "&camera=mardi";
+var pan_camera = "&camera=pancam";
+var minites_camera = "&camera=minites";
 var curiosity = "/curiosity/";
 var opportunity = "/opportunity/";
 var spirit = "/spirit/";
@@ -26,10 +31,13 @@ var img;
 var card_image;
 var closeImage;
 var box;
+var currentUrlIndex;
+var index;
+var getCamera;
 
 // This function wil allow user to choose the following rovers, there are three rovers available;
-
 function chooseRover() {
+
 
     curiosity_box = document.getElementById('Curiosity').checked;
     Opportunity_box = document.getElementById('Opportunity').checked;
@@ -37,19 +45,20 @@ function chooseRover() {
 
     if (curiosity_box === true) {
         rover = curiosity;
+
     } else if (Opportunity_box === true) {
         rover = opportunity;
+        opportunityCalender();
     } else {
         rover = spirit;
+        spiritCalender();
     }
 
     update_url = "https://api.nasa.gov/mars-photos/api/v1/rovers" + rover + "photos?api_key=" + api_key + "&earth_date=";
-    console.log(update_url);
+    // console.log(update_url);
 
 }
-
 // this function will send the httpRequest to the nasa api server, it takes three arguments, 1. Method (that could be GET or POST),2. url , 3. mode (either true or false).
-
 function sendHttpRequest(method, update_url, mode) {
 
     return new Promise((resolve, reject) => {
@@ -74,19 +83,11 @@ function sendHttpRequest(method, update_url, mode) {
         req.send();
     })
 }
-
-
-
-
-
 //it will allow to set loading image as per requirement.
-
 function loadingImg(mode) {
     document.getElementById('loadImg').style.display = mode;
 }
-
 // This function will be used for disable following buttons.
-
 function disablebtn() {
     document.getElementById("next").disabled = true;
     document.getElementById("prev").disabled = true;
@@ -101,9 +102,7 @@ function errorImage(mode) {
     disableImage();
     document.getElementById('notFound').style.display = mode;
 }
-
 // for enable main image
-
 function enableImage() {
     document.getElementById("pic").style.display = "inline-block";
 }
@@ -112,10 +111,7 @@ function disableImage() {
     document.getElementById("pic").style.display = "none";
 
 }
-
 // when image is successfully parsed from the server then, showpic() will allow to show that pictures on the webpage.
-
-
 function showPic() {
     var i = 0;
     console.log(data);
@@ -126,8 +122,6 @@ function showPic() {
         img.className = "cardImage";
         ImgBox.id = "card";
         ImgBox.appendChild(img);
-        // var img = document.createElement('img');
-        //  var img = document.createElement("img");
         img.src = data.photos[i].img_src;
         img.onload = function () {
             loadingImg('none');
@@ -142,17 +136,13 @@ function showPic() {
             errorImage('inline');
         }
         imageContainer.appendChild(ImgBox);
-        i++; 
-        
-    } 
+        i++;
+
+    }
     modalImage();
 }
 
-
-
-
-function removeChild()
-{
+function removeChild() {
     var list = document.getElementById("imageContainer");
 
     // As long as <ul> has a child node, remove it
@@ -160,11 +150,10 @@ function removeChild()
         list.removeChild(list.firstChild);
     }
 }
-
-
 //It will allow user to go to the next image.
 function nextPic() {
-    
+
+    // urlIndex = getImageUrl();
     urlIndex++;
     if (urlIndex > data.photos.length) {
         urlIndex = 0;
@@ -172,6 +161,7 @@ function nextPic() {
     }
     if (urlIndex < data.photos.length) {
         card_image.src = data.photos[urlIndex].img_src;
+        console.log(urlIndex);
     }
 }
 // to jump for previous image
@@ -184,7 +174,6 @@ function prevPic() {
         console.log(urlIndex);
     }
 }
-
 // date_change will store the information about date choosen by the user each time.
 
 function date_change() {
@@ -195,6 +184,7 @@ function date_change() {
 }
 
 function fcam() {
+
     modalImage();
     console.log('front camera is enabled!');
     sendHttpRequest(method, update_url + imgDate + front_camera, mode).then((test) => {
@@ -212,6 +202,7 @@ function fcam() {
             urlIndex = 0;
             removeChild();
             showPic();
+            getImageUrl();
 
         }
 
@@ -219,6 +210,7 @@ function fcam() {
 }
 // unlike fcam it will ask for rear camera angle photos to the server.
 function rcam() {
+
     console.log('Rear camera is enabled!');
     sendHttpRequest(method, update_url + imgDate + Rear_camera, mode).then((test) => {
         data = test;
@@ -236,11 +228,13 @@ function rcam() {
             urlIndex = 0;
             removeChild();
             showPic();
+            getImageUrl();
         }
     });
 }
 // this is for another camera angle, that is navigation.
 function navcam() {
+
     console.log('Nav cam is enabled!');
     // date_change();
     sendHttpRequest(method, update_url + imgDate + Nav_camera, mode).then((test) => {
@@ -259,70 +253,138 @@ function navcam() {
             urlIndex = 0;
             removeChild();
             showPic();
+            getImageUrl();
         }
     });
 }
 
-document.addEventListener("change", date_change, true);
-// document.addEventListener("click",date_change,true);
+function chemCam() {
+    console.log('Chemistry & camera complex  cam is enabled!');
+    // date_change();
+    sendHttpRequest(method, update_url + imgDate + Chem_camera, mode).then((test) => {
+        data = test;
+
+        if (data.photos.length < 1) {
+            // alert("we are here");
+            errorImage('inline');
+            loadingImg('none');
+            // disableImage();
+            console.log("no data found for this date!");
+
+        } else {
+            errorImage('none');
+            data = test;
+            urlIndex = 0;
+            removeChild();
+            showPic();
+            getImageUrl();
+        }
+    });
+}
+
+function mahliCam() {
+    console.log('mahli_cam is enabled!');
+    // date_change();
+    sendHttpRequest(method, update_url + imgDate + mahli_camera, mode).then((test) => {
+        data = test;
+
+        if (data.photos.length < 1) {
+            // alert("we are here");
+            errorImage('inline');
+            loadingImg('none');
+            // disableImage();
+            console.log("no data found for this date!");
+
+        } else {
+            errorImage('none');
+            data = test;
+            urlIndex = 0;
+            removeChild();
+            showPic();
+            getImageUrl();
+        }
+    });
+}
+
+function mardiCam() {
+    console.log('madr_cam is enabled!');
+    // date_change();
+    sendHttpRequest(method, update_url + imgDate + mardi_camera, mode).then((test) => {
+        data = test;
+
+        if (data.photos.length < 1) {
+            // alert("we are here");
+            errorImage('inline');
+            loadingImg('none');
+            // disableImage();
+            console.log("no data found for this date!");
+
+        } else {
+            errorImage('none');
+            data = test;
+            urlIndex = 0;
+            removeChild();
+            showPic();
+            getImageUrl();
+        }
+    });
+}
+
 function onChangeDate() {
+    document.addEventListener("change", date_change, true);
 
     document.getElementById("toggle").style.visibility = "hidden";
 
 }
 
-function modalImage()
-{
-box = document.createElement('div')
-closeImage = document.getElementById('close');
-const modalHeader = document.getElementById('modalHeader');
+function modalImage() {
+    box = document.createElement('div')
+    closeImage = document.getElementById('close');
+    const modalHeader = document.getElementById('modalHeader');
 
-const next = document.getElementById('next');
-box.id = "box"
-document.body.appendChild(box);
-const images = document.getElementById('imageContainer').querySelectorAll('img');
+    const next = document.getElementById('next');
+    box.id = "box"
+    document.body.appendChild(box);
+    const images = document.getElementById('imageContainer').querySelectorAll('img');
 
 
     images.forEach(image => {
+
         image.addEventListener('click', e => {
+            getImageUrl();
             box.classList.add('active');
             // closeImage.classList.add('active');
             modalHeader.classList.add('active');
             card_image = document.createElement('img');
-    
+
             card_image.src = image.src;
-           
-            while(box.firstChild)
-            {
+
+
+            while (box.firstChild) {
                 box.removeChild(box.firstChild)
             }
-    
+
             box.appendChild(card_image);
             // box.appendChild(closeImage);
             box.appendChild(modalHeader);
-            
+
         })
     })
-// closeImage.addEventListener('click',e => {
-//     if(e.target == e.closeImage)
-//     return
-//     box.classList.remove('active');
-// })
 }
-function closeButton()
-{
-    closeImage.addEventListener('click',e => {
-        if(e.target == e.closeImage)
-        return
+
+function closeButton() {
+
+    closeImage.addEventListener('click', e => {
+        if (e.target == e.closeImage)
+            return
         box.classList.remove('active');
     })
 }
 
-function ripples()
-{
-    const buttons = document.querySelectorAll('button');
+function ripples() {
+    const buttons = document.getElementById('modalHeader').querySelectorAll('button');
     buttons.forEach(btn => {
-        btn.addEventListener('click', function(e) {
+        btn.addEventListener('click', function (e) {
             let x = e.clientX - e.target.offsetLeft;
             let y = e.clientY - e.target.offsetTop;
 
@@ -338,7 +400,119 @@ function ripples()
         });
     });
 }
+// for all the images with every possible camera angle
 
+function allPhotos() {
+    sendHttpRequest(method, update_url + imgDate, mode).then((test) => {
 
+        date_change();
+        if (data.photos.length < 1) {
+            // alert("we are here");
+            errorImage('inline');
+            loadingImg('none');
+            // disableImage();
+            console.log("no data found for this date!");
 
+        } else {
+            errorImage('none');
+            data = test;
+            urlIndex = 0;
+            removeChild();
+            showPic();
+            getImageUrl();
+            fetchCamera();
+           
+            
+        }
 
+    })
+}
+
+function getImageUrl() {
+    const img = document.getElementById('imageContainer').querySelectorAll('img');
+    var i;
+    for (i = 0; i < img.length; i++) {
+        img[i].src = data.photos[i].img_src;
+        img[i].setAttribute("index-data", i);
+        //after changing image src i just want to show index of clicked image
+        img[i].onclick = function () {
+            index = this.getAttribute("index-data");
+            urlIndex = index;
+            console.log(index);
+        }
+    }
+    return index;
+
+}
+
+function opportunityCalender() {
+    imgDate = document.getElementById("dateText");
+    imgDate.min = "2004-01-26";
+    imgDate.max = "2018-06-10";
+}
+function spiritCalender()
+{
+    imgDate = document.getElementById("dateText");
+    imgDate.min = "2004-01-04";
+    imgDate.max = "2010-03-22";
+}
+
+function disableCamera()
+{
+    document.getElementById('front').style.display = 'none';
+    document.getElementById('rear').style.display = 'none';
+    document.getElementById('nav').style.display = 'none';
+    document.getElementById('chem').style.display = 'none';
+    document.getElementById('mahli').style.display = 'none';
+    document.getElementById('mardi').style.display = 'none';
+    document.getElementById('pan').style.display = "none";
+    document.getElementById('minites').style.display = 'none';
+}
+
+// function enableCamera()
+// {
+//     if(getCamera == 'FHAZ')
+//     {
+//         document.getElementById('front').style.display = 'inline';
+//     }
+//     else
+//     {
+//         document.getElementById('front').style.display = 'none';
+
+//     }
+    
+//     document.getElementById('rear').style.display = 'inline';
+//     document.getElementById('nav').style.display = 'inline';
+//     document.getElementById('chem').style.display = 'inline';
+//     document.getElementById('mahli').style.display = 'inline';
+//     document.getElementById('mardi').style.display = 'inline';
+//     document.getElementById('minites').style.display = 'inline';
+//     document.getElementById('pan').style.display = "inline";
+// }
+
+disableCamera();
+
+function fetchCamera()
+{
+
+    sendHttpRequest(method, update_url + imgDate, mode).then((test) => {
+
+        date_change();
+        if (data.photos.length < 1) {
+            errorImage('inline');
+            loadingImg('none');
+            console.log("no data found for this date!");
+        } else {
+            var i;
+            for(i = 0; i<data.photos.length;i++)
+            {
+                getCamera = data.photos[i].camera.name;
+                console.log(getCamera);
+            }
+        
+            errorImage('none');
+          
+        }
+
+    })
+}
