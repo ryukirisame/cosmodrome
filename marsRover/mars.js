@@ -46,7 +46,9 @@ function chooseRover() {
 
     if (curiosity_box === true) {
         rover = curiosity;
+        currentDate();
         curiosityCalender();
+
 
     } else if (Opportunity_box === true) {
         rover = opportunity;
@@ -604,4 +606,5 @@ var yyyy = today.getFullYear();
 today =yyyy + '-' + mm + '-' + dd;
 console.log(today);
 }
+
 
