@@ -153,6 +153,9 @@ svg {
     background-color: black;
     height: 500px;
     width: 700px;
+    max-width: 100%;
+    margin-left: 210px;
+    
 }
 #pic
 {

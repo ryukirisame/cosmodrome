@@ -1,27 +1,32 @@
-hideButton();
+
+// global varaiable declaration 
 var API_KEY = "qMEzVucHSomqcUrLNUcSPyGN59TqMUZdcd1SjKcf";
 var method = "GET";
 var mode = true;
-
 var date;
-
 var url;
-
 var itemNumToDownload;
 var currentItemNumber;
-
 var data;
+
+//function declaration for hidinng buttons before date selection default buttons are hidden
 function hideButton()
 {
     var x=document.getElementById("btn");
     x.style.display="none";
 }
+hideButton();
+
+
+// function declaration for showing button after date selection
 function showButton()
 {
     var x=document.getElementById("btn");
     x.style.display="inline";
 }
 
+
+//function for sending request 
 function sendHttpRequest(method, url, mode) {
 
     const promise = new Promise((resolve, reject) => {
@@ -41,6 +46,8 @@ function sendHttpRequest(method, url, mode) {
 
 }
 
+
+/*for getting date through input tag*/
 function getDate() {
 
     showButton();
@@ -49,10 +56,13 @@ function getDate() {
 
 }
 
+
+/*url for sending request*/
 function getUrl() {
     url = "https://api.nasa.gov/EPIC/api/natural/date/" + date + "?api_key=" + API_KEY;
 }
 
+/* sending request */
 function getPic() {
 
     stopDownloadingPic();
@@ -78,7 +88,7 @@ function getPic() {
 }
 
 
-
+/*storing all pic of choosen date */
 function downloadPic() {
 
     console.log("itemNum Downloading: " + itemNumToDownload);
@@ -132,6 +142,7 @@ function prev() {
     }
 }
 
+/*for displaying next pic of choosen date */
 function next() {
     if (currentItemNumber + 1 > data.length) {
         currentItemNumber = 0;
@@ -142,6 +153,7 @@ function next() {
     }
 }
 
+/*changing formate of date to yyyy-mm-dd to yyyy/mm/dd */
 function changeFormate(x) {
     var year = x.substring(0, 4);
     var month = x.substring(5, 7);
@@ -149,6 +161,8 @@ function changeFormate(x) {
     var nd = year + "/" + month + "/" + day;
     return nd
 }
+
+/* getting current date */
 function curDay(){
 var today = new Date();
 var dd = String(today.getDate()).padStart(2, '0');
