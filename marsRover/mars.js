@@ -9,6 +9,7 @@ var data;
 var front_camera = "&camera=FHAZ";
 var Rear_camera = "&camera=RHAZ";
 var Nav_camera = "&camera=navcam";
+var mast_camera = "&camera=mast";
 var Chem_camera = "&camera=chemcam";
 var mahli_camera = "&camera=mahli";
 var mardi_camera = "&camera=mardi";
@@ -48,14 +49,17 @@ function chooseRover() {
         rover = curiosity;
         currentDate();
         curiosityCalender();
+      
 
 
     } else if (Opportunity_box === true) {
         rover = opportunity;
         opportunityCalender();
+       
     } else {
         rover = spirit;
         spiritCalender();
+       
     }
 
     update_url = "https://api.nasa.gov/mars-photos/api/v1/rovers" + rover + "photos?api_key=" + api_key + "&earth_date=";
@@ -129,15 +133,18 @@ function showPic() {
         img.src = data.photos[i].img_src;
         img.onload = function () {
             loadingImg('none');
+          
             enableImage();
             enableBtn();
             document.getElementById("toggle").style.visibility = "hidden";
         }
         disablebtn();
         img.onerror = () => {
+            
             loadingImg("none");
             disableImage();
             errorImage('inline');
+           
         }
         imageContainer.appendChild(ImgBox);
         i++;
@@ -147,7 +154,7 @@ function showPic() {
 }
 
 function removeChild() {
-    var list = document.getElementById("imageContainer");
+     var list = document.getElementById("imageContainer");
 
     // As long as <ul> has a child node, remove it
     while (list.hasChildNodes()) {
@@ -184,6 +191,8 @@ function date_change() {
 
     imgDate = document.getElementById("dateText").value;
     document.getElementById("toggle").style.visibility = "visible";
+    searchOnEnterKey();
+   
 
 }
 
@@ -311,7 +320,7 @@ function mahliCam() {
 }
 
 function mardiCam() {
-    console.log('madr_cam is enabled!');
+    console.log('madri_cam is enabled!');
     // date_change();
     sendHttpRequest(method, update_url + imgDate + mardi_camera, mode).then((test) => {
         data = test;
@@ -332,6 +341,32 @@ function mardiCam() {
             getImageUrl();
         }
     });
+}
+
+function mastcam()
+{
+    console.log('mast_cam is enabled!');
+    // date_change();
+    sendHttpRequest(method, update_url + imgDate + mast_camera, mode).then((test) => {
+        data = test;
+
+        if (data.photos.length < 1) {
+            // alert("we are here");
+            errorImage('inline');
+            loadingImg('none');
+            // disableImage();
+            console.log("no data found for this date!");
+
+        } else {
+            errorImage('none');
+            data = test;
+            urlIndex = 0;
+            removeChild();
+            showPic();
+            getImageUrl();
+        }
+    });
+
 }
 
 function onChangeDate() {
@@ -459,6 +494,7 @@ function allPhotos() {
         if (data.photos.length < 1) {
             // alert("we are here");
             errorImage('inline');
+            removeChild();
             loadingImg('none');
             // disableImage();
             console.log("no data found for this date!");
@@ -605,6 +641,45 @@ var yyyy = today.getFullYear();
 
 today =yyyy + '-' + mm + '-' + dd;
 console.log(today);
+}
+
+function searchOnEnterKey()
+{
+    const input = document.getElementById('dateText');
+    input.addEventListener('keyup',function(event) {
+        if(event.keyCode == 13)
+        {
+            event.preventDefault();
+            document.getElementById('allImg').click();
+        }
+    })
+}
+hideOnScroll();
+
+function hideOnScroll()
+{
+    var mybutton = document.getElementById("mybtn");
+
+// When the user scrolls down 20px from the top of the document, show the button
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    mybutton.style.display = "block";
+  } else {
+    mybutton.style.display = "none";
+  }
+}
+}
+
+
+
+function goToTopOfThePage()
+{
+    
+    //Get the button
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
 }
 
 
