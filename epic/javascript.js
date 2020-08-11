@@ -1,3 +1,4 @@
+hideButton();
 var API_KEY = "qMEzVucHSomqcUrLNUcSPyGN59TqMUZdcd1SjKcf";
 var method = "GET";
 var mode = true;
@@ -10,6 +11,16 @@ var itemNumToDownload;
 var currentItemNumber;
 
 var data;
+function hideButton()
+{
+    var x=document.getElementById("btn");
+    x.style.display="none";
+}
+function showButton()
+{
+    var x=document.getElementById("btn");
+    x.style.display="inline";
+}
 
 function sendHttpRequest(method, url, mode) {
 
@@ -32,6 +43,7 @@ function sendHttpRequest(method, url, mode) {
 
 function getDate() {
 
+    showButton();
     date = document.getElementById('date').value;
     console.log(date);
 
@@ -110,7 +122,6 @@ function showPic(itemNum) {
 
 }
 
-
 function prev() {
     if (currentItemNumber - 1 < 0) {
         currentItemNumber = data.length - 1;
@@ -138,3 +149,30 @@ function changeFormate(x) {
     var nd = year + "/" + month + "/" + day;
     return nd
 }
+function curDay(){
+var today = new Date();
+var dd = String(today.getDate()).padStart(2, '0');
+var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+var yyyy = today.getFullYear();
+
+today = yyyy + '-' + mm + '-' + dd;
+return today
+}
+var td=curDay();
+console.log(td);
+
+function setMax()
+{
+    var cd=curDay();
+    console.log(cd);
+    var input=document.getElementById('date');
+    // input.setAttribute("max",this.value);
+    // input.max=cd;
+    
+}
+setMax();
+
+
+
+
+
