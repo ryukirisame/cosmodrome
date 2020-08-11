@@ -34,6 +34,7 @@ var box;
 var currentUrlIndex;
 var index;
 var getCamera;
+var today;
 
 // This function wil allow user to choose the following rovers, there are three rovers available;
 function chooseRover() {
@@ -45,6 +46,7 @@ function chooseRover() {
 
     if (curiosity_box === true) {
         rover = curiosity;
+        curiosityCalender();
 
     } else if (Opportunity_box === true) {
         rover = opportunity;
@@ -335,6 +337,8 @@ function onChangeDate() {
 
     document.getElementById("toggle").style.visibility = "hidden";
 
+    disableCamera();
+
 }
 
 function modalImage() {
@@ -351,6 +355,7 @@ function modalImage() {
     images.forEach(image => {
 
         image.addEventListener('click', e => {
+            ripples();
             getImageUrl();
             box.classList.add('active');
             // closeImage.classList.add('active');
@@ -382,23 +387,66 @@ function closeButton() {
 }
 
 function ripples() {
-    const buttons = document.getElementById('modalHeader').querySelectorAll('button');
-    buttons.forEach(btn => {
-        btn.addEventListener('click', function (e) {
-            let x = e.clientX - e.target.offsetLeft;
-            let y = e.clientY - e.target.offsetTop;
 
-            let ripple = document.createElement('span');
-            ripple.style.left = x + 'px';
-            ripple.style.top = y + 'px';
-            this.appendChild(ripple);
 
-            setTimeout(() => {
-                ripple.remove()
-            }, 1000);
+    const buttonsSplashEffect = document.querySelectorAll('.splash-effect');
+
+        buttonsSplashEffect.forEach(button => {
+            button.addEventListener('click', function(e) {
+
+                var elem = button.getBoundingClientRect();
+                var x = e.clientX - elem.left;
+                var y = e.clientY - elem.top;
+
+
+                let ripple = document.createElement('div');
+                ripple.classList.add("splash-effect-ripple");
+
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                this.appendChild(ripple);
+
+                setTimeout(() => {
+                    ripple.remove()
+                }, 1000);
+
+            });
 
         });
-    });
+
+        //        buttons background effect script
+
+        const buttonsBackgroundEffect = document.querySelectorAll('.button-background-color-splash');
+
+        buttonsBackgroundEffect.forEach(button => {
+            button.addEventListener("mouseenter", (event) => {
+
+
+                var elem = button.getBoundingClientRect();
+                var x = event.clientX - elem.left;
+                var y = event.clientY - elem.top;
+
+                let background = document.createElement('div');
+                background.classList.add("button-background-color");
+                background.style.left = x + 'px';
+                background.style.top = y + 'px';
+
+                event.target.insertBefore(background, event.target.firstChild);
+
+
+            });
+
+            button.addEventListener("mouseleave", (event) => {
+
+
+                var item = document.querySelector(".button-background-color");
+                item.parentNode.removeChild(item);
+
+
+            });
+
+        });
+
 }
 // for all the images with every possible camera angle
 
@@ -457,6 +505,12 @@ function spiritCalender()
     imgDate.max = "2010-03-22";
 }
 
+function curiosityCalender()
+{
+    imgDate = document.getElementById("dateText");
+    imgDate.max = today;
+}
+
 function disableCamera()
 {
     document.getElementById('front').style.display = 'none';
@@ -467,31 +521,10 @@ function disableCamera()
     document.getElementById('mardi').style.display = 'none';
     document.getElementById('pan').style.display = "none";
     document.getElementById('minites').style.display = 'none';
+    document.getElementById('mast').style.display = 'none';
 }
 
-// function enableCamera()
-// {
-//     if(getCamera == 'FHAZ')
-//     {
-//         document.getElementById('front').style.display = 'inline';
-//     }
-//     else
-//     {
-//         document.getElementById('front').style.display = 'none';
-
-//     }
-    
-//     document.getElementById('rear').style.display = 'inline';
-//     document.getElementById('nav').style.display = 'inline';
-//     document.getElementById('chem').style.display = 'inline';
-//     document.getElementById('mahli').style.display = 'inline';
-//     document.getElementById('mardi').style.display = 'inline';
-//     document.getElementById('minites').style.display = 'inline';
-//     document.getElementById('pan').style.display = "inline";
-// }
-
 disableCamera();
-
 function fetchCamera()
 {
 
@@ -504,10 +537,54 @@ function fetchCamera()
             console.log("no data found for this date!");
         } else {
             var i;
+
+
+            //2mars.js:551 FHAZ
+// 2mars.js:551 RHAZ
+// 24mars.js:551 MAST
+// 12mars.js:551 CHEMCAM
+// 2mars.js:551 MARDI
+// 35mars.js:551 NAVCAM
+
+
+
             for(i = 0; i<data.photos.length;i++)
             {
                 getCamera = data.photos[i].camera.name;
                 console.log(getCamera);
+
+                switch(getCamera)
+                {
+                    case 'FHAZ' :
+                    document.getElementById('front').style.display = 'inline';
+                    break;
+                    case 'RHAZ' : 
+                    document.getElementById('rear').style.display = 'inline';
+                    break;
+                    case 'MAST' : 
+                    document.getElementById('mast').style.display = 'inline';
+                    break;
+                    case 'CHEMCAM' : 
+                    document.getElementById('chem').style.display = 'inline';
+                    break;
+                    case 'MAHLI' : 
+                    document.getElementById('mahli').style.display = 'inline';
+                    case 'MARDI' : 
+                    document.getElementById('mardi').style.display = 'inline';
+                    break;
+                    case 'NAVCAM' : 
+                    document.getElementById('nav').style.display = 'inline';
+                    break;
+                    case 'PANCAM' : 
+                    document.getElementById('pan').style.display = 'inline';
+                    break;
+                    case 'MINITES' : 
+                    document.getElementById('minites').style.display = 'inline';
+                    break;
+                
+                    default:
+                }
+         
             }
         
             errorImage('none');
@@ -516,3 +593,15 @@ function fetchCamera()
 
     })
 }
+
+function currentDate()
+{
+today = new Date();
+var dd = String(today.getDate()).padStart(2, '0');
+var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+var yyyy = today.getFullYear();
+
+today =yyyy + '-' + mm + '-' + dd;
+console.log(today);
+}
+
