@@ -1,0 +1,297 @@
+* {
+    margin: 0;
+    padding: 0;
+
+}
+
+
+body {
+    background-color: #424242;
+
+}
+
+.container{
+    background-color:teal;
+    height: 550px;   
+    width: 85%;
+    margin: 2%;
+    padding: 0.5%;
+    position:absolute;
+    max-width: 70%;
+    
+    
+}
+
+.date-selector
+{
+   
+    height: 25px;
+    width: 30%;
+    top: 30px;
+    position: relative;
+    
+}
+.image-details
+{
+    background-color: blue;
+    display: inline-block;
+    height: 300px;
+    width: 30%;
+    position: relative;
+    top: -140px;
+    padding: 5px;
+    
+}
+.image-container
+{
+    
+    
+    height: 500px;
+    width: 60%;
+    display: inline-block;
+    position: relative;
+    left: 5%;
+    top: 10px;;
+}
+#pic{
+    position: relative;
+    display: block;
+    width: 80%;
+    left: 20%;
+   
+}
+
+#hidden-image
+{
+    display: none;
+}
+
+h4{
+    position: absolute;
+    padding-left: 25%;
+    color:white;
+}
+span
+{
+   color: wheat;
+   position: absolute;
+   top: 50px;
+    
+   
+}
+#caption{
+   position: absolute; 
+   left: 150px;
+   top: 420px;
+}
+#txtdt
+{
+    left: 100px;
+}
+#image_id
+{
+    top: 80px;
+}
+#txt_image
+{
+    top: 80px;
+    left: 80px;
+}
+#lat
+{
+    top: 110px;
+}
+#lon
+{
+    top: 140px;
+}
+
+#txtlat
+{
+    top: 110px;
+    left: 80px;
+}
+#txtlon
+{
+    top: 140px;
+    left: 80px;
+}
+
+
+
+
+.button-container {
+    position: absolute;
+    top: 50%;
+    left: 40%;
+    transform: translate(-50%, 0);
+    /*            background-color: aqua;*/
+}
+#next_button
+{
+   top: -60px;
+   right: -270px;
+   
+   
+}
+#prev_button
+{
+    top: -60px;
+    left: -50px;
+    
+    
+}
+.button {
+
+
+    box-sizing: content-box;
+    display: flex;
+    float: left;
+    margin: 10px;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 32px;
+    /*            border: 1px solid rgba(66,165,245 ,1);*/
+    border-radius: 1px;
+    border: none;
+
+    background-color: transparent;
+
+}
+
+
+button:focus {
+    outline: 0;
+}
+
+svg {
+    fill: white;
+    height: 12px;
+    width: 12px;
+
+
+}
+
+
+
+/*        button-background-color */
+.button-background-color-splash {
+    position: relative;
+
+
+    overflow: hidden;
+}
+
+.button-background-color {
+    background-color: rgba(66, 165, 245, 1);
+    position: absolute;
+    z-index: -1;
+
+    pointer-events: none;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: animateBackgroundColor 0.3s ease-out;
+    animation-fill-mode: forwards;
+
+}
+
+@keyframes animateBackgroundColor {
+    0% {
+        width: 0px;
+        height: 0px;
+
+    }
+
+    100% {
+        width: 325px;
+        height: 325px;
+
+
+    }
+}
+
+
+/*splash effect*/
+.splash-effect {
+
+    position: relative;
+
+
+    overflow: hidden;
+}
+
+.splash-effect-ripple {
+    position: absolute;
+    background-color: white;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    border-radius: 50%;
+    animation: animate 0.75s ease-out;
+
+
+
+}
+
+@keyframes animate {
+    0% {
+        width: 0px;
+        height: 0px;
+        opacity: 0.5;
+    }
+
+    100% {
+        width: 300px;
+        height: 300px;
+        opacity: 0;
+
+    }
+}
+
+/*
+.test{
+    overflow: hidden;
+}
+#test{
+    display: inline-block;
+    height: 110%;
+    width: 110%;
+    background-color: white;
+}
+*/
+/* .image-container
+{
+    background-color: black;
+    height: 500px;
+    width: 700px;
+    max-width: 100%;
+    margin-left: 210px;
+    
+} */
+/* #pic
+{
+    margin-left: 220px;
+    margin-top: -150px;
+    width: 400px;
+} */
+/* #hidden-image {
+
+    display: none;
+}
+
+* {
+    box-sizing: border-box;
+} */
+/* 
+.img-magnifier-container {
+    position: relative;
+}
+
+.img-magnifier-glass {
+    position: absolute;
+    border: 3px solid #000;
+    border-radius: 50%;
+    cursor: none;
+    /*Set the size of the magnifier glass:*/
+    /* width: 100px;
+    height: 100px;
+} */ 
