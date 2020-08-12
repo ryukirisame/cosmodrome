@@ -32,6 +32,9 @@ var currentThumbPage = 1;
 // loading animation setTimeOut
 var loadingAnimationSetTimeOut;
 
+// buttons enabled or disabled
+var buttonsDisabled = false;
+
 // message strings
 var connecting = "Connecting to NASA...";
 var loading = "Loading...";
@@ -55,13 +58,16 @@ var lastPage = "This is the last item!";
 var firstPage = "This is the first item!";
 
 window.addEventListener("scroll", handleScroll);
-window.onresize = handleWindowResize;
+// window.onresize = handleWindowResize;
 window.onload = () => {
   //listening to enter key press
   startListeningToEnterKeyPress();
 
-  //starting button splash effect listeners
+  //starting button splash effect listener
   listenToButtonClickForSplashEffect();
+
+  // starting button background fill effect listener
+  listenToButtonHoverForBackgroundFillEffect();
 };
 function startListeningToEnterKeyPress() {
   var searchBar = document.getElementById("searchBar");
@@ -73,13 +79,41 @@ function startListeningToEnterKeyPress() {
     }
   });
 }
+function listenToButtonHoverForBackgroundFillEffect() {
+  const buttonsBackgroundEffect = document.querySelectorAll(
+    ".button-background-color-splash"
+  );
 
+  buttonsBackgroundEffect.forEach((btn) => {
+    btn.addEventListener("mouseenter", (event) => {
+      // console.log("mouse enter was fired");
+      var elem = btn.getBoundingClientRect();
+      var x = event.clientX - elem.left;
+      var y = event.clientY - elem.top;
+
+      let background = document.createElement("span");
+      background.classList.add("button-background-color");
+      background.style.left = x + "px";
+      background.style.top = y + "px";
+
+      event.target.insertBefore(background, event.target.firstChild);
+    });
+
+    btn.addEventListener("mouseleave", (event) => {
+      // console.log("mouseleave was fired");
+      var item = document.querySelector(".button-background-color");
+
+      item.parentNode.removeChild(item);
+    });
+  });
+}
 function listenToButtonClickForSplashEffect() {
   const buttons = document.querySelectorAll(".splash-effect");
 
   buttons.forEach((btn) => {
     btn.addEventListener("click", function (e) {
-      // console.log("i was executed");
+      // console.log(btn.disabled);
+      // if (btn.disabled == false) {
       var elem = btn.getBoundingClientRect();
       var x = e.clientX - elem.left;
       var y = e.clientY - elem.top;
@@ -93,6 +127,7 @@ function listenToButtonClickForSplashEffect() {
       setTimeout(() => {
         ripple.remove();
       }, 1000);
+      // }
     });
   });
 }
@@ -129,31 +164,34 @@ function sendHttpRequest(method, url, mode) {
 }
 
 function enableBtns() {
-  document.getElementById("nextBtn").disabled = false;
+  console.log("enabling buttons");
+  buttonsDisabled = false;
+  document.getElementById("nextBtn").style.pointerEvents = "auto";
 
   // document.getElementById("nextPageBtn").disabled = false;
-  document.getElementById("prevBtn").disabled = false;
+  document.getElementById("prevBtn").style.pointerEvents = "auto";
 
   // document.getElementById("prevPageBtn").disabled = false;
   // document.getElementById("changeMediaQualityBtn").disabled = false;
-  document.getElementById("searchBtn").disabled = false;
-  document.getElementsByName("media-type")[0].disabled = false;
-  document.getElementsByName("media-type")[1].disabled = false;
-  document.getElementById("quality-selector").disabled = false;
+  document.getElementById("searchBtn").style.pointerEvents = "auto";
+  document.getElementsByName("media-type")[0].style.pointerEvents = "auto";
+  document.getElementsByName("media-type")[1].style.pointerEvents = "auto";
+  document.getElementById("quality-selector").style.pointerEvents = "auto";
 }
 
 function disableBtns() {
-  document.getElementById("nextBtn").disabled = true;
+  buttonsDisabled = true;
+  document.getElementById("nextBtn").style.pointerEvents = "none";
 
   // document.getElementById("nextPageBtn").disabled = true;
-  document.getElementById("prevBtn").disabled = true;
+  document.getElementById("prevBtn").style.pointerEvents = "none";
 
   // document.getElementById("prevPageBtn").disabled = true;
   // document.getElementById("changeMediaQualityBtn").disabled = true;
-  document.getElementById("searchBtn").disabled = true;
-  document.getElementsByName("media-type")[0].disabled = true;
-  document.getElementsByName("media-type")[1].disabled = true;
-  document.getElementById("quality-selector").disabled = true;
+  document.getElementById("searchBtn").style.pointerEvents = "none";
+  document.getElementsByName("media-type")[0].style.pointerEvents = "none";
+  document.getElementsByName("media-type")[1].style.pointerEvents = "none";
+  document.getElementById("quality-selector").style.pointerEvents = "none";
 }
 function showControls() {
   document.getElementById("nextBtn").style.display = "inline-block";
@@ -393,44 +431,46 @@ function downloadNextPage(page) {
     });
 }
 function nextData() {
-  disableBtns();
-  pauseVideo();
-  hideVideo();
-  hitNum++;
-  //if hit number exceeds total number of hits in the current page and if there is a next page then transition to next page
-  //    but if there is not a next page(eg: first page with less than 100 items, last page with less than 100 items)
-  // then hitNum--;
-
-  //if hit number exceeds total number of hits in the CURRENT page
-  if (hitNum > queryResponse[currentPage - 1].collection.items.length - 1) {
-    //if next page is available then go to next page
-
-    if (isNextPageAvailable()) {
-      hitNum = 0;
-      hideMessage();
-      nextPage();
-    }
-    //if next page is not available then display message
-    else {
-      hitNum--;
-
-      showMessage(lastPage, 0);
-      enableBtns();
-    }
-  }
-  //else show next data from the current page
-  else {
-    hideImage();
+  if (buttonsDisabled == false) {
+    disableBtns();
     pauseVideo();
     hideVideo();
-    hideMessage();
-    showLoadingAnimation();
-    // showMessage(loading, 0);
-    // document.getElementById("pic").src = "loading.gif";
+    hitNum++;
+    //if hit number exceeds total number of hits in the current page and if there is a next page then transition to next page
+    //    but if there is not a next page(eg: first page with less than 100 items, last page with less than 100 items)
+    // then hitNum--;
 
-    showModalScreen();
-    fetchMediaUrl(hitNum, currentPage);
-    showDescription(hitNum, currentPage);
+    //if hit number exceeds total number of hits in the CURRENT page
+    if (hitNum > queryResponse[currentPage - 1].collection.items.length - 1) {
+      //if next page is available then go to next page
+
+      if (isNextPageAvailable()) {
+        hitNum = 0;
+        hideMessage();
+        nextPage();
+      }
+      //if next page is not available then display message
+      else {
+        hitNum--;
+
+        showMessage(lastPage, 0);
+        enableBtns();
+      }
+    }
+    //else show next data from the current page
+    else {
+      hideImage();
+      pauseVideo();
+      hideVideo();
+      hideMessage();
+      showLoadingAnimation();
+      // showMessage(loading, 0);
+      // document.getElementById("pic").src = "loading.gif";
+
+      showModalScreen();
+      fetchMediaUrl(hitNum, currentPage);
+      showDescription(hitNum, currentPage);
+    }
   }
 }
 
@@ -465,36 +505,38 @@ function nextPage() {
 }
 
 function prevData() {
-  disableBtns();
-  pauseVideo();
-  hideVideo();
-  hitNum--;
-  // document.getElementById("message").innerHTML = "";
-  //if hit number becomes less than 0 then transition to prev page
-  if (hitNum < 0) {
-    //if previous page is available then go to previous page
-    if (isPrevPageAvailable()) {
-      prevPage();
-    }
-    //else show message and undo changes to hitNum
-    else {
-      hitNum++;
-      showMessage(firstPage, 0);
-
-      enableBtns();
-    }
-  }
-  //else show previous data from the current page
-  else {
-    //document.getElementById("message").innerHTML = "Loading...";
-    hideImage();
+  if (buttonsDisabled == false) {
+    disableBtns();
     pauseVideo();
     hideVideo();
-    showLoadingAnimation();
-    // showMessage(loading, 0);
-    //document.getElementById("pic").src = "loading.gif";
-    fetchMediaUrl(hitNum, currentPage);
-    showDescription(hitNum, currentPage);
+    hitNum--;
+    // document.getElementById("message").innerHTML = "";
+    //if hit number becomes less than 0 then transition to prev page
+    if (hitNum < 0) {
+      //if previous page is available then go to previous page
+      if (isPrevPageAvailable()) {
+        prevPage();
+      }
+      //else show message and undo changes to hitNum
+      else {
+        hitNum++;
+        showMessage(firstPage, 0);
+
+        enableBtns();
+      }
+    }
+    //else show previous data from the current page
+    else {
+      //document.getElementById("message").innerHTML = "Loading...";
+      hideImage();
+      pauseVideo();
+      hideVideo();
+      showLoadingAnimation();
+      // showMessage(loading, 0);
+      //document.getElementById("pic").src = "loading.gif";
+      fetchMediaUrl(hitNum, currentPage);
+      showDescription(hitNum, currentPage);
+    }
   }
 }
 //tries going to previous page. shows error if its  first page
@@ -731,33 +773,35 @@ function showIvlVideo() {
 //   };
 // }
 function changeMediaQuality(qualityKey) {
-  disableBtns();
-  hideMessage();
+  if (buttonsDisabled == false) {
+    disableBtns();
+    hideMessage();
 
-  // if (mediaType == "album") {
-  // } else
-  if (mediaType == "video") {
-    pauseVideo();
-    // hideVideo();
-    // showLoadingAnimation();
+    // if (mediaType == "album") {
+    // } else
+    if (mediaType == "video") {
+      pauseVideo();
+      // hideVideo();
+      // showLoadingAnimation();
 
-    var vid = document.getElementById("vid");
-    vid.src = mediaUrls[qualityIndices[qualityKey]].href;
-    enableBtns();
-    // console.log(
-    //   "Quality: " + qualityKey + " url num: " + qualityIndices[qualityKey]
-    // );
-  }
-  //for image
-  else {
-    hideImage();
-    showLoadingAnimation();
-    var image = document.getElementById("pic");
-    image.src = mediaUrls[qualityIndices[qualityKey]].href;
-    enableBtns();
-    // console.log(
-    //   "Quality: " + qualityKey + " url num: " + qualityIndices[qualityKey]
-    // );
+      var vid = document.getElementById("vid");
+      vid.src = mediaUrls[qualityIndices[qualityKey]].href;
+      enableBtns();
+      // console.log(
+      //   "Quality: " + qualityKey + " url num: " + qualityIndices[qualityKey]
+      // );
+    }
+    //for image
+    else {
+      hideImage();
+      showLoadingAnimation();
+      var image = document.getElementById("pic");
+      image.src = mediaUrls[qualityIndices[qualityKey]].href;
+      enableBtns();
+      // console.log(
+      //   "Quality: " + qualityKey + " url num: " + qualityIndices[qualityKey]
+      // );
+    }
   }
 }
 function handleWindowResize() {
@@ -786,8 +830,8 @@ function showIvlImage() {
   // var imageHeight = screen.height;
   // var imageWidth = screen.width;
 
-  var contentSectionWidth = window.innerWidth;
-  var contentSectionHeight = window.innerHeight * 0.9;
+  // var contentSectionWidth = window.innerWidth;
+  // var contentSectionHeight = window.innerHeight * 0.9;
 
   // console.log("screen height: " + imageHeight + " scren width: " + imageWidth);
   // console.log(
@@ -798,8 +842,8 @@ function showIvlImage() {
   // );
 
   var image = document.getElementById("pic");
-  image.style.maxHeight = contentSectionHeight * 0.95;
-  image.style.maxWidth = contentSectionWidth * 0.9;
+  // image.style.maxHeight = contentSectionHeight * 0.95;
+  // image.style.maxWidth = contentSectionWidth * 0.9;
 
   // var contentSection = document.getElementsByClassName("content-section");
   //  var contentSectionHeight = contentSection[0].style.height;
@@ -873,6 +917,7 @@ function getCurrentCosmicObjectNum(itemNum, pageNum) {
 }
 
 function showMedia() {
+  console.log("showMedia()");
   if (mediaType == "video") {
     findMediaQualities();
     createMediaQualityOptions();
@@ -925,6 +970,7 @@ function showDescription(itemNum, pageNum) {
 
 //fetches media urls of a specific hit and calls showIvl()
 function fetchMediaUrl(itemNum, pageNum) {
+  console.log("fetchMediaUrl()");
   // console.log("itemNum: " + itemNum + " " + "pageNum: " + pageNum);
 
   var url;
@@ -1023,31 +1069,33 @@ function calSearchUrl(page) {
 function startSearch() {
   // document.getElementById("message").innerHTML = "Loading...";
   //get the searching string
-  search = document.getElementById("searchBar").value;
+  if (buttonsDisabled == false) {
+    search = document.getElementById("searchBar").value;
 
-  if (search != "") {
-    // listenToMediaChange();
-    disableBtns();
-    pauseVideo();
-    hideVideo();
-    hideDescription();
-    hideImage();
+    if (search != "") {
+      // listenToMediaChange();
+      disableBtns();
+      pauseVideo();
+      hideVideo();
+      hideDescription();
+      hideImage();
 
-    // showLoadingAnimation();
-    // showMessage(loading, 0);
+      // showLoadingAnimation();
+      // showMessage(loading, 0);
 
-    queryResponse = [];
+      queryResponse = [];
 
-    //get selected media type
-    getSelectedMediaType();
+      //get selected media type
+      getSelectedMediaType();
 
-    pageReset();
-    hitNum = 0;
-    thumbNum = 0;
-    search = search.trim();
-    removeCards();
-    //getting url and fetching query results (initial data)
-    getIvl(1);
+      pageReset();
+      hitNum = 0;
+      thumbNum = 0;
+      search = search.trim();
+      removeCards();
+      //getting url and fetching query results (initial data)
+      getIvl(1);
+    }
   }
 }
 
@@ -1120,7 +1168,7 @@ function getIvl(page) {
 }
 
 function showResultCards() {
-  var flexContainer = document.getElementById("flex-container");
+  var cardsContainer = document.getElementById("cards-container");
   // var column = document.getElementsByClassName("column");
 
   //if we have shown all the thumbs from current page and there is a next page
@@ -1150,15 +1198,40 @@ function showResultCards() {
           queryResponse[currentThumbPage - 1].collection.items.length &&
         thumbNum < nextLimit
       ) {
-        // console.log(thumbNum);
+        // creating card
         const card = document.createElement("div");
         card.className = "card";
-        card.id = thumbNum + "," + currentThumbPage;
+
+        // putting image inside it
+        const image = document.createElement("img");
+        var thumbURL = encodeURI(
+          queryResponse[currentThumbPage - 1].collection.items[thumbNum]
+            .links[0].href
+        );
+        image.src = thumbURL;
+        card.appendChild(image);
+
+        // card.style.backgroundSize = "cover";
+
+        // card.id = thumbNum + "," + currentThumbPage;
+
+        // storing information item num and page num in each card
+        const page_num = document.createAttribute("data-page-num");
+        page_num.value = currentThumbPage;
+        const item_num = document.createAttribute("data-item-num");
+        item_num.value = thumbNum;
+        card.setAttributeNode(page_num);
+        card.setAttributeNode(item_num);
+
+        // card on click handler
         card.onclick = () => {
-          const id = card.id;
-          const commaPosition = id.lastIndexOf(",");
-          const itemNum = id.slice(0, commaPosition);
-          const pageNum = id.slice(commaPosition + 1);
+          // const id = card.id;
+          // const commaPosition = id.lastIndexOf(",");
+          // const itemNum = id.slice(0, commaPosition);
+          // const pageNum = id.slice(commaPosition + 1);
+          const itemNum = card.getAttribute("data-item-num");
+          const pageNum = card.getAttribute("data-page-num");
+
           hitNum = itemNum;
           currentPage = pageNum;
           showDescription(itemNum, pageNum);
@@ -1171,6 +1244,7 @@ function showResultCards() {
           fetchMediaUrl(itemNum, pageNum);
         };
 
+        // title overloay information
         const titleOverlay = document.createElement("div");
         titleOverlay.className = "overlay";
         titleOverlay.innerHTML =
@@ -1181,18 +1255,9 @@ function showResultCards() {
           queryResponse[currentThumbPage - 1].collection.items[thumbNum].data[0]
             .title;
 
-        var thumbURL = encodeURI(
-          queryResponse[currentThumbPage - 1].collection.items[thumbNum]
-            .links[0].href
-        );
-
-        card.style.backgroundImage = `url(${thumbURL})`;
-
-        card.style.backgroundSize = "cover";
-
         card.appendChild(titleOverlay);
 
-        flexContainer.appendChild(card);
+        cardsContainer.appendChild(card);
         thumbNum++;
       }
       enableBtns();
@@ -1202,9 +1267,9 @@ function showResultCards() {
 }
 
 function removeCards() {
-  var flexContainer = document.getElementById("flex-container");
-  while (flexContainer.hasChildNodes()) {
-    flexContainer.removeChild(flexContainer.firstChild);
+  var cardsContainer = document.getElementById("cards-container");
+  while (cardsContainer.hasChildNodes()) {
+    cardsContainer.removeChild(cardsContainer.firstChild);
   }
 }
 function handleScroll() {
@@ -1231,7 +1296,7 @@ function showModalScreen() {
   // Get the modal
   var modal = document.getElementById("myModal");
   //displaying modal screen
-  modal.style.display = "block";
+  modal.classList.add("open");
   //starting key press listeners
   document.addEventListener("keyup", handleArrowKeyPress);
 }
@@ -1240,11 +1305,11 @@ function hideModalSreen() {
   //removing event listener of arrow key press
   document.removeEventListener("keyup", handleArrowKeyPress);
   //hiding modal screen
-  modal.style.display = "none";
+  modal.classList.remove("open");
 }
 function isModalScreenOpen() {
   var modal = document.getElementById("myModal");
-  if (modal.style.display == "block") {
+  if (modal.style.opacity != 0) {
     return true;
   } else return false;
 }

@@ -1,6 +1,7 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
-    <title>NASA</title>
+    <meta charset="UTF-8" />
 
     <!-- viewport -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -17,8 +18,7 @@
       href="https://fonts.googleapis.com/css?family=Open Sans"
       rel="stylesheet"
     />
-
-    <!-- icons -->
+    <title>NASA</title>
   </head>
   <body>
     <input tye="text" id="searchBar" />
@@ -64,7 +64,7 @@
         <!-- previous and next -->
 
         <button
-          class="change-item-button splash-effect"
+          class="change-item-button splash-effect button-background-color-splash"
           id="prevBtn"
           onclick="prevData()"
           text="previous"
@@ -82,7 +82,7 @@
           </svg>
         </button>
         <button
-          class="change-item-button splash-effect"
+          class="change-item-button splash-effect button-background-color-splash"
           id="nextBtn"
           onclick="nextData()"
           text="next"
@@ -102,7 +102,7 @@
         <!-- close button -->
         <div
           id="close-button-container"
-          class="splash-effect"
+          class="button-background-color-splash"
           onclick="handleCloseButtonClick();"
         >
           <svg
@@ -168,7 +168,7 @@
     <span class="message" id="message"></span>
 
     <!-- contains all the cards -->
-    <div class="flex-container" id="flex-container"></div>
+    <div class="cards-container" id="cards-container"></div>
 
     <!-- script -->
     <script src="javascript.js"></script>

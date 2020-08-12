@@ -1,4 +1,5 @@
 {
     "editor.formatOnSave": true,
-    "html.format.wrapLineLength": 180
+    "html.format.wrapLineLength": 180,
+    "liveServer.settings.port": 5501
 }
