@@ -10,24 +10,134 @@ body {
 
 }
 
+.container{
+    background-color:teal;
+    height: 550px;   
+    width: 85%;
+    margin: 2%;
+    padding: 0.5%;
+    position:absolute;
+    max-width: 70%;
+    
+    
+}
+
+.date-selector
+{
+   
+    height: 25px;
+    width: 30%;
+    top: 30px;
+    position: relative;
+    
+}
+.image-details
+{
+    background-color: blue;
+    display: inline-block;
+    height: 300px;
+    width: 30%;
+    position: relative;
+    top: -140px;
+    padding: 5px;
+    
+}
+.image-container
+{
+    
+    
+    height: 500px;
+    width: 60%;
+    display: inline-block;
+    position: relative;
+    left: 5%;
+    top: 10px;;
+}
+#pic{
+    position: relative;
+    display: block;
+    width: 80%;
+    left: 20%;
+   
+}
+
+#hidden-image
+{
+    display: none;
+}
+
+h4{
+    position: absolute;
+    padding-left: 25%;
+    color:white;
+}
+span
+{
+   color: wheat;
+   position: absolute;
+   top: 50px;
+    
+   
+}
+#caption{
+   position: absolute; 
+   left: 150px;
+   top: 420px;
+}
+#txtdt
+{
+    left: 100px;
+}
+#image_id
+{
+    top: 80px;
+}
+#txt_image
+{
+    top: 80px;
+    left: 80px;
+}
+#lat
+{
+    top: 110px;
+}
+#lon
+{
+    top: 140px;
+}
+
+#txtlat
+{
+    top: 110px;
+    left: 80px;
+}
+#txtlon
+{
+    top: 140px;
+    left: 80px;
+}
+
+
+
+
 .button-container {
     position: absolute;
     top: 50%;
-    left: 50%;
+    left: 40%;
     transform: translate(-50%, 0);
     /*            background-color: aqua;*/
 }
 #next_button
 {
-   right: -230px;
-   top: -100px;
+   top: -60px;
+   right: -270px;
    
    
 }
 #prev_button
 {
-    right: 70px;
-    top: -100px;
+    top: -60px;
+    left: -50px;
     
     
 }
@@ -56,8 +166,8 @@ button:focus {
 
 svg {
     fill: white;
-    height: 32px;
-    width: 32px;
+    height: 12px;
+    width: 12px;
 
 
 }
@@ -148,7 +258,7 @@ svg {
     background-color: white;
 }
 */
-.image-container
+/* .image-container
 {
     background-color: black;
     height: 500px;
@@ -156,20 +266,21 @@ svg {
     max-width: 100%;
     margin-left: 210px;
     
-}
-#pic
+} */
+/* #pic
 {
     margin-left: 220px;
+    margin-top: -150px;
     width: 400px;
-}
-#hidden-image {
+} */
+/* #hidden-image {
 
     display: none;
 }
 
 * {
     box-sizing: border-box;
-}
+} */
 /* 
 .img-magnifier-container {
     position: relative;

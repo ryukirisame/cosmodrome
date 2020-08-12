@@ -128,8 +128,11 @@ function showPic(itemNum) {
     var cdate = changeFormate(date);
     var img_url = "https://api.nasa.gov/EPIC/archive/natural/" + cdate + "/png/" + data[itemNum].image + ".png?api_key=" + API_KEY;
     document.getElementById('pic').src = img_url;
-
-
+    document.getElementById('txtdt').innerHTML=data[itemNum].date;
+    document.getElementById('caption').innerHTML=data[itemNum].caption;
+    document.getElementById('txt_image').innerHTML=data[itemNum].image;
+    document.getElementById('txtlat').innerHTML=data[itemNum].centroid_coordinates.lat;
+    document.getElementById('txtlon').innerHTML=data[itemNum].centroid_coordinates.lon;
 }
 
 function prev() {
@@ -184,7 +187,7 @@ function setMax()
     // input.max=cd;
     
 }
-setMax();
+
 
 
 
