@@ -9,6 +9,29 @@ body {
   background-color: rgb(48, 48, 48);
   color: white;
 }
+/* Icons */
+.material-icons.md-18 {
+  font-size: 18px;
+}
+.material-icons.md-24 {
+  font-size: 24px;
+}
+.material-icons.md-36 {
+  font-size: 36px;
+}
+.material-icons.md-48 {
+  font-size: 48px;
+}
+.material-icons.md-32 {
+  font-size: 32px;
+}
+.material-icons.md-28 {
+  font-size: 28px;
+}
+.material-icons.md-30 {
+  font-size: 30px;
+}
+
 /* button splash effect */
 .splash-effect {
   position: relative;
@@ -37,37 +60,6 @@ body {
   }
 }
 
-/*        button-background-color */
-.button-background-color-splash {
-  position: relative;
-
-  overflow: hidden;
-}
-
-.button-background-color {
-  background-color: rgba(66, 165, 245, 1);
-  position: absolute;
-  z-index: -1;
-
-  pointer-events: none;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  animation: animateBackgroundColor 0.3s ease-out;
-  animation-fill-mode: forwards;
-}
-
-@keyframes animateBackgroundColor {
-  0% {
-    width: 0px;
-    height: 0px;
-  }
-
-  100% {
-    width: 325px;
-    height: 325px;
-  }
-}
-
 /* cards container */
 .cards-container {
   /* display: flex;
@@ -78,7 +70,7 @@ body {
   /* width: 100%; */
 
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   grid-gap: 12px;
 }
 .card {
@@ -128,32 +120,25 @@ body {
   opacity: 1;
 }
 
-@media (max-width: 800px) {
-  .card {
-    /* flex: 50%; */
-    /* max-width: 50%; */
-  }
-}
-
-@media (max-width: 600px) {
-  .card {
-    /* flex: 100%; */
-    /* max-width: 100%; */
-  }
-}
+/* MODAL SCREEN */
 
 .modal {
-  /* display: none;*/ /* Hidden by default */
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: 64px 1fr;
+
+  /* grid-gap: 10px; */
+
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
 
   left: 0;
   top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
+  width: 100%;
+  height: 100%;
   overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(43, 43, 43); /* Fallback color */
-  background-color: rgba(49, 49, 49, 0.75); /* Black w/ opacity */
+  background-color: white;
+  background-color: rgba(49, 49, 49, 0.75);
 
   -webkit-backdrop-filter: blur(1px);
 
@@ -166,16 +151,16 @@ body {
   pointer-events: all;
   opacity: 1;
 }
-.modal-header-container {
-  /* background-color: turquoise; */
+/*.modal-header-container {
+   background-color: turquoise; 
   box-sizing: border-box;
   width: 100%;
   min-width: 700px;
   height: 10%;
   margin: 0px;
-  /* padding: 24px 32px; */
+  /* padding: 24px 32px; 
   position: relative;
-}
+}*/
 
 /* includes the close and next and prev buttons */
 svg {
@@ -184,32 +169,133 @@ svg {
   fill: white;
 }
 
-#close-button-container {
-  height: 55px;
-  width: 55px;
-  background-color: transparent;
-  position: absolute;
+/* CONTROLS SECTION */
+.controls-section {
+  /* position: absolute;
   top: 50%;
+  transform: translateY(-50%); */
+  /* left: 32px; */
+  /* background-color: blueviolet; */
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.know-more-button-container {
+  height: 36px;
+}
+.know-more-button {
+  border: none;
+  border-bottom: 0.5px solid white;
+  padding: 8px 8px;
+  height: 100%;
+  margin-left: 12px;
+  /* margin: 10px; */
+  border-radius: 1px;
+
+  background-color: transparent;
+  color: white;
+  font-family: "Open Sans", sans-serif;
+  font-size: 14px;
+  font-weight: light;
+  outline: none;
+  cursor: pointer;
+}
+.know-more-button:focus {
+  outline: none;
+}
+.know-more-data-container {
+  position: absolute;
+  top: 0;
+  background-color: thistle;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  min-height: 100%;
+  padding: 16px;
+  font-family: "Lato", sans-serif;
+  /* height: 100%; */
+  /* overflow: auto; */
+  pointer-events: none;
+  background-color: rgba(0, 0, 0, 0.8);
+
+  opacity: 0;
+  /* display: none; */
+}
+.know-more-data-container.open {
+  opacity: 1;
+}
+.select-menu-container {
+  height: 36px;
+}
+.select-menu {
+  /* box-sizing: content-box; */
+  padding: 8px 8px;
+  height: 100%;
+  margin-left: 12px;
+  /* margin: 10px; */
+  border-radius: 1px;
+  background-color: transparent;
+  color: white;
+  font-family: "Open Sans", sans-serif;
+  font-size: 14px;
+  font-weight: light;
+  border: none;
+  border-bottom: 0.5px solid white;
+  outline: none;
+  cursor: pointer;
+  /* font-style: italic; */
+}
+.select-menu:focus {
+  outline: none;
+}
+
+option {
+  background-color: transparent;
+  color: black;
+}
+/* CLOSE BUTTON */
+#close-button-section {
+  /* background-color: chartreuse; */
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#close-button-container {
+  margin-right: 12px;
+  /* height: 48px;
+  width: 48px; */
+  /* background-color: aqua; */
+  /* position: absolute; */
+  /* top: 50%;
   transform: translateY(-50%);
-  right: 32px;
+  right: 10%; */
+  /* margin: 10px; */
+
   display: inline-block;
-  border-radius: 50%;
+  /* border: 1px solid red; */
+
+  /* border-radius: 50%; */
+  position: relative;
+  /* height: 100%;
+  width: 100%; */
 }
 #close-button-container:hover {
   cursor: pointer;
-  /* background-color: #f44336; */
-}
-#close-button-container span {
   background-color: #f44336;
 }
+
 .close {
   position: absolute;
-  left: 50%;
   top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
+  /* height: 24px;
+  width: 24px; */
 }
 
-/* next and prev buttons */
+/* NEXT AND PREVIOUS BUTTONS */
 .change-item-button {
   position: absolute;
   padding: 8px 18px;
@@ -218,7 +304,7 @@ svg {
 
   border: none;
   outline: none;
-  display: inline-block;
+  display: none;
   text-decoration: none;
   background-color: transparent;
   /* transition: 0.1s; */
@@ -228,11 +314,9 @@ svg {
 }
 .change-item-button:hover {
   cursor: pointer;
-  /* background-color: #42a5f5; */
+  background-color: #42a5f5;
 }
-.change-item-button:disabled {
-  cursor: pointer;
-}
+
 #prevBtn {
   left: 50%;
   top: 50%;
@@ -244,25 +328,19 @@ svg {
   transform: translate(125%, -50%);
 }
 
-.controls-section {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  left: 32px;
-}
-#know-more {
-  display: none;
-}
+/*  CONTENTS SECTION */
 
-/* MODAL CONTENTS SECTION */
 .content-section {
+  /* background-color: cadetblue; */
   position: relative;
   /* display: block; */
+  /* max-width: 100%; */
   width: 100%;
-  height: 90%; /* the other 10% is taken by the modal header section*/
+  height: calc(100vh - 64px);
   /* overflow: hidden; */
   /* background-color: teal; */
   /* flex-direction: column; */
+  grid-column: 1 / span 2;
 }
 /* loading animation */
 .lds-ripple {
@@ -338,26 +416,46 @@ svg {
 /* MODAL CONTENT (image and video) */
 
 .media-container {
-  position: absolute;
-  top: 47.75%;
+  /* display: flex; */
+  /* width: 100%; */
+  /* width: 100%; */
+  height: 100%;
+  /* width: 100%; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* height: 50vh; */
+  /* max-height: 90%; */
+  /* overflow: hidden; */
+  /* position: absolute;
+  top: 50%;
+  transform: translateY(-50%); */
+  /* position: absolute;
+  top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  /* max-height: 100%;
-  max-width: 100%; */
+  transform: translate(-50%, -50%); */
 }
 .modal-content {
   /* margin: auto; */
   /* margin-top: 0px; */
-  display: inline-block;
+  /* display: inline-block; */
   /* padding: 0px; */
+  /* height: 100%; */
   /* max-width: 100%; */
-
-  height: 400px;
+  /* object-fit: contain; */
+  max-width: 100%;
+  max-height: 100%;
+  /* height: 400px; */
   /* max-width: 95%; */
   /* max-height: 90%; */
+
   box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
 }
 
+video.modal-content {
+  width: 100%;
+  object-fit: contain;
+}
 .modal-content {
   -webkit-animation-name: zoom;
   -moz-animation-name: zoom;
@@ -391,9 +489,7 @@ svg {
     transform: scale(1);
   }
 }
-/* 100% Image Width on Smaller Screens */
-@media only screen and (max-width: 700px) {
-  .modal-content {
-    width: 100%;
-  }
+
+.disabled {
+  cursor: progress;
 }

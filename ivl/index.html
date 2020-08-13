@@ -18,6 +18,12 @@
       href="https://fonts.googleapis.com/css?family=Open Sans"
       rel="stylesheet"
     />
+    <!-- Icons -->
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+
     <title>NASA</title>
   </head>
   <body>
@@ -41,71 +47,37 @@
     />Video
 
     <!-- Modal Content start-->
+
     <div id="myModal" class="modal">
       <!-- HEADER SECTION -->
-      <div class="modal-header-container">
-        <!-- controls section -->
-        <div class="controls-section">
-          <!-- basic information -->
-          <div id="know-more">
-            <div id="cosmic-object-num" class="modal-text"></div>
-            <div id="date" class="modal-text"></div>
-            <div id="title" class="modal-text"></div>
-            <div id="resolution" class="modal-text"></div>
-            <div id="description" class="modal-text"></div>
-          </div>
-
-          <!-- quality selector -->
+      <!-- <div class="modal-header-container"> -->
+      <!-- controls section -->
+      <div class="controls-section">
+        <!-- basic information -->
+        <div class="know-more-button-container">
+          <button class="know-more-button" onclick="handleKnowMoreClick()">
+            Know More
+          </button>
+        </div>
+        <!-- quality selector -->
+        <div class="select-menu-container">
           <select
             id="quality-selector"
+            class="select-menu"
             onchange="changeMediaQuality(document.getElementById('quality-selector').value);"
           ></select>
         </div>
-        <!-- previous and next -->
+      </div>
 
-        <button
-          class="change-item-button splash-effect button-background-color-splash"
-          id="prevBtn"
-          onclick="prevData()"
-          text="previous"
-        >
-          <svg width="48.284" height="76.564" viewBox="0 0 48.284 76.564">
-            <g id="prev" transform="translate(-4.142 -4.142)">
-              <path
-                id="Union_1"
-                data-name="Union 1"
-                d="M7.071,77.777a10,10,0,0,1,0-14.142L28.283,42.424,7.071,21.213A10,10,0,0,1,21.213,7.071l28.1,28.1q.092.087.182.178a10.005,10.005,0,0,1,0,14.146q-.09.09-.182.177l-28.1,28.1a10,10,0,0,1-14.142,0Z"
-                transform="translate(56.569 84.848) rotate(180)"
-                fill="#fff"
-              />
-            </g>
-          </svg>
-        </button>
-        <button
-          class="change-item-button splash-effect button-background-color-splash"
-          id="nextBtn"
-          onclick="nextData()"
-          text="next"
-        >
-          <svg width="48.284" height="76.564" viewBox="0 0 48.284 76.564">
-            <g id="next" transform="translate(-804.142 -655.142)">
-              <path
-                id="Union_1"
-                data-name="Union 1"
-                d="M7.071,77.777a10,10,0,0,1,0-14.142L28.283,42.424,7.071,21.213A10,10,0,0,1,21.213,7.071l28.1,28.1q.092.087.182.178a10.005,10.005,0,0,1,0,14.146q-.09.09-.182.177l-28.1,28.1a10,10,0,0,1-14.142,0Z"
-                transform="translate(800 651)"
-                fill="#fff"
-              />
-            </g>
-          </svg>
-        </button>
-        <!-- close button -->
-        <div
-          id="close-button-container"
-          class="button-background-color-splash"
-          onclick="handleCloseButtonClick();"
-        >
-          <svg
+      <!-- Controls section end -->
+
+      <!-- close button -->
+      <div id="close-button-section">
+        <div id="close-button-container" onclick="handleCloseButtonClick();">
+          <span class="material-icons md-30">
+            close
+          </span>
+          <!-- <svg
             xmlns="http://www.w3.org/2000/svg"
             width="76.569"
             height="76.568"
@@ -124,11 +96,44 @@
               />
             </g>
           </svg>
+           -->
         </div>
       </div>
 
+      <!-- close button section end -->
+
+      <!-- previous and next -->
+
+      <button
+        class="change-item-button splash-effect"
+        id="prevBtn"
+        onclick="prevData()"
+        text="previous"
+      >
+        <svg width="48.284" height="76.564" viewBox="0 0 48.284 76.564">
+          <g id="prev" transform="translate(-4.142 -4.142)">
+            <path
+              id="Union_1"
+              data-name="Union 1"
+              d="M7.071,77.777a10,10,0,0,1,0-14.142L28.283,42.424,7.071,21.213A10,10,0,0,1,21.213,7.071l28.1,28.1q.092.087.182.178a10.005,10.005,0,0,1,0,14.146q-.09.09-.182.177l-28.1,28.1a10,10,0,0,1-14.142,0Z"
+              transform="translate(56.569 84.848) rotate(180)"
+              fill="#fff"
+            />
+          </g>
+        </svg>
+      </button>
+
       <!-- CONTENT SECTION -->
       <div class="content-section">
+        <!-- Know More Data -->
+        <div class="know-more-data-container">
+          <div id="cosmic-object-num" class="modal-text"></div>
+          <div id="date" class="modal-text"></div>
+          <div id="title" class="modal-text"></div>
+          <div id="resolution" class="modal-text"></div>
+          <div id="description" class="modal-text"></div>
+        </div>
+
         <!-- loading animation -->
         <div class="lds-ripple" id="loading-animation">
           <div></div>
@@ -140,28 +145,35 @@
         <span class="message" id="messageInsideModal"></span>
 
         <!-- image -->
-        <div class="media-container">
-          <img class="modal-content" id="pic" />
+        <div id="media-container" class="media-container">
+          <img id="pic" />
         </div>
-
-        <!-- video -->
-
-        <div class="media-container" id="videoContainer">
-          <!-- <video
-            id="vid"
-            class="modal-content"
-            autoplay
-            controls
-            style="display: none; width: 100%;"
-          >
-            <source type="video/mp4" src="" />
-          </video> -->
-        </div>
-
-        <!-- video end -->
       </div>
+      <!-- Content Section End -->
+
+      <button
+        class="change-item-button splash-effect"
+        id="nextBtn"
+        onclick="nextData()"
+        text="next"
+      >
+        <svg width="48.284" height="76.564" viewBox="0 0 48.284 76.564">
+          <g id="next" transform="translate(-804.142 -655.142)">
+            <path
+              id="Union_1"
+              data-name="Union 1"
+              d="M7.071,77.777a10,10,0,0,1,0-14.142L28.283,42.424,7.071,21.213A10,10,0,0,1,21.213,7.071l28.1,28.1q.092.087.182.178a10.005,10.005,0,0,1,0,14.146q-.09.09-.182.177l-28.1,28.1a10,10,0,0,1-14.142,0Z"
+              transform="translate(800 651)"
+              fill="#fff"
+            />
+          </g>
+        </svg>
+      </button>
+
+      <!-- </div> -->
+
+      <!-- Modal content end -->
     </div>
-    <!-- Modal content end -->
 
     <!-- displays message -->
 

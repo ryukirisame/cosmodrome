@@ -32,9 +32,6 @@ var currentThumbPage = 1;
 // loading animation setTimeOut
 var loadingAnimationSetTimeOut;
 
-// buttons enabled or disabled
-var buttonsDisabled = false;
-
 // message strings
 var connecting = "Connecting to NASA...";
 var loading = "Loading...";
@@ -164,43 +161,63 @@ function sendHttpRequest(method, url, mode) {
 }
 
 function enableBtns() {
-  console.log("enabling buttons");
-  buttonsDisabled = false;
-  document.getElementById("nextBtn").style.pointerEvents = "auto";
+  const nextBtn = document.getElementById("nextBtn");
+  nextBtn.disabled = false;
+  nextBtn.classList.remove("disabled");
 
-  // document.getElementById("nextPageBtn").disabled = false;
-  document.getElementById("prevBtn").style.pointerEvents = "auto";
+  const prevBtn = document.getElementById("prevBtn");
+  prevBtn.disabled = false;
+  prevBtn.classList.remove("disabled");
 
-  // document.getElementById("prevPageBtn").disabled = false;
-  // document.getElementById("changeMediaQualityBtn").disabled = false;
-  document.getElementById("searchBtn").style.pointerEvents = "auto";
-  document.getElementsByName("media-type")[0].style.pointerEvents = "auto";
-  document.getElementsByName("media-type")[1].style.pointerEvents = "auto";
-  document.getElementById("quality-selector").style.pointerEvents = "auto";
+  const searchBtn = document.getElementById("searchBtn");
+  searchBtn.disabled = false;
+  searchBtn.classList.remove("disabled");
+
+  const mediaTypeImage = document.getElementsByName("media-type")[0];
+  mediaTypeImage.disabled = false;
+  mediaTypeImage.classList.remove("disabled");
+
+  const mediaTypeVideo = document.getElementsByName("media-type")[1];
+  mediaTypeVideo.disabled = false;
+  mediaTypeVideo.classList.remove("disabled");
+
+  const qualitySelector = document.getElementById("quality-selector");
+  qualitySelector.disabled = false;
+  qualitySelector.classList.remove("disabled");
+
+  const knowMoreButton = document.querySelector(".know-more-button");
+  knowMoreButton.disabled = false;
+  knowMoreButton.classList.remove("disabled");
 }
 
 function disableBtns() {
-  buttonsDisabled = true;
-  document.getElementById("nextBtn").style.pointerEvents = "none";
+  const nextBtn = document.getElementById("nextBtn");
+  nextBtn.disabled = true;
+  nextBtn.classList.add("disabled");
 
-  // document.getElementById("nextPageBtn").disabled = true;
-  document.getElementById("prevBtn").style.pointerEvents = "none";
+  const prevBtn = document.getElementById("prevBtn");
+  prevBtn.disabled = true;
+  prevBtn.classList.add("disabled");
 
-  // document.getElementById("prevPageBtn").disabled = true;
-  // document.getElementById("changeMediaQualityBtn").disabled = true;
-  document.getElementById("searchBtn").style.pointerEvents = "none";
-  document.getElementsByName("media-type")[0].style.pointerEvents = "none";
-  document.getElementsByName("media-type")[1].style.pointerEvents = "none";
-  document.getElementById("quality-selector").style.pointerEvents = "none";
-}
-function showControls() {
-  document.getElementById("nextBtn").style.display = "inline-block";
-  document.getElementById("prevBtn").style.display = "inline-block";
-  // disableBtns();
-  // document.getElementById("nextPageBtn").style.display = "inline-block";
-  // document.getElementById("prevPageBtn").style.display = "inline-block";
+  const searchBtn = document.getElementById("searchBtn");
+  searchBtn.disabled = true;
+  searchBtn.classList.add("disabled");
 
-  // document.getElementById("changeMediaQualityBtn").style.display = "inline";
+  const mediaTypeImage = document.getElementsByName("media-type")[0];
+  mediaTypeImage.disabled = true;
+  mediaTypeImage.classList.add("disabled");
+
+  const mediaTypeVideo = document.getElementsByName("media-type")[1];
+  mediaTypeVideo.disabled = true;
+  mediaTypeVideo.classList.add("disabled");
+
+  const qualitySelector = document.getElementById("quality-selector");
+  qualitySelector.disabled = true;
+  qualitySelector.classList.add("disabled");
+
+  const knowMoreButton = document.querySelector(".know-more-button");
+  knowMoreButton.disabled = true;
+  knowMoreButton.classList.add("disabled");
 }
 
 function displayVideo() {
@@ -209,8 +226,8 @@ function displayVideo() {
 }
 
 function createVideoElement(url) {
-  var contentSectionWidth = window.innerWidth;
-  var contentSectionHeight = window.innerHeight * 0.9;
+  // var contentSectionWidth = window.innerWidth;
+  // var contentSectionHeight = window.innerHeight * 0.9;
 
   // console.log("screen height: " + imageHeight + " scren width: " + imageWidth);
   // console.log(
@@ -220,7 +237,7 @@ function createVideoElement(url) {
   //     contentSectionWidth
   // );
 
-  var videoContainer = document.getElementById("videoContainer");
+  var mediaContainer = document.getElementById("media-container");
   var vid = document.createElement("video");
   // var source = document.createElement("source");
 
@@ -230,12 +247,12 @@ function createVideoElement(url) {
   vid.controls = true;
   vid.style.display = "none";
   // vid.style.width = "100%";
-  vid.style.maxHeight = contentSectionHeight * 0.95;
-  vid.style.maxWidth = contentSectionWidth * 0.9;
+  // vid.style.maxHeight = contentSectionHeight * 0.95;
+  // vid.style.maxWidth = contentSectionWidth * 0.9;
   // source.type = "video/mp4";
   // source.src = "";
 
-  videoContainer.appendChild(vid);
+  mediaContainer.appendChild(vid);
   stopPreviousIvlVideoListeners();
   startIvlVideoListeners();
   vid.src = url;
@@ -246,10 +263,10 @@ function hideVideo() {
 
   // if there exists a video element with id="vid"
   if (vid != undefined) {
-    var videoContainer = document.getElementById("videoContainer");
+    var mediaContainer = document.getElementById("media-container");
     vid.style.display = "none";
     stopPreviousIvlVideoListeners();
-    videoContainer.removeChild(vid);
+    mediaContainer.removeChild(vid);
   }
 }
 function pauseVideo() {
@@ -263,11 +280,16 @@ function pauseVideo() {
   }
 }
 function displayImage() {
-  document.getElementById("pic").style.display = "inline-block";
+  const pic = document.getElementById("pic");
+  pic.style.display = "inline-block";
+  pic.classList.add("modal-content");
 }
 function hideImage() {
-  console.log("hiding image");
-  document.getElementById("pic").style.display = "none";
+  // console.log("hiding image");
+  const pic = document.getElementById("pic");
+
+  pic.style.display = "none";
+  pic.classList.remove("modal-content");
 }
 function showMessage(messageString, messageBoxNum) {
   //boxNum=0 means the message box inside modal screen
@@ -431,46 +453,44 @@ function downloadNextPage(page) {
     });
 }
 function nextData() {
-  if (buttonsDisabled == false) {
-    disableBtns();
+  disableBtns();
+  pauseVideo();
+  hideVideo();
+  hitNum++;
+  //if hit number exceeds total number of hits in the current page and if there is a next page then transition to next page
+  //    but if there is not a next page(eg: first page with less than 100 items, last page with less than 100 items)
+  // then hitNum--;
+
+  //if hit number exceeds total number of hits in the CURRENT page
+  if (hitNum > queryResponse[currentPage - 1].collection.items.length - 1) {
+    //if next page is available then go to next page
+
+    if (isNextPageAvailable()) {
+      hitNum = 0;
+      hideMessage();
+      nextPage();
+    }
+    //if next page is not available then display message
+    else {
+      hitNum--;
+
+      showMessage(lastPage, 0);
+      enableBtns();
+    }
+  }
+  //else show next data from the current page
+  else {
+    hideImage();
     pauseVideo();
     hideVideo();
-    hitNum++;
-    //if hit number exceeds total number of hits in the current page and if there is a next page then transition to next page
-    //    but if there is not a next page(eg: first page with less than 100 items, last page with less than 100 items)
-    // then hitNum--;
+    hideMessage();
+    showLoadingAnimation();
+    // showMessage(loading, 0);
+    // document.getElementById("pic").src = "loading.gif";
 
-    //if hit number exceeds total number of hits in the CURRENT page
-    if (hitNum > queryResponse[currentPage - 1].collection.items.length - 1) {
-      //if next page is available then go to next page
-
-      if (isNextPageAvailable()) {
-        hitNum = 0;
-        hideMessage();
-        nextPage();
-      }
-      //if next page is not available then display message
-      else {
-        hitNum--;
-
-        showMessage(lastPage, 0);
-        enableBtns();
-      }
-    }
-    //else show next data from the current page
-    else {
-      hideImage();
-      pauseVideo();
-      hideVideo();
-      hideMessage();
-      showLoadingAnimation();
-      // showMessage(loading, 0);
-      // document.getElementById("pic").src = "loading.gif";
-
-      showModalScreen();
-      fetchMediaUrl(hitNum, currentPage);
-      showDescription(hitNum, currentPage);
-    }
+    showModalScreen();
+    fetchMediaUrl(hitNum, currentPage);
+    showDescription(hitNum, currentPage);
   }
 }
 
@@ -505,38 +525,36 @@ function nextPage() {
 }
 
 function prevData() {
-  if (buttonsDisabled == false) {
-    disableBtns();
+  disableBtns();
+  pauseVideo();
+  hideVideo();
+  hitNum--;
+  // document.getElementById("message").innerHTML = "";
+  //if hit number becomes less than 0 then transition to prev page
+  if (hitNum < 0) {
+    //if previous page is available then go to previous page
+    if (isPrevPageAvailable()) {
+      prevPage();
+    }
+    //else show message and undo changes to hitNum
+    else {
+      hitNum++;
+      showMessage(firstPage, 0);
+
+      enableBtns();
+    }
+  }
+  //else show previous data from the current page
+  else {
+    //document.getElementById("message").innerHTML = "Loading...";
+    hideImage();
     pauseVideo();
     hideVideo();
-    hitNum--;
-    // document.getElementById("message").innerHTML = "";
-    //if hit number becomes less than 0 then transition to prev page
-    if (hitNum < 0) {
-      //if previous page is available then go to previous page
-      if (isPrevPageAvailable()) {
-        prevPage();
-      }
-      //else show message and undo changes to hitNum
-      else {
-        hitNum++;
-        showMessage(firstPage, 0);
-
-        enableBtns();
-      }
-    }
-    //else show previous data from the current page
-    else {
-      //document.getElementById("message").innerHTML = "Loading...";
-      hideImage();
-      pauseVideo();
-      hideVideo();
-      showLoadingAnimation();
-      // showMessage(loading, 0);
-      //document.getElementById("pic").src = "loading.gif";
-      fetchMediaUrl(hitNum, currentPage);
-      showDescription(hitNum, currentPage);
-    }
+    showLoadingAnimation();
+    // showMessage(loading, 0);
+    //document.getElementById("pic").src = "loading.gif";
+    fetchMediaUrl(hitNum, currentPage);
+    showDescription(hitNum, currentPage);
   }
 }
 //tries going to previous page. shows error if its  first page
@@ -773,58 +791,56 @@ function showIvlVideo() {
 //   };
 // }
 function changeMediaQuality(qualityKey) {
-  if (buttonsDisabled == false) {
-    disableBtns();
-    hideMessage();
+  disableBtns();
+  hideMessage();
 
-    // if (mediaType == "album") {
-    // } else
-    if (mediaType == "video") {
-      pauseVideo();
-      // hideVideo();
-      // showLoadingAnimation();
-
-      var vid = document.getElementById("vid");
-      vid.src = mediaUrls[qualityIndices[qualityKey]].href;
-      enableBtns();
-      // console.log(
-      //   "Quality: " + qualityKey + " url num: " + qualityIndices[qualityKey]
-      // );
-    }
-    //for image
-    else {
-      hideImage();
-      showLoadingAnimation();
-      var image = document.getElementById("pic");
-      image.src = mediaUrls[qualityIndices[qualityKey]].href;
-      enableBtns();
-      // console.log(
-      //   "Quality: " + qualityKey + " url num: " + qualityIndices[qualityKey]
-      // );
-    }
-  }
-}
-function handleWindowResize() {
-  //for video
+  // if (mediaType == "album") {
+  // } else
   if (mediaType == "video") {
-    var video = document.getElementById("vid");
-    if (video != undefined) {
-      var contentSectionWidth = window.innerWidth;
-      var contentSectionHeight = window.innerHeight * 0.9;
-      video.style.maxHeight = contentSectionHeight * 0.95;
-      video.style.maxWidth = contentSectionWidth * 0.9;
-    }
-  }
+    pauseVideo();
+    // hideVideo();
+    // showLoadingAnimation();
 
+    var vid = document.getElementById("vid");
+    vid.src = mediaUrls[qualityIndices[qualityKey]].href;
+    enableBtns();
+    // console.log(
+    //   "Quality: " + qualityKey + " url num: " + qualityIndices[qualityKey]
+    // );
+  }
   //for image
-  if (mediaType == "image") {
+  else {
+    hideImage();
+    showLoadingAnimation();
     var image = document.getElementById("pic");
-    var contentSectionWidth = window.innerWidth;
-    var contentSectionHeight = window.innerHeight * 0.9;
-    image.style.maxHeight = contentSectionHeight * 0.95;
-    image.style.maxWidth = contentSectionWidth * 0.9;
+    image.src = mediaUrls[qualityIndices[qualityKey]].href;
+    enableBtns();
+    // console.log(
+    //   "Quality: " + qualityKey + " url num: " + qualityIndices[qualityKey]
+    // );
   }
 }
+// function handleWindowResize() {
+//   //for video
+//   if (mediaType == "video") {
+//     var video = document.getElementById("vid");
+//     if (video != undefined) {
+//       var contentSectionWidth = window.innerWidth;
+//       var contentSectionHeight = window.innerHeight * 0.9;
+//       video.style.maxHeight = contentSectionHeight * 0.95;
+//       video.style.maxWidth = contentSectionWidth * 0.9;
+//     }
+//   }
+
+//   //for image
+//   if (mediaType == "image") {
+//     var image = document.getElementById("pic");
+//     var contentSectionWidth = window.innerWidth;
+//     var contentSectionHeight = window.innerHeight * 0.9;
+//     image.style.maxHeight = contentSectionHeight * 0.95;
+//     image.style.maxWidth = contentSectionWidth * 0.9;
+//   }
+// }
 function showIvlImage() {
   //  showDescription();
   // var imageHeight = screen.height;
@@ -946,9 +962,18 @@ function hideDescription() {
   document.getElementById("description").style.display = "none";
   document.getElementById("resolution").style.display = "none";
 }
+function handleKnowMoreClick() {
+  var dataContainer = document.querySelector(".know-more-data-container");
+  if (dataContainer.classList.contains("open")) {
+    dataContainer.classList.remove("open");
+  } else {
+    dataContainer.classList.add("open");
+  }
+}
 function showDescription(itemNum, pageNum) {
-  var descriptiveData =
+  const descriptiveData =
     queryResponse[pageNum - 1].collection.items[itemNum].data[0];
+
   document.getElementById("cosmic-object-num").innerHTML =
     "Cosmic Object: " +
     getCurrentCosmicObjectNum(itemNum, pageNum) +
@@ -960,6 +985,8 @@ function showDescription(itemNum, pageNum) {
     "Title: " + descriptiveData.title;
   document.getElementById("description").innerHTML =
     "Description: " + descriptiveData.description;
+  document.getElementById("resolution").innerHTML =
+    "Resolution: Calculating...";
 
   document.getElementById("date").style.display = "block";
   document.getElementById("cosmic-object-num").style.display = "block";
@@ -1069,33 +1096,32 @@ function calSearchUrl(page) {
 function startSearch() {
   // document.getElementById("message").innerHTML = "Loading...";
   //get the searching string
-  if (buttonsDisabled == false) {
-    search = document.getElementById("searchBar").value;
 
-    if (search != "") {
-      // listenToMediaChange();
-      disableBtns();
-      pauseVideo();
-      hideVideo();
-      hideDescription();
-      hideImage();
+  search = document.getElementById("searchBar").value;
 
-      // showLoadingAnimation();
-      // showMessage(loading, 0);
+  if (search != "") {
+    // listenToMediaChange();
+    disableBtns();
+    pauseVideo();
+    hideVideo();
+    hideDescription();
+    hideImage();
 
-      queryResponse = [];
+    // showLoadingAnimation();
+    // showMessage(loading, 0);
 
-      //get selected media type
-      getSelectedMediaType();
+    queryResponse = [];
 
-      pageReset();
-      hitNum = 0;
-      thumbNum = 0;
-      search = search.trim();
-      removeCards();
-      //getting url and fetching query results (initial data)
-      getIvl(1);
-    }
+    //get selected media type
+    getSelectedMediaType();
+
+    pageReset();
+    hitNum = 0;
+    thumbNum = 0;
+    search = search.trim();
+    removeCards();
+    //getting url and fetching query results (initial data)
+    getIvl(1);
   }
 }
 
