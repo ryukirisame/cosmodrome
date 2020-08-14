@@ -50,7 +50,7 @@ function sendHttpRequest(method, url, mode) {
 /*for getting date through input tag*/
 function getDate() {
 
-    showButton();
+    
     date = document.getElementById('date').value;
     console.log(date);
 
@@ -90,7 +90,7 @@ function getPic() {
 
 /*storing all pic of choosen date */
 function downloadPic() {
-
+    showButton();
     console.log("itemNum Downloading: " + itemNumToDownload);
     var hiddenImage = document.getElementById("hidden-image");
 
