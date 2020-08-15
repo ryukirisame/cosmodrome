@@ -8,6 +8,7 @@ var url;
 var itemNumToDownload;
 var currentItemNumber;
 var data;
+var today;
 
 //function declaration for hidinng buttons before date selection default buttons are hidden
 function hideButton()
@@ -46,15 +47,31 @@ function sendHttpRequest(method, url, mode) {
 
 }
 
+function curDay(){
+    today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    
+    today = yyyy + '-' + mm + '-' + dd;
+    date = document.getElementById('date');
+    date.max = today;
+    
+    }
+
+
+    
+  
+
 
 /*for getting date through input tag*/
 function getDate() {
-
     
     date = document.getElementById('date').value;
-    console.log(date);
-
+    
+   
 }
+
 
 
 /*url for sending request*/
@@ -166,27 +183,18 @@ function changeFormate(x) {
 }
 
 /* getting current date */
-function curDay(){
-var today = new Date();
-var dd = String(today.getDate()).padStart(2, '0');
-var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-var yyyy = today.getFullYear();
 
-today = yyyy + '-' + mm + '-' + dd;
-return today
-}
-var td=curDay();
-console.log(td);
 
-function setMax()
-{
-    var cd=curDay();
-    console.log(cd);
-    var input=document.getElementById('date');
-    // input.setAttribute("max",this.value);
-    // input.max=cd;
+
+// function setMax()
+// {
+//     var cd=curDay();
+//     console.log(cd);
+//     var input=document.getElementById('date');
+//     // input.setAttribute("max",this.value);
+//     // input.max=cd;
     
-}
+// }
 
 
 
