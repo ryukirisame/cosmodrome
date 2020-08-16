@@ -49,7 +49,7 @@ function sendHttpRequest(method, url, mode) {
 
 function curDay(){
     today = new Date();
-    var dd = String(today.getDate()).padStart(2, '0');
+    var dd = String(today.getDate() - 2).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
     
@@ -58,11 +58,6 @@ function curDay(){
     date.max = today;
     
     }
-
-
-    
-  
-
 
 /*for getting date through input tag*/
 function getDate() {
