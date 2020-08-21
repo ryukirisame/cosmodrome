@@ -54,9 +54,54 @@ var onErrorMessage =
 var lastPage = "This is the last item!";
 var firstPage = "This is the first item!";
 
+// body scroll position when a modal is opened
+var bodyScrollPos;
+
 window.addEventListener("scroll", handleScroll);
-// window.onresize = handleWindowResize;
+
+const navBar = document.querySelector(".nav-bar");
+var prevScrollPos = window.pageYOffset;
+
+function handleScroll() {
+  // console.log(window.pageYOffset);
+  // console.log(window.scrollY+window.innerHeight);
+  // console.log(document.documentElement.scrollHeight);
+
+  // code for infinite scroll
+  if (
+    window.scrollY + window.innerHeight + 75 >=
+    document.documentElement.scrollHeight
+  ) {
+    showResultCards();
+  }
+
+  // code for hiding and showing the nav bar on page scroll
+  // hide the nav bar only when the user has scrolled atleast 64px
+  //  from the top. so that there is no white space shown when the
+  // nav bar hides itself
+  if (window.scrollY >= 360) {
+    var currentScrollPos = window.pageYOffset;
+
+    // when the user scrolls up then prevscrollpos is greater
+    //  than currentscrollpos
+    if (prevScrollPos > currentScrollPos) {
+      navBar.classList.remove("hidden");
+    }
+    // when the user scrolls down then prevscrollpos is less than
+    // currentscrollpos
+    else {
+      navBar.classList.add("hidden");
+    }
+
+    prevScrollPos = currentScrollPos;
+  }
+}
+
+// code ends
+
 window.onload = () => {
+  // to get viewport dimensions
+  getViewportDimensions();
   //listening to enter key press
   startListeningToEnterKeyPress();
 
@@ -66,13 +111,43 @@ window.onload = () => {
   // starting button background fill effect listener
   listenToButtonHoverForBackgroundFillEffect();
 };
+
+function getViewportDimensions() {
+  // First we get the viewport height and we multiple it by 1% to get a value for a vh unit
+  let vh = window.innerHeight * 0.01;
+  let vw = window.innerWidth * 0.01;
+  // Then we set the value in the --vh custom property to the root of the document
+  document.documentElement.style.setProperty("--vh", `${vh}px`);
+  document.documentElement.style.setProperty("--vw", `${vw}px`);
+
+  // We listen to the resize event
+  window.addEventListener("resize", () => {
+    // We execute the same script as before
+    let vh = window.innerHeight * 0.01;
+    let vw = window.innerWidth * 0.01;
+    // console.log(vh);
+    // console.log(vw);
+    document.documentElement.style.setProperty("--vh", `${vh}px`);
+    document.documentElement.style.setProperty("--vw", `${vw}px`);
+  });
+}
+
 function startListeningToEnterKeyPress() {
-  var searchBar = document.getElementById("searchBar");
-  searchBar.addEventListener("keyup", (event) => {
+  const navBarSearchBox = document.getElementById("nav-search-box");
+  const homePageSearchBox = document.getElementById("home-page-search-box");
+  navBarSearchBox.addEventListener("keyup", (event) => {
     var char = event.keyCode;
     // console.log("char code:" + char);
     if (char == 13) {
-      startSearch();
+      startSearch(event);
+      console.log("enter key was pressed");
+    }
+  });
+  homePageSearchBox.addEventListener("keyup", (event) => {
+    var char = event.keyCode;
+    // console.log("char code:" + char);
+    if (char == 13) {
+      startSearch(event);
     }
   });
 }
@@ -123,7 +198,7 @@ function listenToButtonClickForSplashEffect() {
 
       setTimeout(() => {
         ripple.remove();
-      }, 1000);
+      }, 700);
       // }
     });
   });
@@ -132,14 +207,17 @@ function handleArrowKeyPress(event) {
   var char = event.keyCode;
   console.log("key pressed: " + char);
   if (char == 37) {
-    if (document.getElementById("prevBtn").disabled == false) {
-      prevData();
-    }
+    // extra if check to not fire prevData() while the button is disabled (media is still loading)
+    // if (document.getElementById("prevBtn").disabled == false) {
+    prevData();
+    // }
   }
   if (char == 39) {
-    if (document.getElementById("nextBtn").disabled == false) {
-      nextData();
-    }
+    // extra if check to not fire prevData() while the button is disabled (media is still loading)
+
+    // if (document.getElementById("nextBtn").disabled == false) {
+    nextData();
+    // }
   }
 }
 
@@ -161,63 +239,71 @@ function sendHttpRequest(method, url, mode) {
 }
 
 function enableBtns() {
-  const nextBtn = document.getElementById("nextBtn");
-  nextBtn.disabled = false;
-  nextBtn.classList.remove("disabled");
+  // const nextBtn = document.getElementById("nextBtn");
+  // nextBtn.disabled = false;
+  // nextBtn.classList.remove("disabled");
 
-  const prevBtn = document.getElementById("prevBtn");
-  prevBtn.disabled = false;
-  prevBtn.classList.remove("disabled");
+  // const prevBtn = document.getElementById("prevBtn");
+  // prevBtn.disabled = false;
+  // prevBtn.classList.remove("disabled");
 
   const searchBtn = document.getElementById("searchBtn");
   searchBtn.disabled = false;
   searchBtn.classList.remove("disabled");
 
-  const mediaTypeImage = document.getElementsByName("media-type")[0];
-  mediaTypeImage.disabled = false;
-  mediaTypeImage.classList.remove("disabled");
+  const mediaTypeImage = document.querySelectorAll(".image-radio-button");
+  mediaTypeImage.forEach((btn) => {
+    btn.disabled = false;
+    btn.classList.remove("disabled");
+  });
 
-  const mediaTypeVideo = document.getElementsByName("media-type")[1];
-  mediaTypeVideo.disabled = false;
-  mediaTypeVideo.classList.remove("disabled");
+  const mediaTypeVideo = document.querySelectorAll(".video-radio-button");
+  mediaTypeVideo.forEach((btn) => {
+    btn.disabled = false;
+    btn.classList.remove("disabled");
+  });
 
   const qualitySelector = document.getElementById("quality-selector");
   qualitySelector.disabled = false;
   qualitySelector.classList.remove("disabled");
 
-  const knowMoreButton = document.querySelector(".know-more-button");
-  knowMoreButton.disabled = false;
-  knowMoreButton.classList.remove("disabled");
+  // const knowMoreButton = document.querySelector(".know-more-button");
+  // knowMoreButton.disabled = false;
+  // knowMoreButton.classList.remove("disabled");
 }
 
 function disableBtns() {
-  const nextBtn = document.getElementById("nextBtn");
-  nextBtn.disabled = true;
-  nextBtn.classList.add("disabled");
+  // const nextBtn = document.getElementById("nextBtn");
+  // nextBtn.disabled = true;
+  // nextBtn.classList.add("disabled");
 
-  const prevBtn = document.getElementById("prevBtn");
-  prevBtn.disabled = true;
-  prevBtn.classList.add("disabled");
+  // const prevBtn = document.getElementById("prevBtn");
+  // prevBtn.disabled = true;
+  // prevBtn.classList.add("disabled");
 
   const searchBtn = document.getElementById("searchBtn");
   searchBtn.disabled = true;
   searchBtn.classList.add("disabled");
 
-  const mediaTypeImage = document.getElementsByName("media-type")[0];
-  mediaTypeImage.disabled = true;
-  mediaTypeImage.classList.add("disabled");
+  const mediaTypeImage = document.querySelectorAll(".image-radio-button");
+  mediaTypeImage.forEach((btn) => {
+    btn.disabled = true;
+    btn.classList.add("disabled");
+  });
 
-  const mediaTypeVideo = document.getElementsByName("media-type")[1];
-  mediaTypeVideo.disabled = true;
-  mediaTypeVideo.classList.add("disabled");
+  const mediaTypeVideo = document.querySelectorAll(".video-radio-button");
+  mediaTypeVideo.forEach((btn) => {
+    btn.disabled = true;
+    btn.classList.add("disabled");
+  });
 
   const qualitySelector = document.getElementById("quality-selector");
   qualitySelector.disabled = true;
   qualitySelector.classList.add("disabled");
 
-  const knowMoreButton = document.querySelector(".know-more-button");
-  knowMoreButton.disabled = true;
-  knowMoreButton.classList.add("disabled");
+  // const knowMoreButton = document.querySelector(".know-more-button");
+  // knowMoreButton.disabled = true;
+  // knowMoreButton.classList.add("disabled");
 }
 
 function displayVideo() {
@@ -282,14 +368,12 @@ function pauseVideo() {
 function displayImage() {
   const pic = document.getElementById("pic");
   pic.style.display = "inline-block";
-  pic.classList.add("modal-content");
 }
 function hideImage() {
   // console.log("hiding image");
   const pic = document.getElementById("pic");
 
   pic.style.display = "none";
-  pic.classList.remove("modal-content");
 }
 function showMessage(messageString, messageBoxNum) {
   //boxNum=0 means the message box inside modal screen
@@ -330,14 +414,82 @@ function hideQualitySelector() {
 //     };
 //   }
 // }
-function getSelectedMediaType() {
-  var buttons = document.getElementsByName("media-type");
-  for (var i = 0; i < buttons.length; i++) {
-    if (buttons[i].checked) {
-      selectedMediaType = buttons[i].value;
-      break;
+
+function toggleNavBarMediaType() {
+  const toggleVideoIcon = document.getElementById("toggle-video-icon");
+  const toggleImageIcon = document.getElementById("toggle-image-icon");
+  const inactiveMediaType = document.querySelector(".inactive-media-type");
+
+  // if image is active (when video is not active)
+  if (inactiveMediaType.id == "toggle-video-icon") {
+    // hiding image icon
+    toggleImageIcon.classList.add("inactive-media-type");
+
+    // displaying video icon
+    toggleVideoIcon.classList.remove("inactive-media-type");
+    // checking home page video buttons
+    const videoRadioButtons = document.querySelector(".video-radio-button");
+    videoRadioButtons.checked = true;
+  }
+  // if image is inactive (when video is active)
+  else {
+    // hiding video icon
+    toggleVideoIcon.classList.add("inactive-media-type");
+    // displaying image icon
+    toggleImageIcon.classList.remove("inactive-media-type");
+    // checking home page image buttons
+    const imageRadioButtons = document.querySelector(".image-radio-button");
+
+    imageRadioButtons.checked = true;
+  }
+}
+
+function selectRadioButtons() {
+  console.log("selectRadioButton()");
+  const imageRadioButtons = document.querySelectorAll(".image-radio-button");
+  const videoRadioButtons = document.querySelectorAll(".video-radio-button");
+  if (selectedMediaType == "image") {
+    imageRadioButtons.forEach((btn) => {
+      btn.checked = true;
+    });
+  } else {
+    videoRadioButtons.forEach((btn) => {
+      btn.checked = true;
+
+      console.log("i was executed" + btn.id);
+    });
+  }
+}
+function getSelectedMediaType(event) {
+  console.log("getSelectedMediatype()");
+  // this function updates the value of selectedMediaType and checks
+  //  the respective button at all places
+
+  // if the user pressed the search icon of nav bar or presed enter while typing
+  // in the nav search box
+  if (
+    event.target.classList.contains("nav-start-search-icon-button") ||
+    event.target.id == "nav-search-box"
+  ) {
+    console.log("get selected media type of nav bar was fired");
+    const inactiveMediaType = document.querySelector(".inactive-media-type");
+    if (inactiveMediaType.id == "toggle-video-icon") {
+      selectedMediaType = "image";
+    } else {
+      selectedMediaType = "video";
+    }
+  } else {
+    console.log("get selected media type of big search bar was fired");
+    var buttons = document.getElementsByName("media-type-1");
+    for (var i = 0; i < buttons.length; i++) {
+      if (buttons[i].checked) {
+        selectedMediaType = buttons[i].value;
+        break;
+      }
     }
   }
+  // selecting the radio buttons
+  selectRadioButtons();
 }
 
 function pageReset() {
@@ -700,6 +852,7 @@ function handleVideoLoadingError() {
   enableBtns();
 }
 function handleVideoLoadedMetaData() {
+  // showDescription(hitNum, currentPage);
   document.getElementById("resolution").innerHTML =
     "Resolution: " + vid.videoWidth + " x " + vid.videoHeight;
   document.getElementById("message").innerHTML = "";
@@ -877,6 +1030,7 @@ function showIvlImage() {
     // enableBtns();
   };
   image.onload = () => {
+    // showDescription(hitNum, currentPage);
     document.getElementById("resolution").innerHTML =
       "Resolution: " + image.naturalWidth + " x " + image.naturalHeight;
     document.getElementById("message").innerHTML = "";
@@ -933,7 +1087,6 @@ function getCurrentCosmicObjectNum(itemNum, pageNum) {
 }
 
 function showMedia() {
-  console.log("showMedia()");
   if (mediaType == "video") {
     findMediaQualities();
     createMediaQualityOptions();
@@ -956,20 +1109,16 @@ function showMedia() {
   }
 }
 function hideDescription() {
-  document.getElementById("date").style.display = "none";
-  document.getElementById("cosmic-object-num").style.display = "none";
-  document.getElementById("title").style.display = "none";
-  document.getElementById("description").style.display = "none";
-  document.getElementById("resolution").style.display = "none";
+  document.querySelector(".know-more-data-container").classList.remove("show");
 }
-function handleKnowMoreClick() {
-  var dataContainer = document.querySelector(".know-more-data-container");
-  if (dataContainer.classList.contains("open")) {
-    dataContainer.classList.remove("open");
-  } else {
-    dataContainer.classList.add("open");
-  }
-}
+// function handleKnowMoreClick() {
+//   var dataContainer = document.querySelector(".know-more-data-container");
+//   if (dataContainer.classList.contains("open")) {
+//     dataContainer.classList.remove("open");
+//   } else {
+//     dataContainer.classList.add("open");
+//   }
+// }
 function showDescription(itemNum, pageNum) {
   const descriptiveData =
     queryResponse[pageNum - 1].collection.items[itemNum].data[0];
@@ -984,15 +1133,11 @@ function showDescription(itemNum, pageNum) {
   document.getElementById("title").innerHTML =
     "Title: " + descriptiveData.title;
   document.getElementById("description").innerHTML =
-    "Description: " + descriptiveData.description;
+    "Description: " + descriptiveData.description + descriptiveData.description;
   document.getElementById("resolution").innerHTML =
     "Resolution: Calculating...";
 
-  document.getElementById("date").style.display = "block";
-  document.getElementById("cosmic-object-num").style.display = "block";
-  document.getElementById("title").style.display = "block";
-  document.getElementById("description").style.display = "block";
-  document.getElementById("resolution").style.display = "block";
+  document.querySelector(".know-more-data-container").classList.add("show");
 }
 
 //fetches media urls of a specific hit and calls showIvl()
@@ -1093,14 +1238,32 @@ function calSearchUrl(page) {
 }
 
 //retrives user search input
-function startSearch() {
+function startSearch(event) {
   // document.getElementById("message").innerHTML = "Loading...";
   //get the searching string
 
-  search = document.getElementById("searchBar").value;
+  // if the user used the search box on the nav bar
+  if (
+    event.target.classList.contains("nav-start-search-icon-button") ||
+    event.target.id == "nav-search-box"
+  ) {
+    search = document.getElementById("nav-search-box").value;
+  }
+  // if the user used the search box on the home page
+  else {
+    search = document.getElementById("home-page-search-box").value;
+  }
 
+  console.log("searching for: " + search);
   if (search != "") {
+    event.target.blur();
     // listenToMediaChange();
+
+    //hiding home page modal
+    document.querySelector(".home-page-modal").style.display = "none";
+    // showing loading animation
+    showLoadingAnimation();
+
     disableBtns();
     pauseVideo();
     hideVideo();
@@ -1113,16 +1276,35 @@ function startSearch() {
     queryResponse = [];
 
     //get selected media type
-    getSelectedMediaType();
+    getSelectedMediaType(event);
 
     pageReset();
     hitNum = 0;
     thumbNum = 0;
     search = search.trim();
-    removeCards();
+    // hide total hits and delete cards
+    removeResults();
     //getting url and fetching query results (initial data)
     getIvl(1);
   }
+}
+function handleRadioButtonChange() {
+  removeResults();
+  disableBtns();
+  showLoadingAnimation();
+
+  if (event.target.classList.contains("image-radio-button")) {
+    selectedMediaType = "image";
+  } else {
+    selectedMediaType = "video";
+  }
+  selectRadioButtons();
+
+  queryResponse = [];
+  pageReset();
+  hitNum = 0;
+  thumbNum = 0;
+  getIvl(1);
 }
 
 //gets Ivl initial data, sets total page and fetches media url
@@ -1132,7 +1314,9 @@ function getIvl(page) {
   // console.log(searchURL);
   sendHttpRequest(method, searchUrl, mode)
     .then((response) => {
+      hideLoadingAnimation();
       totalHits = response.collection.metadata.total_hits;
+
       console.log("Total hits:" + totalHits);
       console.log(response);
       queryResponse[page - 1] = response;
@@ -1255,6 +1439,14 @@ function showResultCards() {
           // const commaPosition = id.lastIndexOf(",");
           // const itemNum = id.slice(0, commaPosition);
           // const pageNum = id.slice(commaPosition + 1);
+
+          // displaying media controls bar on nav bar
+          document
+            .querySelector(".nav-media-control-bar")
+            .classList.add("open");
+          // revealing nav bar if its hidden
+          document.querySelector(".nav-bar").classList.remove("hidden");
+
           const itemNum = card.getAttribute("data-item-num");
           const pageNum = card.getAttribute("data-page-num");
 
@@ -1265,24 +1457,29 @@ function showResultCards() {
           hideVideo();
           hideMessage();
           showModalScreen();
-          showLoadingAnimation();
+          // showLoadingAnimation();
           // showMessage(loading, 0);
           fetchMediaUrl(itemNum, pageNum);
         };
 
-        // title overloay information
+        // title overlay information
         const titleOverlay = document.createElement("div");
         titleOverlay.className = "overlay";
-        titleOverlay.innerHTML =
+
+        const title = document.createElement("p");
+        title.classList.add("overlay-title");
+
+        title.innerText =
           thumbNum +
           ": " +
           currentThumbPage +
           ": " +
           queryResponse[currentThumbPage - 1].collection.items[thumbNum].data[0]
             .title;
-
+        titleOverlay.appendChild(title);
         card.appendChild(titleOverlay);
 
+        // appending card
         cardsContainer.appendChild(card);
         thumbNum++;
       }
@@ -1292,63 +1489,107 @@ function showResultCards() {
   // while(queryResponse[currentThumbPage]==undefined);
 }
 
-function removeCards() {
+function removeResults() {
+  // hiding total hits
+
   var cardsContainer = document.getElementById("cards-container");
+  // deleting cards
   while (cardsContainer.hasChildNodes()) {
     cardsContainer.removeChild(cardsContainer.firstChild);
   }
 }
-function handleScroll() {
-  // console.log(window.scrollY+window.innerHeight);
-  // console.log(document.documentElement.scrollHeight);
-  if (
-    window.scrollY + window.innerHeight + 75 >=
-    document.documentElement.scrollHeight
-  ) {
-    showResultCards();
-  }
-}
 
-function handleCloseButtonClick() {
+function handleBackButtonClick() {
   if (mediaType == "video") {
     pauseVideo();
     hideVideo();
   }
-
+  // hiding media controls on nav bar
+  document.querySelector(".nav-media-control-bar").classList.remove("open");
+  // hiding modal
   hideModalSreen();
 }
 
 function showModalScreen() {
+  // preventing background scroll
+  preventBodyScroll();
   // Get the modal
-  var modal = document.getElementById("myModal");
+  var contentModal = document.getElementById("contentModal");
   //displaying modal screen
-  modal.classList.add("open");
+  contentModal.classList.add("open");
   //starting key press listeners
   document.addEventListener("keyup", handleArrowKeyPress);
 }
 function hideModalSreen() {
-  var modal = document.getElementById("myModal");
+  // allowing body scroll again
+  allowBodyScroll();
+  // get the modal
+  var contentModal = document.getElementById("contentModal");
   //removing event listener of arrow key press
   document.removeEventListener("keyup", handleArrowKeyPress);
   //hiding modal screen
-  modal.classList.remove("open");
+  contentModal.classList.remove("open");
 }
 function isModalScreenOpen() {
-  var modal = document.getElementById("myModal");
+  var modal = document.getElementById("contentModal");
   if (modal.style.opacity != 0) {
     return true;
   } else return false;
 }
 
 function showLoadingAnimation() {
-  var ripple = document.getElementById("loading-animation");
-
-  loadingAnimationSetTimeOut = setTimeout(function () {
-    ripple.style.display = "inline-block";
-  }, 250);
+  document
+    .querySelector(".loading-animation-container")
+    .classList.remove("hide");
 }
 function hideLoadingAnimation() {
-  var ripple = document.getElementById("loading-animation");
-  clearTimeout(loadingAnimationSetTimeOut);
-  ripple.style.display = "none";
+  document.querySelector(".loading-animation-container").classList.add("hide");
+}
+
+function openNavSearchBar() {
+  var navSearchBar = document.querySelector(".nav-search-bar");
+  var navSearchBox = document.querySelector("#nav-search-box");
+  navSearchBar.classList.add("open");
+  navSearchBox.focus();
+}
+function closeNavSearchBar() {
+  var navSearchBar = document.querySelector(".nav-search-bar");
+  navSearchBar.classList.remove("open");
+}
+function preventBodyScroll() {
+  // getting current scroll position
+  bodyScrollPos = window.scrollY;
+
+  // fixing body position
+  document.body.classList.add("modal-open");
+  // briging back the body to the bodyScrollPos because when
+  // the body position is fixed then we come back to the top of the page
+  //  as the top of the body element tries to start from the top of the
+  // window
+  document.body.style.top = -bodyScrollPos + "px";
+}
+function allowBodyScroll() {
+  // to prevent the hiding of the nav bar due to scrollTo
+  window.removeEventListener("scroll", handleScroll);
+
+  document.body.classList.remove("modal-open");
+  window.scrollTo(0, bodyScrollPos);
+  setTimeout(() => {
+    window.addEventListener("scroll", handleScroll);
+  }, 1000);
+}
+function revealSideBar() {
+  var sideBarModal = document.querySelector(".sidebar-menu-modal");
+
+  sideBarModal.classList.add("open");
+  preventBodyScroll();
+  // document.body.style.top = `-${window.scrollY}px`;
+}
+
+function hideSideBar(event) {
+  var sideBarModal = document.querySelector(".sidebar-menu-modal");
+  if (event.target.classList.contains("sidebar-menu-modal")) {
+    sideBarModal.classList.remove("open");
+    allowBodyScroll();
+  }
 }
