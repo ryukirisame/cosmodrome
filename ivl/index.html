@@ -282,8 +282,8 @@
     <!-- Main body section (search results section) -->
     <!-- loading animation -->
     <div class="loading-animation-container hide">
-      <div id="bowlG">
-        <div id="bowl_ringG">
+      <div class="bowlG">
+        <div class="bowl_ringG">
           <div class="ball_holderG">
             <div class="ballG"></div>
           </div>
@@ -324,8 +324,35 @@
     <!-- content modal start-->
 
     <div id="contentModal" class="content-modal">
-      <!-- Media Section -->
+      <!--  media loading animation -->
+      <div class="loading-animation-container hide media-loading-animation">
+        <div class="bowlG">
+          <div class="bowl_ringG">
+            <div class="ball_holderG">
+              <div class="ballG"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content Section -->
       <div class="content-section">
+        <div class="arrow-button-container">
+          <!-- Prev Button -->
+
+          <span class="material-icons arrow-button md-24" onclick="prevData()">
+            arrow_back_ios
+          </span>
+
+          <!-- next button -->
+          <!-- we have used the back button and rotated it 180 deg to maintain icon experience -->
+          <!-- google icons are messed up. the next button is wider than the prev button -->
+          <span class="material-icons arrow-button md-24" onclick="nextData()">
+            arrow_back_ios
+          </span>
+        </div>
+
+        <!-- content (pic/video) -->
         <div id="media-container" class="media-container">
           <img id="pic" />
         </div>
