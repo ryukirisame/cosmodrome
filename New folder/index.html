@@ -59,6 +59,7 @@
                         <div class="links" id="epic">image &amp; videos</div>
                     </a>
                 </div>
+
                 <!-- footer section -->
                 <div class="sidebar-footer-section">
                     <div class="footer-contents">
@@ -89,9 +90,9 @@
             </g>
         </svg>
     </div>
+<!--Navbar--> 
     
-    
-     <!-- HOME PAGE MODAL -->
+<!-- HOME PAGE MODAL -->
     <div class="home-page-modal">
       <!-- Page Description Section -->
       <div class="page-description-container">
@@ -119,6 +120,7 @@
                     </path>
                 </svg> </button>
             </div>
+            <!--Right next-->
         <div class="dummy-button-rt">
             <button onclick="next();" class="button splash-effect button-background-color-splash" id="next_button">
                 <svg id="next" class="lrb" viewBox="1.74 6.746 41.7 64.59">
@@ -128,27 +130,132 @@
             </button>
     
         </div>
+     </div>
+    <div class="date-input-container">
 
-        
-
-      </div>
-      <div class="date-input-container">
-
-        <div class="date-selector">
-
-           <div class="date-box">
-            <input class="date-box" type="date" id="date" value="2020-08-03"  onclick="curDay();">
-           </div>
-            <button class="search-button button splash-effect  button-background-color-splash" onclick="getPic();"><i class="material-icons">search</i></button>
+        <div class="date-box">
+             <input type="date" id="date" value="2020-08-03"  onclick="curDay();">      
+       
+        </div>
+        <div class="search-box">
+            <button class="splash-effect  button-background-color-splash" onclick="getPic();"><i class="material-icons">search</i></button>
            
         </div>
-        
     </div>
-    
+
+    <div class="image-details-section">
+       <div class="image-details-box">
+           <table class="image-details-table"> 
+               <th colspan="2">Image Details</th>
+               <tr>
+                   <td>
+                       Date & Time : 
+                   </td>
+                   <td>
+                       2020:07:03
+                   </td>
+               </tr>
+               <tr>
+                   <td>
+                    Image
+               </td>
+               <td>
+                   23443353533
+               </td>
+            </tr>
+            <tr>
+                <td>
+                    Latitude:
+                </td>
+                <td>
+                    data
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Longitude
+                </td>
+                <td>
+                    data
+                </td>
+            </tr>
+            <tr>
+                <td>Lunar J2_position</td>
+                <td>data</td>
+            </tr>
+            <tr>
+                <td>Solar J2_position</td>
+                <td>data</td>
+            </tr>
+
+           </table>
+
+       </div>
+     
+    </div>
+
+    <div class="details">
+        <div class="epic-details">
+            <div class="st-image1">
+                here your picture of first satelite
+                <img src="" alt="">
+
+            </div>
+            <div class="epic-details-text">
+                here your text about first st
+            </div>
+
+        </div>
+        <div class="dscovr-details">
+            <div class="st-image2">
+                here your picture of second st
+                <img src="" alt="">
+            </div>
+            <div class="dscovr-details-text">
+                here your text about second st
+            </div>
+
+        </div>
+    </div>
 
 
+
+
+
+
+<!-- HOME PAGE FOOTER SECTION -->
+<div class="home-page-footer-section">
+    <div class="footer-contents">
+      <div class="social-links">
+        <a href="https://github.com/ryukirisame/cosmodrome">
+          <svg width="24.51" height="24" viewBox="0 0 24.51 24">
+            <g id="github" transform="translate(0 -5.329)">
+              <g
+                id="Group_26"
+                data-name="Group 26"
+                transform="translate(0 5.329)"
+              >
+                <path
+                  id="Path_49"
+                  data-name="Path 49"
+                  d="M12.254,5.329A12.311,12.311,0,0,0,8.382,29.308c.613.113.836-.267.836-.593,0-.293-.011-1.066-.017-2.093-3.408.743-4.128-1.65-4.128-1.65a3.249,3.249,0,0,0-1.36-1.8c-1.114-.763.083-.748.083-.748a2.574,2.574,0,0,1,1.877,1.268A2.6,2.6,0,0,0,9.24,24.715a2.626,2.626,0,0,1,.778-1.645C7.3,22.759,4.436,21.7,4.436,16.99a4.769,4.769,0,0,1,1.262-3.3,4.434,4.434,0,0,1,.119-3.255s1.029-.331,3.37,1.261a11.568,11.568,0,0,1,6.137,0c2.339-1.592,3.367-1.261,3.367-1.261a4.44,4.44,0,0,1,.123,3.255,4.76,4.76,0,0,1,1.259,3.3c0,4.726-2.865,5.766-5.594,6.071a2.943,2.943,0,0,1,.832,2.278c0,1.645-.015,2.972-.015,3.375,0,.329.221.712.843.591A12.312,12.312,0,0,0,12.254,5.329Z"
+                  transform="translate(0 -5.329)"
+                />
+              </g>
+            </g>
+          </svg>
+        </a>
+      </div>
+
+      <div class="project-info-footer">
+        <p>The Cosmodrome Project v1.0</p>
+      </div>
     </div>
-   
+  </div>
+
+  <!-- HOME PAGE FOOTER SECTION ENDS -->
+
+</div>
     <script src="script.js">
 
     </script>

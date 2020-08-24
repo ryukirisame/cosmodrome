@@ -7,9 +7,9 @@ var date;
 var url;
 var itemNumToDownload;
 var currentItemNumber;
-var data;
+var data="2020/08/03";
 var today;
-
+getPic();
 //function declaration for hidinng buttons before date selection default buttons are hidden
 function hideButton()
 {
@@ -56,6 +56,7 @@ function curDay(){
     today = yyyy + '-' + mm + '-' + dd;
     date = document.getElementById('date');
     date.max = today;
+    return today;
     
     }
 
