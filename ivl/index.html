@@ -82,7 +82,7 @@
               </div>
 
               <div class="project-info-footer">
-                <p>The Cosmodrome Project v1.0</p>
+                <p>The Cosmodrome Project 1.0</p>
               </div>
             </div>
           </div>
@@ -171,18 +171,31 @@
 
       <!-- NAV MEDIA CONTROL BAR -->
       <div class="nav-media-control-bar">
+        <!-- back arrow icon -->
         <div class="back-button-container" onclick="handleBackButtonClick()">
           <span class="material-icons md-24">
             arrow_back
           </span>
         </div>
+        <!-- quality-selector and full screen -->
+        <div class="controls-container">
+          <!-- full screen icon -->
 
-        <div class="select-menu-container">
-          <select
-            id="quality-selector"
-            class="select-menu"
-            onchange="changeMediaQuality(document.getElementById('quality-selector').value);"
-          ></select>
+          <span
+            class="material-icons md-24 full-screen-icon"
+            onclick="openFullScreen();"
+          >
+            open_in_full
+          </span>
+
+          <!-- quality selector -->
+          <div class="select-quality-container">
+            <select
+              id="quality-selector"
+              class="select-quality"
+              onchange="changeMediaQuality(document.getElementById('quality-selector').value);"
+            ></select>
+          </div>
         </div>
       </div>
     </div>
@@ -301,7 +314,7 @@
             class="image-radio-button"
             name="media-type-2"
             value="image"
-            onchange="handleRadioButtonChange(event)"
+            onchange="handleRadioButtonChange()"
           />
           <label for="image-radio-button-2">Image</label>
           <input
@@ -310,7 +323,7 @@
             class="video-radio-button"
             name="media-type-2"
             value="video"
-            onchange="handleRadioButtonChange(event)"
+            onchange="handleRadioButtonChange()"
           />
           <label for="video-radio-button-2">Video</label>
         </div>
@@ -334,10 +347,19 @@
           </div>
         </div>
       </div>
-
+      <!--  media loading animation -->
+      <div class="loading-animation-container card-click hide">
+        <div class="bowlG">
+          <div class="bowl_ringG">
+            <div class="ball_holderG">
+              <div class="ballG"></div>
+            </div>
+          </div>
+        </div>
+      </div>
       <!-- Content Section -->
       <div class="content-section">
-        <div class="arrow-button-container">
+        <div class="arrow-button-container hide">
           <!-- Prev Button -->
 
           <span class="material-icons arrow-button md-24" onclick="prevData()">
@@ -365,10 +387,10 @@
 
       <!-- Know More Data -->
       <div class="know-more-data-container">
-        <div id="cosmic-object-num" class="modal-text"></div>
-        <div id="date" class="modal-text"></div>
+        <!-- <div id="cosmic-object-num" class="modal-text"></div> -->
+        <!-- <div id="resolution" class="modal-text"></div> -->
         <div id="title" class="modal-text"></div>
-        <div id="resolution" class="modal-text"></div>
+        <div id="date" class="modal-text"></div>
         <div id="description" class="modal-text"></div>
       </div>
 

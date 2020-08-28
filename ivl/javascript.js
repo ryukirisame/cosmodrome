@@ -19,7 +19,7 @@ var currentPage = 1;
 var totalPage = 0;
 //the selected media type from radio button
 var selectedMediaType;
-//media type of the current hit num
+//media type of the current hit num value="image" or "video"
 var mediaType;
 //stores the searching string
 var search = "";
@@ -224,10 +224,12 @@ function handleArrowKeyPress(event) {
 function sendHttpRequest(method, url, mode) {
   return new Promise((resolve, reject) => {
     var req = new XMLHttpRequest();
+    // req.responseType = "json";
     req.onreadystatechange = function () {
       if (this.readyState == 4) {
         if (this.status == 200) {
           var data = JSON.parse(this.response);
+          // var data = this.response;
           //console.log(data);
           resolve(data);
         } else reject(this.status);
@@ -268,6 +270,11 @@ function enableBtns() {
   qualitySelector.disabled = false;
   qualitySelector.classList.remove("disabled");
 
+  const arrowButton = document.querySelectorAll(".arrow-button");
+  arrowButton.forEach((btn) => {
+    btn.classList.remove("disabled");
+  });
+
   // const knowMoreButton = document.querySelector(".know-more-button");
   // knowMoreButton.disabled = false;
   // knowMoreButton.classList.remove("disabled");
@@ -301,6 +308,11 @@ function disableBtns() {
   const qualitySelector = document.getElementById("quality-selector");
   qualitySelector.disabled = true;
   qualitySelector.classList.add("disabled");
+
+  const arrowButton = document.querySelectorAll(".arrow-button");
+  arrowButton.forEach((btn) => {
+    btn.classList.add("disabled");
+  });
 
   // const knowMoreButton = document.querySelector(".know-more-button");
   // knowMoreButton.disabled = true;
@@ -360,11 +372,14 @@ function pauseVideo() {
   var vid = document.getElementById("vid");
   // if there exists a video element with id="vid".
   if (vid != undefined) {
+    const prevTime = vid.currentTime;
     vid.pause();
     vid.currentTime = 0;
     vid.src = "";
     vid.load();
+    return prevTime;
   }
+  return -1;
 }
 function displayImage() {
   const pic = document.getElementById("pic");
@@ -385,20 +400,32 @@ function showMessage(messageString, messageBoxNum) {
   console.log(messageString);
   // message inside modal box
   if (messageBoxNum == 0) {
-    messageBoxInsideModal.innerHTML = messageString;
+    messageBoxInsideModal.innerText = messageString;
     // messageBox.style.display = "none";
-    messageBoxInsideModal.style.display = "inline";
+    messageBoxInsideModal.style.display = "inline-block";
   }
   //message outside modal box
   if (messageBoxNum == 1) {
-    messageBox.innerHTML = messageString;
+    messageBox.innerText = messageString;
     // messageBoxInsideModal.style.display = "none";
-    messageBox.style.display = "inline";
+    messageBox.style.display = "inline-block";
   }
+  // console.log("we are going out");
 }
 function hideMessage() {
   document.getElementById("messageInsideModal").style.display = "none";
   document.getElementById("message").style.display = "none";
+}
+function isMessageOnDisplay() {
+  const messageBoxInsideModal = document.getElementById("messageInsideModal");
+  console.log(messageBoxInsideModal.style.display);
+  if (messageBoxInsideModal.style.display == "inline-block") {
+    console.log("returning true");
+    return true;
+  } else {
+    console.log("returning false");
+    return false;
+  }
 }
 function showQualitySelector() {
   document.getElementById("quality-selector").style.display = "inline-block";
@@ -635,8 +662,19 @@ function nextData() {
     // hideImage();
     pauseVideo();
     hideVideo();
-    hideMessage();
-    showLoadingAnimation();
+
+    if (isMessageOnDisplay()) {
+      hideMessage();
+      showLoadingAnimation();
+    } else {
+      hideMessage();
+      if (mediaType == "image") {
+        showMediaLoadingAnimation();
+      } else {
+        hideDescription();
+      }
+    }
+
     // showMessage(loading, 0);
     // document.getElementById("pic").src = "loading.gif";
 
@@ -706,7 +744,18 @@ function prevData() {
     // hideImage();
     pauseVideo();
     hideVideo();
-    showLoadingAnimation();
+
+    if (isMessageOnDisplay()) {
+      hideMessage();
+      showLoadingAnimation();
+    } else {
+      hideMessage();
+      if (mediaType == "image") {
+        showMediaLoadingAnimation();
+      } else {
+        hideDescription();
+      }
+    }
     // showMessage(loading, 0);
     //document.getElementById("pic").src = "loading.gif";
     fetchMediaUrl(hitNum, currentPage);
@@ -849,38 +898,36 @@ function findMediaQualities() {
   }
 }
 function handleVideoLoadingError() {
+  console.log("handleVideoLoadingError()");
   pauseVideo();
   hideVideo();
   hideImage();
+  hideDescription();
 
-  hideLoadingAnimation();
+  removeBlurFromContentSection();
   // console.log("i was fired");
   showMessage(onErrorMessage, 0);
 
+  // showing arrow buttons
+  document.querySelector(".arrow-button-container").classList.remove("hide");
   enableBtns();
+  console.log("we are here hahah 3");
 }
-function handleVideoLoadedMetaData() {
-  // showDescription(hitNum, currentPage);
-  document.getElementById("resolution").innerHTML =
-    "Resolution: " + vid.videoWidth + " x " + vid.videoHeight;
-  document.getElementById("message").innerHTML = "";
-  hideLoadingAnimation();
 
-  enableBtns();
-}
 function stopPreviousIvlVideoListeners() {
   var vid = document.getElementById("vid");
   vid.removeEventListener("error", handleVideoLoadingError);
-  vid.removeEventListener("loadedmetadata", handleVideoLoadedMetaData);
+  // vid.removeEventListener("loadedmetadata", handleVideoLoadedMetaData);
 }
 function startIvlVideoListeners() {
   var vid = document.getElementById("vid");
 
   vid.addEventListener("error", handleVideoLoadingError);
-  vid.addEventListener("loadedmetadata", handleVideoLoadedMetaData);
+  // vid.addEventListener("loadedmetadata", handleVideoLoadedMetaData);
 }
 //SHOWS THE IVL VIDEO
 function showIvlVideo() {
+  console.log("showIvlVideo()");
   //console.log(mediaUrls[0]);
 
   if (mediaUrls.length > 0) {
@@ -891,6 +938,13 @@ function showIvlVideo() {
       // vid.src = mediaUrls[qualityIndices["Large"]].href;
       createVideoElement(mediaUrls[qualityIndices["Large"]].href);
       displayVideo();
+      // showing arrow buttons
+      document
+        .querySelector(".arrow-button-container")
+        .classList.remove("hide");
+      enableBtns();
+      showDescription(hitNum, currentPage);
+      removeBlurFromContentSection();
       console.log("Quality: Large url num: " + qualityIndices["Large"]);
     } else if (qualityIndices.hasOwnProperty("Medium")) {
       document.getElementById("Medium").selected = true;
@@ -899,7 +953,13 @@ function showIvlVideo() {
       // vid.src = mediaUrls[qualityIndices["Medium"]].href;
       createVideoElement(mediaUrls[qualityIndices["Medium"]].href);
       displayVideo();
-
+      // showing arrow buttons
+      document
+        .querySelector(".arrow-button-container")
+        .classList.remove("hide");
+      enableBtns();
+      showDescription(hitNum, currentPage);
+      removeBlurFromContentSection();
       console.log("Quality: Medium url num: " + qualityIndices["Medium"]);
     } else if (qualityIndices.hasOwnProperty("Original")) {
       document.getElementById("Original").selected = true;
@@ -908,7 +968,13 @@ function showIvlVideo() {
       // vid.src = mediaUrls[qualityIndices["Original"]].href;
       createVideoElement(mediaUrls[qualityIndices["Original"]].href);
       displayVideo();
-
+      // showing arrow buttons
+      document
+        .querySelector(".arrow-button-container")
+        .classList.remove("hide");
+      enableBtns();
+      showDescription(hitNum, currentPage);
+      removeBlurFromContentSection();
       console.log("Quality: Original url num: " + qualityIndices["Original"]);
     } else if (qualityIndices.hasOwnProperty("Small")) {
       document.getElementById("Small").selected = true;
@@ -917,7 +983,13 @@ function showIvlVideo() {
       // vid.src = mediaUrls[qualityIndices["Small"]].href;
       createVideoElement(mediaUrls[qualityIndices["Small"]].href);
       displayVideo();
-
+      // showing arrow buttons
+      document
+        .querySelector(".arrow-button-container")
+        .classList.remove("hide");
+      enableBtns();
+      showDescription(hitNum, currentPage);
+      removeBlurFromContentSection();
       console.log("Quality: Preview url num: " + qualityIndices["Small"]);
     } else if (qualityIndices.hasOwnProperty("Preview")) {
       document.getElementById("Preview").selected = true;
@@ -926,7 +998,13 @@ function showIvlVideo() {
       // vid.src = mediaUrls[qualityIndices["Preview"]].href;
       createVideoElement(mediaUrls[qualityIndices["Preview"]].href);
       displayVideo();
-
+      // showing arrow buttons
+      document
+        .querySelector(".arrow-button-container")
+        .classList.remove("hide");
+      enableBtns();
+      showDescription(hitNum, currentPage);
+      removeBlurFromContentSection();
       console.log("Quality: Small url num: " + qualityIndices["Preview"]);
     } else if (qualityIndices.hasOwnProperty("Mobile")) {
       document.getElementById("Mobile").selected = true;
@@ -935,12 +1013,38 @@ function showIvlVideo() {
       // vid.src = mediaUrls[qualityIndices["Mobile"]].href;
       createVideoElement(mediaUrls[qualityIndices["Mobile"]].href);
       displayVideo();
-
+      // showing arrow buttons
+      document
+        .querySelector(".arrow-button-container")
+        .classList.remove("hide");
+      enableBtns();
+      showDescription(hitNum, currentPage);
+      removeBlurFromContentSection();
       console.log("Quality: Mobile url num: " + qualityIndices["Mobile"]);
     } else {
+      // console.log("we are here hahah");
+      removeBlurFromContentSection();
+      hideDescription();
+      hideLoadingAnimation();
+      hideMediaLoadingAnimation();
+      // showing arrow buttons
+      document
+        .querySelector(".arrow-button-container")
+        .classList.remove("hide");
+
+      enableBtns();
       showMessage(notFound404, 0);
     }
   } else {
+    // console.log("we are here hahah 2");
+    removeBlurFromContentSection();
+    hideDescription();
+    hideLoadingAnimation();
+    hideMediaLoadingAnimation();
+    // showing arrow buttons
+    document.querySelector(".arrow-button-container").classList.remove("hide");
+    enableBtns();
+    enableBtns();
     showMessage(notFound404, 0);
   }
 }
@@ -954,19 +1058,24 @@ function showIvlVideo() {
 // }
 function changeMediaQuality(qualityKey) {
   disableBtns();
-  blurContentSection();
+  // blur content section for image only.
+  if (document.querySelector("#vid") == undefined) {
+    blurContentSection();
+  }
+
   hideMessage();
 
   // if (mediaType == "album") {
   // } else
   if (mediaType == "video") {
-    pauseVideo();
+    const prevTime = pauseVideo();
+    console.log(prevTime);
     // hideVideo();
     // showLoadingAnimation();
 
     var vid = document.getElementById("vid");
     vid.src = mediaUrls[qualityIndices[qualityKey]].href;
-
+    vid.currentTime = prevTime;
     enableBtns();
     // console.log(
     //   "Quality: " + qualityKey + " url num: " + qualityIndices[qualityKey]
@@ -975,7 +1084,8 @@ function changeMediaQuality(qualityKey) {
   //for image
   else {
     // hideImage();
-    showLoadingAnimation();
+
+    showMediaLoadingAnimation();
     var image = document.getElementById("pic");
     image.src = mediaUrls[qualityIndices[qualityKey]].href;
 
@@ -1037,18 +1147,21 @@ function showIvlImage() {
     // pauseVideo();
     // hideVideo();
     // hideImage();
+    hideDescription();
     hideLoadingAnimation();
+    hideMediaLoadingAnimation();
     showMessage(onErrorMessage, 0);
     // enableBtns();
   };
   image.onload = () => {
     // showDescription(hitNum, currentPage);
-
+    hideMediaLoadingAnimation();
     hideLoadingAnimation();
+
     showDescription(hitNum, currentPage);
-    document.getElementById("resolution").innerHTML =
-      "Resolution: " + image.naturalWidth + " x " + image.naturalHeight;
-    document.getElementById("message").innerHTML = "";
+    // document.getElementById("resolution").innerText =
+    //   "Resolution: " + image.naturalWidth + " x " + image.naturalHeight;
+    document.getElementById("message").innerText = "";
     // rePositionImage();
     hideMessage();
     removeBlurFromContentSection();
@@ -1141,19 +1254,32 @@ function showDescription(itemNum, pageNum) {
   const descriptiveData =
     queryResponse[pageNum - 1].collection.items[itemNum].data[0];
 
-  document.getElementById("cosmic-object-num").innerHTML =
-    "Cosmic Object: " +
-    getCurrentCosmicObjectNum(itemNum, pageNum) +
-    " / " +
-    totalHits;
-  document.getElementById("date").innerHTML =
-    "Date: " + descriptiveData.date_created;
-  document.getElementById("title").innerHTML =
-    "Title: " + descriptiveData.title;
-  document.getElementById("description").innerHTML =
-    "Description: " + descriptiveData.description;
-  document.getElementById("resolution").innerHTML =
-    "Resolution: Calculating...";
+  // document.getElementById("cosmic-object-num").innerHTML =
+  //   "Cosmic Object: " +
+  //   getCurrentCosmicObjectNum(itemNum, pageNum) +
+  //   " / " +
+  //   totalHits;
+  const date = new Date(descriptiveData.date_created);
+  var months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  document.getElementById("date").innerText =
+    date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
+  document.getElementById("title").innerText = descriptiveData.title;
+  document.getElementById("description").innerText =
+    descriptiveData.description;
+  // document.getElementById("resolution").innerText = "Calculating...";
 
   document.querySelector(".know-more-data-container").classList.add("show");
 }
@@ -1205,39 +1331,32 @@ function fetchMediaUrl(itemNum, pageNum) {
     })
     .catch((errCode) => {
       console.log("error code: " + errCode);
-
+      hideDescription();
+      pauseVideo();
+      hideVideo();
+      hideImage();
+      hideLoadingAnimation();
+      hideMediaLoadingAnimation();
+      // showing arrow buttons
+      document
+        .querySelector(".arrow-button-container")
+        .classList.remove("hide");
+      removeBlurFromContentSection();
       enableBtns();
       if (errCode == 404) {
-        pauseVideo();
-        hideVideo();
-        hideImage();
-
-        hideLoadingAnimation();
         showMessage(notFound404, 0);
       } else if (errCode > 499 && errCode < 600) {
-        pauseVideo();
-        hideVideo();
-        hideImage();
-
-        hideLoadingAnimation();
         showMessage(problemWithNasaServer, 0);
       } else if (errCode == 400) {
-        pauseVideo();
-        hideVideo();
-        hideImage();
-
-        hideLoadingAnimation();
         showMessage(badResquest400, 0);
       }
 
       //for no internet connection
       else {
+        hideLoadingAnimation();
         pauseVideo();
         hideVideo();
         hideImage();
-
-        hideLoadingAnimation();
-
         showMessage(onErrorMessage, 0);
       }
     });
@@ -1274,11 +1393,13 @@ function startSearch(event) {
 
   console.log("searching for: " + search);
   if (search != "") {
+    // removing focus from the search input
     event.target.blur();
-    // listenToMediaChange();
 
     //hiding home page modal
     document.querySelector(".home-page-modal").style.display = "none";
+
+    hideMessage();
     // showing loading animation
     showLoadingAnimation();
 
@@ -1307,6 +1428,8 @@ function startSearch(event) {
   }
 }
 function handleRadioButtonChange() {
+  console.log("handleRadiobuttonchange()");
+  hideMessage();
   removeResults();
   disableBtns();
   showLoadingAnimation();
@@ -1333,6 +1456,7 @@ function getIvl(page) {
   sendHttpRequest(method, searchUrl, mode)
     .then((response) => {
       hideLoadingAnimation();
+      enableBtns();
       totalHits = response.collection.metadata.total_hits;
 
       console.log("Total hits:" + totalHits);
@@ -1355,7 +1479,7 @@ function getIvl(page) {
 
         showMessage(nothingFound, 1);
 
-        enableBtns();
+        // enableBtns();
       }
     })
     .catch((errCode) => {
@@ -1567,11 +1691,21 @@ function isContentModalOpen() {
     return false;
   }
 }
-
+function showMediaLoadingAnimation() {
+  document
+    .querySelector(".loading-animation-container.media-loading-animation")
+    .classList.remove("hide");
+}
+function hideMediaLoadingAnimation() {
+  console.log("i was executed");
+  document
+    .querySelector(".loading-animation-container.media-loading-animation")
+    .classList.add("hide");
+}
 function showLoadingAnimation() {
   if (isContentModalOpen()) {
     document
-      .querySelector(".loading-animation-container.media-loading-animation")
+      .querySelector(".loading-animation-container.card-click")
       .classList.remove("hide");
   } else {
     document
@@ -1579,15 +1713,11 @@ function showLoadingAnimation() {
       .classList.remove("hide");
   }
 }
+
 function hideLoadingAnimation() {
-  // isContentModalOpen();
-  // var a = document.querySelectorAll(".loading-animation-container");
-  // a.forEach((i) => {
-  //   i.classList.add("hide");
-  // });
   if (isContentModalOpen()) {
     document
-      .querySelector(".loading-animation-container.media-loading-animation")
+      .querySelector(".loading-animation-container.card-click")
       .classList.add("hide");
   } else {
     document
@@ -1651,3 +1781,47 @@ function blurContentSection() {
 function removeBlurFromContentSection() {
   document.querySelector(".content-section").classList.remove("blur");
 }
+
+function openFullScreen() {
+  const pic = document.querySelector("#pic");
+  const vid = document.querySelector("#vid");
+  if (vid != undefined) {
+    elem = vid;
+  } else {
+    elem = pic;
+  }
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+  } else if (elem.mozRequestFullScreen) {
+    /* Firefox */
+    elem.mozRequestFullScreen();
+  } else if (elem.webkitRequestFullscreen) {
+    /* Chrome, Safari & Opera */
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) {
+    /* IE/Edge */
+    elem.msRequestFullscreen();
+  }
+}
+
+// MEDIA QUERY
+function matchMediaFunction(matchMedia) {
+  console.log("myfunction()");
+  if (matchMedia.matches) {
+    const icons = document.querySelectorAll(".material-icons");
+    icons.forEach((icon) => {
+      icon.classList.remove("md-24");
+      icon.classList.add("md-20");
+    });
+  } else {
+    const icons = document.querySelectorAll(".material-icons");
+    icons.forEach((icon) => {
+      icon.classList.remove("md-20");
+      icon.classList.add("md-24");
+    });
+  }
+}
+var matchMedia = window.matchMedia("(max-width: 320px)");
+
+matchMediaFunction(matchMedia);
+matchMedia.addListener(matchMediaFunction);
