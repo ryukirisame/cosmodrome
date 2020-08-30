@@ -769,6 +769,9 @@ option {
   padding: 4rem;
   transition: all 0.25s ease-out;
 }
+/* .page-description-text {
+  text-align: center;
+} */
 .page-description-text p:first-child {
   font-family: "Montserrat", sans-serif;
   font-size: 2.4rem;
@@ -1264,11 +1267,11 @@ input[type="radio"]:checked + label {
   }
   /* page description */
   .page-description-container {
-    /* padding: 5.6rem 7.2rem; */
+    padding: 4.8rem 7.2rem;
   }
   /* home page search section */
   .home-page-search-section {
-    padding: 6.4rem 4.8rem;
+    padding: 4.8rem;
   }
   .home-page-search-box-container input {
     padding-left: 2.4rem;
