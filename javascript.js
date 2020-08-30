@@ -911,7 +911,6 @@ function handleVideoLoadingError() {
   // showing arrow buttons
   document.querySelector(".arrow-button-container").classList.remove("hide");
   enableBtns();
-  console.log("we are here hahah 3");
 }
 
 function stopPreviousIvlVideoListeners() {
@@ -1117,36 +1116,12 @@ function changeMediaQuality(qualityKey) {
 //   }
 // }
 function showIvlImage() {
-  //  showDescription();
-  // var imageHeight = screen.height;
-  // var imageWidth = screen.width;
-
-  // var contentSectionWidth = window.innerWidth;
-  // var contentSectionHeight = window.innerHeight * 0.9;
-
-  // console.log("screen height: " + imageHeight + " scren width: " + imageWidth);
-  // console.log(
-  //   "window height: " +
-  //     contentSectionHeight +
-  //     " window width: " +
-  //     contentSectionWidth
-  // );
-
   var image = document.getElementById("pic");
-  // image.style.maxHeight = contentSectionHeight * 0.95;
-  // image.style.maxWidth = contentSectionWidth * 0.9;
-
-  // var contentSection = document.getElementsByClassName("content-section");
-  //  var contentSectionHeight = contentSection[0].style.height;
-  // console.log(contentSection);
-  // image.style.maxHeight = contentSectionHeight * 0.9;
-  // image.style.maxHeight = imageHeight;
-  // image.style.maxWidth = imageWidth;
 
   image.onerror = () => {
     // pauseVideo();
     // hideVideo();
-    // hideImage();
+    hideImage();
     hideDescription();
     hideLoadingAnimation();
     hideMediaLoadingAnimation();
@@ -1166,7 +1141,32 @@ function showIvlImage() {
     hideMessage();
     removeBlurFromContentSection();
     displayImage();
+
     // showing arrow buttons
+    // for previous button (the first item)
+    if (hitNum == 0 && currentPage == 1) {
+      document
+        .querySelector(".arrow-button:nth-child(1)")
+        .classList.add("hide");
+    } else {
+      document
+        .querySelector(".arrow-button:nth-child(1)")
+        .classList.remove("hide");
+    }
+
+    // for next button (for last item)
+    if (
+      hitNum == queryResponse[currentPage - 1].collection.items.length - 1 &&
+      currentPage == totalPage
+    ) {
+      document
+        .querySelector(".arrow-button:nth-child(2)")
+        .classList.add("hide");
+    } else {
+      document
+        .querySelector(".arrow-button:nth-child(2)")
+        .classList.remove("hide");
+    }
     document.querySelector(".arrow-button-container").classList.remove("hide");
     // enableBtns();
   };
@@ -1396,6 +1396,11 @@ function startSearch(event) {
     // removing focus from the search input
     event.target.blur();
 
+    // putting the search string in nav bar search box
+    // if the user used the search box of home screen then we need to fill
+    // the search box of nav bar too
+    document.querySelector("#nav-search-box").value = search;
+
     //hiding home page modal
     document.querySelector(".home-page-modal").style.display = "none";
 
@@ -1456,6 +1461,7 @@ function getIvl(page) {
   sendHttpRequest(method, searchUrl, mode)
     .then((response) => {
       hideLoadingAnimation();
+
       enableBtns();
       totalHits = response.collection.metadata.total_hits;
 
