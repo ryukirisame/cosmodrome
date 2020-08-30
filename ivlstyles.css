@@ -1264,7 +1264,7 @@ input[type="radio"]:checked + label {
   }
   /* page description */
   .page-description-container {
-    padding: 5.6rem 7.2rem;
+    /* padding: 5.6rem 7.2rem; */
   }
   /* home page search section */
   .home-page-search-section {
