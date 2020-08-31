@@ -57,6 +57,39 @@ var firstPage = "This is the first item!";
 // body scroll position when a modal is opened
 var bodyScrollPos;
 
+// MEDIA QUERY Code
+var matchMediaMaxWidth320 = window.matchMedia("(max-width: 320px)");
+changeIconSizeTo20(matchMediaMaxWidth320);
+matchMediaMaxWidth320.addListener(changeIconSizeTo20);
+
+function changeIconSizeTo20(matchMedia) {
+  // console.log("myfunction()");
+  if (matchMedia.matches) {
+    const icons = document.querySelectorAll(".material-icons");
+    icons.forEach((icon) => {
+      icon.classList.remove("md-24");
+      icon.classList.add("md-20");
+    });
+  } else {
+    const icons = document.querySelectorAll(".material-icons");
+    icons.forEach((icon) => {
+      icon.classList.remove("md-20");
+      icon.classList.add("md-24");
+    });
+  }
+}
+
+// displays search section at the place of big logo when
+// the user is not on the home page. (desktop and tablet landscape)
+function showSearchSection() {
+  // hiding cosmodrome logo
+  document.querySelector(".cosmodrome").classList.add("hide");
+  // showing search section
+  document
+    .querySelector(".nav-bar-search-section-desktop")
+    .classList.add("show");
+}
+
 window.addEventListener("scroll", handleScroll);
 
 const navBar = document.querySelector(".nav-bar");
@@ -69,7 +102,7 @@ function handleScroll() {
 
   // code for infinite scroll
   if (
-    window.scrollY + window.innerHeight + 75 >=
+    window.scrollY + window.innerHeight + 100 >=
     document.documentElement.scrollHeight
   ) {
     showResultCards();
@@ -134,6 +167,10 @@ function getViewportDimensions() {
 
 function startListeningToEnterKeyPress() {
   const navBarSearchBox = document.getElementById("nav-search-box");
+  // the one besides the logo
+  const navBarSearchBoxDesktop = document.getElementById(
+    "nav-search-box-desktop"
+  );
   const homePageSearchBox = document.getElementById("home-page-search-box");
   navBarSearchBox.addEventListener("keyup", (event) => {
     var char = event.keyCode;
@@ -144,6 +181,13 @@ function startListeningToEnterKeyPress() {
     }
   });
   homePageSearchBox.addEventListener("keyup", (event) => {
+    var char = event.keyCode;
+    // console.log("char code:" + char);
+    if (char == 13) {
+      startSearch(event);
+    }
+  });
+  navBarSearchBoxDesktop.addEventListener("keyup", (event) => {
     var char = event.keyCode;
     // console.log("char code:" + char);
     if (char == 13) {
@@ -275,20 +319,15 @@ function enableBtns() {
     btn.classList.remove("disabled");
   });
 
-  // const knowMoreButton = document.querySelector(".know-more-button");
-  // knowMoreButton.disabled = false;
-  // knowMoreButton.classList.remove("disabled");
+  // changeItemBtn are the big arrow buttons on desktop
+  const changeItemBtn = document.querySelectorAll(".change-item");
+  changeItemBtn.forEach((btn) => {
+    btn.classList.remove("disabled");
+  });
 }
 
 function disableBtns() {
-  // const nextBtn = document.getElementById("nextBtn");
-  // nextBtn.disabled = true;
-  // nextBtn.classList.add("disabled");
-
-  // const prevBtn = document.getElementById("prevBtn");
-  // prevBtn.disabled = true;
-  // prevBtn.classList.add("disabled");
-
+  console.log("disabling buttons");
   const searchBtn = document.getElementById("searchBtn");
   searchBtn.disabled = true;
   searchBtn.classList.add("disabled");
@@ -311,6 +350,11 @@ function disableBtns() {
 
   const arrowButton = document.querySelectorAll(".arrow-button");
   arrowButton.forEach((btn) => {
+    btn.classList.add("disabled");
+  });
+  // changeItemBtn are the big arrow buttons on desktop
+  const changeItemBtn = document.querySelectorAll(".change-item");
+  changeItemBtn.forEach((btn) => {
     btn.classList.add("disabled");
   });
 
@@ -418,12 +462,12 @@ function hideMessage() {
 }
 function isMessageOnDisplay() {
   const messageBoxInsideModal = document.getElementById("messageInsideModal");
-  console.log(messageBoxInsideModal.style.display);
+  // console.log(messageBoxInsideModal.style.display);s
   if (messageBoxInsideModal.style.display == "inline-block") {
-    console.log("returning true");
+    // console.log("returning true");
     return true;
   } else {
-    console.log("returning false");
+    // console.log("returning false");
     return false;
   }
 }
@@ -444,31 +488,50 @@ function hideQualitySelector() {
 // }
 
 function toggleNavBarMediaType() {
-  const toggleVideoIcon = document.getElementById("toggle-video-icon");
-  const toggleImageIcon = document.getElementById("toggle-image-icon");
+  const toggleVideoIcon1 = document.getElementById("toggle-video-icon");
+  const toggleVideoIcon2 = document.getElementById("toggle-video-icon-desktop");
+  const toggleImageIcon1 = document.getElementById("toggle-image-icon");
+  const toggleImageIcon2 = document.getElementById("toggle-image-icon-desktop");
   const inactiveMediaType = document.querySelector(".inactive-media-type");
 
   // if image is active (when video is not active)
-  if (inactiveMediaType.id == "toggle-video-icon") {
+  if (
+    inactiveMediaType.id == "toggle-video-icon" ||
+    inactiveMediaType.id == "toggle-video-icon-desktop"
+  ) {
     // hiding image icon
-    toggleImageIcon.classList.add("inactive-media-type");
+    toggleImageIcon1.classList.add("inactive-media-type");
+    toggleImageIcon2.classList.add("inactive-media-type");
 
     // displaying video icon
-    toggleVideoIcon.classList.remove("inactive-media-type");
-    // checking home page video buttons
-    const videoRadioButtons = document.querySelector(".video-radio-button");
-    videoRadioButtons.checked = true;
+    toggleVideoIcon1.classList.remove("inactive-media-type");
+    toggleVideoIcon2.classList.remove("inactive-media-type");
+
+    // checking  video buttons at all places
+    const videoRadioButtons = document.querySelectorAll(".video-radio-button");
+    videoRadioButtons.forEach((btn) => {
+      // excluding change media type button as its class is also the same
+      if (btn.id != "video-radio-button-2") {
+        btn.checked = true;
+      }
+    });
   }
   // if image is inactive (when video is active)
   else {
+    console.log("we are here");
     // hiding video icon
-    toggleVideoIcon.classList.add("inactive-media-type");
+    toggleVideoIcon1.classList.add("inactive-media-type");
+    toggleVideoIcon2.classList.add("inactive-media-type");
     // displaying image icon
-    toggleImageIcon.classList.remove("inactive-media-type");
+    toggleImageIcon1.classList.remove("inactive-media-type");
+    toggleImageIcon2.classList.remove("inactive-media-type");
     // checking home page image buttons
-    const imageRadioButtons = document.querySelector(".image-radio-button");
-
-    imageRadioButtons.checked = true;
+    const imageRadioButtons = document.querySelectorAll(".image-radio-button");
+    imageRadioButtons.forEach((btn) => {
+      if (btn.id != "image-radio-button-2") {
+        btn.checked = true;
+      }
+    });
   }
 }
 
@@ -491,12 +554,27 @@ function getSelectedMediaType(event) {
 
   // if the user pressed the search icon of nav bar or presed enter while typing
   // in the nav search box
+
   if (
-    event.target.classList.contains("nav-start-search-icon-button") ||
+    event.target.id == "nav-start-search-icon-button" ||
     event.target.id == "nav-search-box"
   ) {
-    const inactiveMediaType = document.querySelector(".inactive-media-type");
+    const inactiveMediaType = document.querySelector(
+      ".nav-search-section .inactive-media-type"
+    );
     if (inactiveMediaType.id == "toggle-video-icon") {
+      selectedMediaType = "image";
+    } else {
+      selectedMediaType = "video";
+    }
+  } else if (
+    event.target.id == "nav-start-search-icon-button-desktop" ||
+    event.target.id == "nav-search-box-desktop"
+  ) {
+    const inactiveMediaType = document.querySelector(
+      ".nav-bar-search-section-desktop .inactive-media-type"
+    );
+    if (inactiveMediaType.id == "toggle-video-icon-desktop") {
       selectedMediaType = "image";
     } else {
       selectedMediaType = "video";
@@ -629,6 +707,7 @@ function downloadNextPage(page) {
 }
 
 function nextData() {
+  console.log("nextDAta()");
   disableBtns();
   pauseVideo();
   hideVideo();
@@ -680,6 +759,7 @@ function nextData() {
 
     // showContentModal();
     fetchMediaUrl(hitNum, currentPage);
+    // showNextPrevCards(hitNum, currentPage);
     // showDescription(hitNum, currentPage);
   }
 }
@@ -718,6 +798,7 @@ function nextPage() {
 }
 
 function prevData() {
+  console.log("prevData()");
   disableBtns();
   pauseVideo();
   hideVideo();
@@ -1143,30 +1224,6 @@ function showIvlImage() {
     displayImage();
 
     // showing arrow buttons
-    // for previous button (the first item)
-    if (hitNum == 0 && currentPage == 1) {
-      document
-        .querySelector(".arrow-button:nth-child(1)")
-        .classList.add("hide");
-    } else {
-      document
-        .querySelector(".arrow-button:nth-child(1)")
-        .classList.remove("hide");
-    }
-
-    // for next button (for last item)
-    if (
-      hitNum == queryResponse[currentPage - 1].collection.items.length - 1 &&
-      currentPage == totalPage
-    ) {
-      document
-        .querySelector(".arrow-button:nth-child(2)")
-        .classList.add("hide");
-    } else {
-      document
-        .querySelector(".arrow-button:nth-child(2)")
-        .classList.remove("hide");
-    }
     document.querySelector(".arrow-button-container").classList.remove("hide");
     // enableBtns();
   };
@@ -1201,6 +1258,35 @@ function showIvlImage() {
     }
   } else {
     showMessage(notFound404, 0);
+  }
+
+  // for previous button (the first item)
+  if (hitNum == 0 && currentPage == 1) {
+    document
+      .querySelector(".arrow-button:nth-child(1)")
+      .classList.add("disabled");
+    document.querySelector(".prev-item-icon").classList.add("disabled");
+  } else {
+    document
+      .querySelector(".arrow-button:nth-child(1)")
+      .classList.remove("disabled");
+    document.querySelector(".prev-item-icon").classList.remove("disabled");
+  }
+
+  // for next button (for last item)
+  if (
+    hitNum == queryResponse[currentPage - 1].collection.items.length - 1 &&
+    currentPage == totalPage
+  ) {
+    document
+      .querySelector(".arrow-button:nth-child(2)")
+      .classList.add("disabled");
+    document.querySelector(".next-item-icon").classList.add("disabled");
+  } else {
+    document
+      .querySelector(".arrow-button:nth-child(2)")
+      .classList.remove("disabled");
+    document.querySelector(".next-item-icon").classList.remove("disabled");
   }
 }
 
@@ -1276,6 +1362,7 @@ function showDescription(itemNum, pageNum) {
   ];
   document.getElementById("date").innerText =
     date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
+
   document.getElementById("title").innerText = descriptiveData.title;
   document.getElementById("description").innerText =
     descriptiveData.description;
@@ -1381,10 +1468,17 @@ function startSearch(event) {
 
   // if the user used the search box on the nav bar
   if (
-    event.target.classList.contains("nav-start-search-icon-button") ||
+    event.target.id == "nav-start-search-icon-button" ||
     event.target.id == "nav-search-box"
   ) {
     search = document.getElementById("nav-search-box").value;
+  }
+  // if the user used the search box on the nav bar on desktop/tablet landscape mode
+  else if (
+    event.target.id == "nav-start-search-icon-button-desktop" ||
+    event.target.id == "nav-search-box-desktop"
+  ) {
+    search = document.getElementById("nav-search-box-desktop").value;
   }
   // if the user used the search box on the home page
   else {
@@ -1392,14 +1486,18 @@ function startSearch(event) {
   }
 
   console.log("searching for: " + search);
+
   if (search != "") {
     // removing focus from the search input
     event.target.blur();
 
+    // displaying search section on nav bar in desktop/tablet landscape mode
+    showSearchSection();
     // putting the search string in nav bar search box
     // if the user used the search box of home screen then we need to fill
     // the search box of nav bar too
     document.querySelector("#nav-search-box").value = search;
+    document.querySelector("#nav-search-box-desktop").value = search;
 
     //hiding home page modal
     document.querySelector(".home-page-modal").style.display = "none";
@@ -1425,6 +1523,7 @@ function startSearch(event) {
     pageReset();
     hitNum = 0;
     thumbNum = 0;
+
     search = search.trim();
     // hide total hits and delete cards
     removeResults();
@@ -1528,6 +1627,7 @@ function getIvl(page) {
 }
 
 function showResultCards() {
+  console.log("showResultCards()");
   var cardsContainer = document.getElementById("cards-container");
   // var column = document.getElementsByClassName("column");
 
@@ -1573,16 +1673,24 @@ function showResultCards() {
 
         // card.style.backgroundSize = "cover";
 
-        // card.id = thumbNum + "," + currentThumbPage;
+        // stores resultNum Range:[0-totalHits]
+        const resultNum = `result-num:${
+          (currentThumbPage - 1) * 100 + thumbNum
+        }`;
+        // adding resultNum as a class to identify each card
+        card.classList.add(resultNum);
 
         // storing information item num and page num in each card
         const page_num = document.createAttribute("data-page-num");
         page_num.value = currentThumbPage;
         const item_num = document.createAttribute("data-item-num");
         item_num.value = thumbNum;
+        const result_num = document.createAttribute("data-result-num");
+        result_num.value = (currentThumbPage - 1) * 100 + thumbNum;
+
         card.setAttributeNode(page_num);
         card.setAttributeNode(item_num);
-
+        card.setAttributeNode(result_num);
         // card on click handler
         card.onclick = () => {
           // const id = card.id;
@@ -1612,6 +1720,7 @@ function showResultCards() {
           showLoadingAnimation();
           // showMessage(loading, 0);
           fetchMediaUrl(itemNum, pageNum);
+          // showNextPrevCards(itemNum, pageNum);
         };
 
         // title overlay information
@@ -1638,6 +1747,86 @@ function showResultCards() {
     }
   }
   // while(queryResponse[currentThumbPage]==undefined);
+}
+
+function showNextPrevCards(itemNum, pageNum) {
+  const nextPrevCardsContainer = document.querySelector(
+    ".next-prev-cards-container"
+  );
+  // removing previous cards
+  while (nextPrevCardsContainer.hasChildNodes()) {
+    nextPrevCardsContainer.removeChild(nextPrevCardsContainer.firstChild);
+  }
+
+  // we have to start from one itemNum less as we want the
+  // user to see one previous item
+  itemNum--;
+  // if the user clicked on the first item of the first page
+  if (itemNum == -1 && pageNum == 1) {
+    itemNum = 0;
+  }
+  // if the user clicked on the first item of any page other than first page
+  if (itemNum == -1 && pageNum != 1) {
+    itemNum == 99;
+  }
+
+  var i = 0;
+
+  for (i = 0; i < 5; i++) {
+    // console.log("we are here");
+    const resultNum = `result-num:${(pageNum - 1) * 100 + itemNum}`;
+    // console.log(resultNum);
+    // console.log(className);
+    var cardToClone = document.getElementsByClassName(resultNum);
+    cardToClone = cardToClone[0];
+    // console.log(cardToClone);
+    // if (cardToClone == undefined) {
+    //   if (isNextPageAvailable()) {
+    //     showResultCards();
+    //     i--;
+    //     continue;
+    //   }
+    //   // if we have reached the end of the total results
+    //   else {
+    //     break;
+    //   }
+    // }
+    if (cardToClone == undefined) {
+      break;
+    }
+
+    const result_num_attribute = parseInt(
+      cardToClone.getAttribute("data-result-num")
+    );
+    // thumbNum stores current number of cards loaded
+    if (result_num_attribute + 20 > thumbNum) {
+      // load next 20 cards
+      console.log("loading more cards");
+      showResultCards();
+    }
+
+    const card = cardToClone.cloneNode(true);
+    nextPrevCardsContainer.appendChild(card);
+    card.onclick = () => {
+      disableBtns();
+
+      const itemNum = card.getAttribute("data-item-num");
+      const pageNum = card.getAttribute("data-page-num");
+
+      hitNum = itemNum;
+      currentPage = pageNum;
+      blurContentSection();
+      showMediaLoadingAnimation();
+      fetchMediaUrl(itemNum, pageNum);
+
+      showNextPrevCards(itemNum, pageNum);
+    };
+    itemNum++;
+    // if (itemNum == 80) {
+    //   console.log("calling showResultCards()");
+    //   showResultCards();
+    // }
+  }
 }
 
 function removeResults() {
@@ -1682,6 +1871,8 @@ function hideContentModalScreen() {
   //removing event listener of arrow key press
   document.removeEventListener("keyup", handleArrowKeyPress);
   //hiding modal screen
+  hideLoadingAnimation();
+  hideMediaLoadingAnimation();
   contentModal.classList.remove("open");
 
   document.querySelector(".arrow-button-container").classList.add("hide");
@@ -1703,7 +1894,7 @@ function showMediaLoadingAnimation() {
     .classList.remove("hide");
 }
 function hideMediaLoadingAnimation() {
-  console.log("i was executed");
+  // console.log("i was executed");
   document
     .querySelector(".loading-animation-container.media-loading-animation")
     .classList.add("hide");
@@ -1781,11 +1972,11 @@ function hideSideBar(event) {
 }
 
 function blurContentSection() {
-  document.querySelector(".content-section").classList.add("blur");
+  document.querySelector(".media-container").classList.add("blur");
 }
 
 function removeBlurFromContentSection() {
-  document.querySelector(".content-section").classList.remove("blur");
+  document.querySelector(".media-container").classList.remove("blur");
 }
 
 function openFullScreen() {
@@ -1809,25 +2000,3 @@ function openFullScreen() {
     elem.msRequestFullscreen();
   }
 }
-
-// MEDIA QUERY
-function matchMediaFunction(matchMedia) {
-  console.log("myfunction()");
-  if (matchMedia.matches) {
-    const icons = document.querySelectorAll(".material-icons");
-    icons.forEach((icon) => {
-      icon.classList.remove("md-24");
-      icon.classList.add("md-20");
-    });
-  } else {
-    const icons = document.querySelectorAll(".material-icons");
-    icons.forEach((icon) => {
-      icon.classList.remove("md-20");
-      icon.classList.add("md-24");
-    });
-  }
-}
-var matchMedia = window.matchMedia("(max-width: 320px)");
-
-matchMediaFunction(matchMedia);
-matchMedia.addListener(matchMediaFunction);
