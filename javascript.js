@@ -36,8 +36,7 @@ var loadingAnimationSetTimeOut;
 var connecting = "Connecting to NASA...";
 var loading = "Loading...";
 
-var notFound404 =
-  "404. The cosmic object you are looking for has disappeared beyond the event horizon.";
+var notFound404 = "404. The cosmic object you are looking for does not exist.";
 
 var badResquest400 =
   "400. Bad Request. The server could not understand the request due to invalid syntax.";
@@ -57,27 +56,47 @@ var firstPage = "This is the first item!";
 // body scroll position when a modal is opened
 var bodyScrollPos;
 
-// MEDIA QUERY Code
+// ----------------------------------------------------------------------
+
+// MEDIA QUERY Code for changing icon size on galaxy fold
 var matchMediaMaxWidth320 = window.matchMedia("(max-width: 320px)");
 changeIconSizeTo20(matchMediaMaxWidth320);
 matchMediaMaxWidth320.addListener(changeIconSizeTo20);
 
 function changeIconSizeTo20(matchMedia) {
   // console.log("myfunction()");
+  const icons = document.querySelectorAll(".material-icons");
   if (matchMedia.matches) {
-    const icons = document.querySelectorAll(".material-icons");
     icons.forEach((icon) => {
       icon.classList.remove("md-24");
       icon.classList.add("md-20");
     });
   } else {
-    const icons = document.querySelectorAll(".material-icons");
     icons.forEach((icon) => {
       icon.classList.remove("md-20");
       icon.classList.add("md-24");
     });
   }
 }
+
+// MEDIA QUERY CODE FOR CHANGING ICON SIZE of back button FOR 900PX+ DEVICES
+var matchMediaMaxWidth900 = window.matchMedia("(min-width: 900px)");
+changeIconSizeTo36(matchMediaMaxWidth900);
+matchMediaMaxWidth900.addListener(changeIconSizeTo36);
+
+function changeIconSizeTo36(matchMedia) {
+  // console.log("myfunction()");
+  const backButton = document.querySelector(".back-button-container span");
+  if (matchMedia.matches) {
+    backButton.classList.remove("md-24");
+    backButton.classList.add("md-36");
+  } else {
+    backButton.classList.remove("md-36");
+    backButton.classList.add("md-24");
+  }
+}
+
+// ---------------------------------------------------------------------
 
 // displays search section at the place of big logo when
 // the user is not on the home page. (desktop and tablet landscape)
@@ -90,9 +109,29 @@ function showSearchSection() {
     .classList.add("show");
 }
 
+// --------------------------------------------------------------
+// code to prevent nav bar from hiding on scroll down on desktop
+const navBar = document.querySelector(".nav-bar");
+var shouldWeHideNavBar = true;
+
+var matchMediaMaxWidth1280 = window.matchMedia("(min-width: 1280px)");
+doTheJobFor1280px(matchMediaMaxWidth1280);
+matchMediaMaxWidth1280.addListener(doTheJobFor1280px);
+
+function doTheJobFor1280px(matchMedia) {
+  if (matchMedia.matches) {
+    // dont allow nav bar to hide
+    shouldWeHideNavBar = false;
+    // make it visible if its already hidden
+    navBar.classList.remove("hidden");
+  } else {
+    shouldWeHideNavBar = true;
+  }
+}
+
+// code for nav bar hiding on scroll down and infinite scroll
 window.addEventListener("scroll", handleScroll);
 
-const navBar = document.querySelector(".nav-bar");
 var prevScrollPos = window.pageYOffset;
 
 function handleScroll() {
@@ -109,10 +148,10 @@ function handleScroll() {
   }
 
   // code for hiding and showing the nav bar on page scroll
-  // hide the nav bar only when the user has scrolled atleast 64px
+  // hide the nav bar only when the user has scrolled atleast 360px
   //  from the top. so that there is no white space shown when the
   // nav bar hides itself
-  if (window.scrollY >= 360) {
+  if (window.scrollY >= 360 && shouldWeHideNavBar) {
     var currentScrollPos = window.pageYOffset;
 
     // when the user scrolls up then prevscrollpos is greater
@@ -130,7 +169,7 @@ function handleScroll() {
   }
 }
 
-// code ends
+// --------------------------------------------------------------------
 
 window.onload = () => {
   // to get viewport dimensions
@@ -310,19 +349,23 @@ function enableBtns() {
     btn.classList.remove("disabled");
   });
 
-  const qualitySelector = document.getElementById("quality-selector");
-  qualitySelector.disabled = false;
+  const qualitySelector = document.querySelector("#quality-selector");
   qualitySelector.classList.remove("disabled");
+
+  // qualitySelector.disabled = false;
+  // qualitySelector.classList.remove("disabled");
 
   const arrowButton = document.querySelectorAll(".arrow-button");
   arrowButton.forEach((btn) => {
     btn.classList.remove("disabled");
+    btn.classList.remove("md-inactive");
   });
 
   // changeItemBtn are the big arrow buttons on desktop
-  const changeItemBtn = document.querySelectorAll(".change-item");
+  const changeItemBtn = document.querySelectorAll(".change-item-icon-button");
   changeItemBtn.forEach((btn) => {
     btn.classList.remove("disabled");
+    btn.classList.remove("md-inactive");
   });
 }
 
@@ -344,18 +387,22 @@ function disableBtns() {
     btn.classList.add("disabled");
   });
 
-  const qualitySelector = document.getElementById("quality-selector");
-  qualitySelector.disabled = true;
-  qualitySelector.classList.add("disabled");
+  const qualitySelector = document.querySelector("#quality-selector");
+  qualitySelector.classList.remove("disabled");
+
+  // qualitySelector.disabled = true;
+  // qualitySelector.classList.add("disabled");
 
   const arrowButton = document.querySelectorAll(".arrow-button");
   arrowButton.forEach((btn) => {
     btn.classList.add("disabled");
+    btn.classList.add("md-inactive");
   });
   // changeItemBtn are the big arrow buttons on desktop
-  const changeItemBtn = document.querySelectorAll(".change-item");
+  const changeItemBtn = document.querySelectorAll(".change-item-icon-button");
   changeItemBtn.forEach((btn) => {
     btn.classList.add("disabled");
+    btn.classList.add("md-inactive");
   });
 
   // const knowMoreButton = document.querySelector(".know-more-button");
@@ -472,10 +519,17 @@ function isMessageOnDisplay() {
   }
 }
 function showQualitySelector() {
-  document.getElementById("quality-selector").style.display = "inline-block";
+  const selectElem = document.querySelector("#quality-selector");
+
+  selectElem.style.display = "inline-block";
+
+  // document.getElementById("quality-selector").style.display = "inline-block";
 }
 function hideQualitySelector() {
-  document.getElementById("quality-selector").style.display = "none";
+  const selectElem = document.querySelector("#quality-selector");
+
+  selectElem.style.display = "none";
+  // document.getElementById("quality-selector").style.display = "none";
 }
 // function listenToMediaChange() {
 //   var buttons = document.getElementsByName("media-type");
@@ -882,13 +936,15 @@ function getFileExtension(urlNum) {
 
 //CREATES QUALITY OPTIONS (SELECT)
 function createMediaQualityOptions() {
-  const select = document.getElementById("quality-selector");
+  const select = document.querySelector("#quality-selector");
+  // console.log(select);
   //contains all the keys inside qualityIndices
   const keys = Object.keys(qualityIndices);
   //console.log(keys);
 
   //bypass this statement the first time this function is called as there is nothing
   // to remove.
+
   if (select.length > 0) {
     //it removes all the options in select. IMPORTANT: WE HAVE TO START FROM THE LAST
     // AND NOT FROM THE BEGINNING. OTHERWISE IT WILL NOT WORK.
@@ -900,17 +956,23 @@ function createMediaQualityOptions() {
     }
     select.length = 0;
   }
+
   //runs a function on each key inside qualityIndices
   // and then creates an option for that key(quality)
+
   keys.forEach((key) => {
     var option = document.createElement("OPTION");
     option.value = key;
     option.text = key;
 
     option.id = key;
-
+    // const option2 = option;
     select.add(option);
+    // console.log(option);
+
+    // elem.add(option);
   });
+
   //console.log(select.value);
   // for (var i = 0; i < select.length; i++) {
   //   console.log(select[i]);
@@ -1023,7 +1085,9 @@ function showIvlVideo() {
         .querySelector(".arrow-button-container")
         .classList.remove("hide");
       enableBtns();
-      showDescription(hitNum, currentPage);
+      if (isContentModalOpen()) {
+        showDescription(hitNum, currentPage);
+      }
       removeBlurFromContentSection();
       console.log("Quality: Large url num: " + qualityIndices["Large"]);
     } else if (qualityIndices.hasOwnProperty("Medium")) {
@@ -1038,7 +1102,9 @@ function showIvlVideo() {
         .querySelector(".arrow-button-container")
         .classList.remove("hide");
       enableBtns();
-      showDescription(hitNum, currentPage);
+      if (isContentModalOpen()) {
+        showDescription(hitNum, currentPage);
+      }
       removeBlurFromContentSection();
       console.log("Quality: Medium url num: " + qualityIndices["Medium"]);
     } else if (qualityIndices.hasOwnProperty("Original")) {
@@ -1053,7 +1119,9 @@ function showIvlVideo() {
         .querySelector(".arrow-button-container")
         .classList.remove("hide");
       enableBtns();
-      showDescription(hitNum, currentPage);
+      if (isContentModalOpen()) {
+        showDescription(hitNum, currentPage);
+      }
       removeBlurFromContentSection();
       console.log("Quality: Original url num: " + qualityIndices["Original"]);
     } else if (qualityIndices.hasOwnProperty("Small")) {
@@ -1068,7 +1136,9 @@ function showIvlVideo() {
         .querySelector(".arrow-button-container")
         .classList.remove("hide");
       enableBtns();
-      showDescription(hitNum, currentPage);
+      if (isContentModalOpen()) {
+        showDescription(hitNum, currentPage);
+      }
       removeBlurFromContentSection();
       console.log("Quality: Preview url num: " + qualityIndices["Small"]);
     } else if (qualityIndices.hasOwnProperty("Preview")) {
@@ -1083,7 +1153,9 @@ function showIvlVideo() {
         .querySelector(".arrow-button-container")
         .classList.remove("hide");
       enableBtns();
-      showDescription(hitNum, currentPage);
+      if (isContentModalOpen()) {
+        showDescription(hitNum, currentPage);
+      }
       removeBlurFromContentSection();
       console.log("Quality: Small url num: " + qualityIndices["Preview"]);
     } else if (qualityIndices.hasOwnProperty("Mobile")) {
@@ -1098,7 +1170,9 @@ function showIvlVideo() {
         .querySelector(".arrow-button-container")
         .classList.remove("hide");
       enableBtns();
-      showDescription(hitNum, currentPage);
+      if (isContentModalOpen()) {
+        showDescription(hitNum, currentPage);
+      }
       removeBlurFromContentSection();
       console.log("Quality: Mobile url num: " + qualityIndices["Mobile"]);
     } else {
@@ -1126,6 +1200,35 @@ function showIvlVideo() {
     enableBtns();
     enableBtns();
     showMessage(notFound404, 0);
+  }
+
+  // for previous button (the first item)
+  if (hitNum == 0 && currentPage == 1) {
+    document
+      .querySelector(".arrow-button:nth-child(1)")
+      .classList.add("disabled");
+    document.querySelector(".prev-item-icon").classList.add("disabled");
+  } else {
+    document
+      .querySelector(".arrow-button:nth-child(1)")
+      .classList.remove("disabled");
+    document.querySelector(".prev-item-icon").classList.remove("disabled");
+  }
+
+  // for next button (for last item)
+  if (
+    hitNum == queryResponse[currentPage - 1].collection.items.length - 1 &&
+    currentPage == totalPage
+  ) {
+    document
+      .querySelector(".arrow-button:nth-child(2)")
+      .classList.add("disabled");
+    document.querySelector(".next-item-icon").classList.add("disabled");
+  } else {
+    document
+      .querySelector(".arrow-button:nth-child(2)")
+      .classList.remove("disabled");
+    document.querySelector(".next-item-icon").classList.remove("disabled");
   }
 }
 
@@ -1214,7 +1317,10 @@ function showIvlImage() {
     hideMediaLoadingAnimation();
     hideLoadingAnimation();
 
-    showDescription(hitNum, currentPage);
+    if (isContentModalOpen()) {
+      showDescription(hitNum, currentPage);
+    }
+
     // document.getElementById("resolution").innerText =
     //   "Resolution: " + image.naturalWidth + " x " + image.naturalHeight;
     document.getElementById("message").innerText = "";
@@ -1573,6 +1679,14 @@ function getIvl(page) {
         //calculating total page number
         calTotalPage();
 
+        if (totalHits < 4) {
+          const cardsContainerGrid = document.querySelector(".cards-container");
+          cardsContainerGrid.classList.add("limit-cards-max-width");
+        } else {
+          const cardsContainerGrid = document.querySelector(".cards-container");
+          cardsContainerGrid.classList.remove("limit-cards-max-width");
+        }
+
         showResultCards();
       }
       //if there are no hits
@@ -1699,9 +1813,9 @@ function showResultCards() {
           // const pageNum = id.slice(commaPosition + 1);
 
           // displaying media controls bar on nav bar
-          document
-            .querySelector(".nav-media-control-bar")
-            .classList.add("open");
+          // document
+          //   .querySelector(".nav-media-control-bar")
+          //   .classList.add("open");
           // revealing nav bar if its hidden
           document.querySelector(".nav-bar").classList.remove("hidden");
 
@@ -1845,7 +1959,7 @@ function handleBackButtonClick() {
     hideVideo();
   }
   // hiding nav bar of content modal
-  document.querySelector(".nav-media-control-bar").classList.remove("open");
+  // document.querySelector(".nav-media-control-bar").classList.remove("open");
   // hiding modal
   hideContentModalScreen();
   hideDescription();
