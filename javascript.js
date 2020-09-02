@@ -87,12 +87,17 @@ matchMediaMaxWidth900.addListener(changeIconSizeTo36);
 function changeIconSizeTo36(matchMedia) {
   // console.log("myfunction()");
   const backButton = document.querySelector(".back-button-container span");
+  // const fullScreenIcon = document.querySelector(".full-screen-icon");
   if (matchMedia.matches) {
     backButton.classList.remove("md-24");
     backButton.classList.add("md-36");
+    // fullScreenIcon.classList.remove("md-24");
+    // fullScreenIcon.classList.add("md-36");
   } else {
     backButton.classList.remove("md-36");
     backButton.classList.add("md-24");
+    // fullScreenIcon.classList.remove("md-36");
+    // fullScreenIcon.classList.add("md-24");
   }
 }
 
@@ -1252,7 +1257,7 @@ function changeMediaQuality(qualityKey) {
   // } else
   if (mediaType == "video") {
     const prevTime = pauseVideo();
-    console.log(prevTime);
+    // console.log(prevTime);
     // hideVideo();
     // showLoadingAnimation();
 

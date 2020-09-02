@@ -439,8 +439,8 @@
 
       <div class="content-modal-grid">
         <!-- close button -->
-        <div class="back-button-container" onclick="handleBackButtonClick()">
-          <span class="material-icons md-24">
+        <div class="back-button-container">
+          <span class="material-icons md-24" onclick="handleBackButtonClick()">
             arrow_back
           </span>
         </div>
@@ -455,12 +455,14 @@
         </div>
 
         <!-- full screen icon -->
-        <span
-          class="material-icons md-24 full-screen-icon"
-          onclick="openFullScreen();"
-        >
-          open_in_full
-        </span>
+        <div class="full-screen-icon-container">
+          <span
+            class="material-icons md-24 full-screen-icon"
+            onclick="openFullScreen();"
+          >
+            open_in_full
+          </span>
+        </div>
 
         <!-- back arrow button -->
         <div class="prev-item-icon change-item-icon-button">
@@ -514,7 +516,8 @@
         </div>
         <!-- Content Section End -->
 
-        <!-- next and prev icons (second item of the content modal grid)-->
+        <!-- next icon-->
+        <!-- we have used back arrow. we will rotate it. -->
         <div class="next-item-icon change-item-icon-button">
           <span class="material-icons md-36" onclick="nextData();">
             arrow_forward_ios
