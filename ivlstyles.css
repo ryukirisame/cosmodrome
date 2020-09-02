@@ -1374,7 +1374,7 @@ option {
 
   width: 100%;
   height: auto;
-  max-height: var(calc(--vh, 1vh) * 100 - 6.4rem);
+  max-height: calc(var(--vh, 1vh) * 100 - 6.4rem);
   text-align: center;
 
   /* height: 800px; */
@@ -1619,7 +1619,7 @@ option {
     border-radius: 50%;
   }
   .media-container {
-    max-height: var(calc(--vh, 1vh) * 100 - 6.4rem - 1.6rem);
+    max-height: calc(var(--vh, 1vh) * 100 - 6.4rem - 1.6rem);
   }
   .media-container img {
     width: auto;
