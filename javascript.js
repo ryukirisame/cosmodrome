@@ -81,11 +81,11 @@ function changeIconSizeTo20(matchMedia) {
 
 // MEDIA QUERY CODE FOR CHANGING ICON SIZE of back button FOR 900PX+ DEVICES
 var matchMediaMaxWidth900 = window.matchMedia("(min-width: 900px)");
-changeIconSizeTo36(matchMediaMaxWidth900);
-matchMediaMaxWidth900.addListener(changeIconSizeTo36);
+doTheJobFor900px(matchMediaMaxWidth900);
+matchMediaMaxWidth900.addListener(doTheJobFor900px);
 
-function changeIconSizeTo36(matchMedia) {
-  // console.log("myfunction()");
+function doTheJobFor900px(matchMedia) {
+  // change icon size to 36
   const backButton = document.querySelector(".back-button-container span");
   // const fullScreenIcon = document.querySelector(".full-screen-icon");
   if (matchMedia.matches) {
@@ -99,6 +99,8 @@ function changeIconSizeTo36(matchMedia) {
     // fullScreenIcon.classList.remove("md-36");
     // fullScreenIcon.classList.add("md-24");
   }
+
+  // show blurred background image of content modal
 }
 
 // ---------------------------------------------------------------------
@@ -1304,8 +1306,19 @@ function changeMediaQuality(qualityKey) {
 //     image.style.maxWidth = contentSectionWidth * 0.9;
 //   }
 // }
+function showBlurredBackground(href) {
+  const backgroundBlurElement = document.querySelector(".background-blur");
+  backgroundBlurElement.src = href;
+  backgroundBlurElement.classList.add("show");
+}
+function hideBlurredBackground() {
+  const backgroundBlurElement = document.querySelector(".background-blur");
+  backgroundBlurElement.src = "";
+  backgroundBlurElement.classList.remove("show");
+}
 function showIvlImage() {
   var image = document.getElementById("pic");
+  var highestQualityAvailableForBlurredBackgroundUrl;
 
   image.onerror = () => {
     // pauseVideo();
@@ -1333,7 +1346,7 @@ function showIvlImage() {
     hideMessage();
     removeBlurFromContentSection();
     displayImage();
-
+    showBlurredBackground(highestQualityAvailableForBlurredBackgroundUrl);
     // showing arrow buttons
     document.querySelector(".arrow-button-container").classList.remove("hide");
     // enableBtns();
@@ -1344,24 +1357,26 @@ function showIvlImage() {
       document.getElementById("Large").selected = "true";
 
       image.src = mediaUrls[qualityIndices["Large"]].href;
+      highestQualityAvailableForBlurredBackgroundUrl = image.src;
 
       // console.log("Quality: Large url num: " + qualityIndices["Large"]);
     } else if (qualityIndices.hasOwnProperty("Original")) {
       document.getElementById("Original").selected = true;
 
       image.src = mediaUrls[qualityIndices["Original"]].href;
-
+      highestQualityAvailableForBlurredBackgroundUrl = image.src;
       // console.log("Quality: Original url num: " + qualityIndices["Original"]);
     } else if (qualityIndices.hasOwnProperty("Medium")) {
       document.getElementById("Medium").selected = true;
 
       image.src = mediaUrls[qualityIndices["Medium"]].href;
-
+      highestQualityAvailableForBlurredBackgroundUrl = image.src;
       // console.log("Quality: Medium url num: " + qualityIndices["Medium"]);
     } else if (qualityIndices.hasOwnProperty("Small")) {
       document.getElementById("Small").selected = true;
 
       image.src = mediaUrls[qualityIndices["Small"]].href;
+      highestQualityAvailableForBlurredBackgroundUrl = image.src;
 
       // console.log("Quality: Preview url num: " + qualityIndices["Small"]);
     } else {
@@ -1959,6 +1974,9 @@ function removeResults() {
 }
 
 function handleBackButtonClick() {
+  // hiding blurred background image of content modal
+  hideBlurredBackground();
+
   if (mediaType == "video") {
     pauseVideo();
     hideVideo();
