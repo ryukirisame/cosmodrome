@@ -45,10 +45,10 @@ var problemWithNasaServer =
   "There is some problem with NASA servers.\nPlease try again later.";
 
 var nothingFound =
-  "Sorry, we could not find anything,\nperhaps check what you have typed.";
+  "Sorry, we could not find anything, perhaps check what you have typed.";
 
 var onErrorMessage =
-  "Error. Check your internet connection\n or change media quality.";
+  "Error connecting to NASA. Check your internet connection or change media quality.";
 
 var lastPage = "This is the last item!";
 var firstPage = "This is the first item!";
@@ -137,7 +137,7 @@ function doTheJobFor1280px(matchMedia) {
 }
 
 // code for nav bar hiding on scroll down and infinite scroll
-window.addEventListener("scroll", handleScroll);
+document.addEventListener("scroll", handleScroll);
 
 var prevScrollPos = window.pageYOffset;
 
@@ -151,7 +151,9 @@ function handleScroll() {
     window.scrollY + window.innerHeight + 100 >=
     document.documentElement.scrollHeight
   ) {
-    showResultCards();
+    if (!isContentModalOpen()) {
+      showResultCards();
+    }
   }
 
   // code for hiding and showing the nav bar on page scroll
@@ -178,18 +180,18 @@ function handleScroll() {
 
 // --------------------------------------------------------------------
 
-window.onload = () => {
-  // to get viewport dimensions
-  getViewportDimensions();
-  //listening to enter key press
-  startListeningToEnterKeyPress();
+// to get viewport dimensions
+getViewportDimensions();
+//listening to enter key press
+startListeningToEnterKeyPress();
 
-  //starting button splash effect listener
-  listenToButtonClickForSplashEffect();
+//starting button splash effect listener
+listenToButtonClickForSplashEffect();
 
-  // starting button background fill effect listener
-  listenToButtonHoverForBackgroundFillEffect();
-};
+// starting button background fill effect listener
+listenToButtonHoverForBackgroundFillEffect();
+
+// -------------------------------------------
 
 function getViewportDimensions() {
   // First we get the viewport height and we multiple it by 1% to get a value for a vh unit
@@ -833,7 +835,7 @@ function nextPage() {
     pauseVideo();
     hideVideo();
     if (isContentModalOpen()) {
-      showLoadingAnimation();
+      showMediaLoadingAnimation();
     }
 
     // showMessage(loading, 0);
@@ -863,7 +865,6 @@ function prevData() {
   disableBtns();
   pauseVideo();
   hideVideo();
-  blurContentSection();
   hitNum--;
   // document.getElementById("message").innerHTML = "";
   //if hit number becomes less than 0 then transition to prev page
@@ -886,6 +887,7 @@ function prevData() {
     // hideImage();
     pauseVideo();
     hideVideo();
+    blurContentSection();
 
     if (isMessageOnDisplay()) {
       hideMessage();
@@ -924,7 +926,7 @@ function prevPage() {
     pauseVideo();
     hideVideo();
     if (isContentModalOpen()) {
-      showLoadingAnimation();
+      showMediaLoadingAnimation();
     }
 
     // showMessage(loading, 0);
@@ -1337,16 +1339,16 @@ function showIvlImage() {
 
     if (isContentModalOpen()) {
       showDescription(hitNum, currentPage);
+      showBlurredBackground(highestQualityAvailableForBlurredBackgroundUrl);
     }
 
     // document.getElementById("resolution").innerText =
     //   "Resolution: " + image.naturalWidth + " x " + image.naturalHeight;
-    document.getElementById("message").innerText = "";
+    // document.getElementById("message").innerText = "";
     // rePositionImage();
     hideMessage();
     removeBlurFromContentSection();
     displayImage();
-    showBlurredBackground(highestQualityAvailableForBlurredBackgroundUrl);
     // showing arrow buttons
     document.querySelector(".arrow-button-container").classList.remove("hide");
     // enableBtns();
@@ -1386,20 +1388,21 @@ function showIvlImage() {
     showMessage(notFound404, 0);
   }
 
+  // code to disable buttons for first and last item
   // for previous button (the first item)
   if (hitNum == 0 && currentPage == 1) {
     document
       .querySelector(".arrow-button:nth-child(1)")
       .classList.add("disabled");
-    document.querySelector(".prev-item-icon").classList.add("disabled");
+    document.querySelector(".prev-item-icon span").classList.add("disabled");
   } else {
     document
       .querySelector(".arrow-button:nth-child(1)")
       .classList.remove("disabled");
-    document.querySelector(".prev-item-icon").classList.remove("disabled");
+    document.querySelector(".prev-item-icon span").classList.remove("disabled");
   }
 
-  // for next button (for last item)
+  // for next button (the last item)
   if (
     hitNum == queryResponse[currentPage - 1].collection.items.length - 1 &&
     currentPage == totalPage
@@ -1407,12 +1410,12 @@ function showIvlImage() {
     document
       .querySelector(".arrow-button:nth-child(2)")
       .classList.add("disabled");
-    document.querySelector(".next-item-icon").classList.add("disabled");
+    document.querySelector(".next-item-icon span").classList.add("disabled");
   } else {
     document
       .querySelector(".arrow-button:nth-child(2)")
       .classList.remove("disabled");
-    document.querySelector(".next-item-icon").classList.remove("disabled");
+    document.querySelector(".next-item-icon span").classList.remove("disabled");
   }
 }
 
@@ -1976,7 +1979,7 @@ function removeResults() {
 function handleBackButtonClick() {
   // hiding blurred background image of content modal
   hideBlurredBackground();
-
+  hideImage();
   if (mediaType == "video") {
     pauseVideo();
     hideVideo();
@@ -1989,13 +1992,13 @@ function handleBackButtonClick() {
 }
 
 function showContentModal() {
+  const contentModal = document.getElementById("contentModal");
+  //displaying modal screen
+  contentModal.classList.add("open");
   // preventing background scroll
   preventBodyScroll();
   // Get the modal
-  var contentModal = document.getElementById("contentModal");
 
-  //displaying modal screen
-  contentModal.classList.add("open");
   //starting key press listeners
   document.addEventListener("keyup", handleArrowKeyPress);
 }
