@@ -15,7 +15,7 @@
   --footer-color: #bdbdbd;
   --light-border-color: #e0e0e0;
   --white: white;
-  --icon-hover-background: #616161;
+  --icon-hover-background: rgba(97, 97, 97, 0.5);
 
   font-size: 62.5%;
 
@@ -1374,6 +1374,7 @@ option {
 
   width: 100%;
   height: auto;
+  max-height: var(calc(--vh, 1vh) * 100 - 6.4rem);
   text-align: center;
 
   /* height: 800px; */
@@ -1576,11 +1577,7 @@ option {
   .back-button-container span {
     margin-left: 2.4rem;
   }
-  .back-button-container span:hover::before {
-    background-color: var(--icon-hover-background);
 
-    /* padding: 0.4rem; */
-  }
   .back-button-container span {
     color: white;
   }
@@ -1591,9 +1588,6 @@ option {
   .full-screen-icon-container .full-screen-icon {
     margin-right: 3rem;
     color: white;
-  }
-  .content-modal .full-screen-icon:hover::before {
-    background-color: var(--icon-hover-background);
   }
 
   .content-section {
@@ -1624,23 +1618,8 @@ option {
     transform: translateY(-50%);
     border-radius: 50%;
   }
-  .content-modal .change-item-icon-button span::before {
-    content: "";
-    height: 5.6rem;
-    width: 5.6rem;
-    position: absolute;
-
-    top: 50%;
-    left: calc(50% - 6px);
-    transform: translate(-50%, -50%);
-    z-index: -1;
-    border-radius: 50%;
-  }
-  .content-modal .change-item-icon-button.next-item-icon span::before {
-    left: 50%;
-  }
-  .content-modal .change-item-icon-button span:hover::before {
-    background-color: var(--icon-hover-background);
+  .media-container {
+    max-height: var(calc(--vh, 1vh) * 100 - 6.4rem - 1.6rem);
   }
   .media-container img {
     width: auto;
@@ -1719,6 +1698,33 @@ option {
   }
   .cards-container.limit-cards-max-width {
     grid-template-columns: repeat(auto-fit, minmax(280px, 420px));
+  }
+
+  .back-button-container span:hover::before {
+    background-color: var(--icon-hover-background);
+
+    /* padding: 0.4rem; */
+  }
+  .content-modal .change-item-icon-button span::before {
+    content: "";
+    height: 8rem;
+    width: 5.2rem;
+    position: absolute;
+
+    top: 50%;
+    left: calc(50% - 6px);
+    transform: translate(-50%, -50%);
+    z-index: -1;
+    /* border-radius: 50%; */
+  }
+  .content-modal .change-item-icon-button.next-item-icon span::before {
+    left: 50%;
+  }
+  .content-modal .full-screen-icon:hover::before {
+    background-color: var(--icon-hover-background);
+  }
+  .content-modal .change-item-icon-button span:hover::before {
+    background-color: var(--icon-hover-background);
   }
 }
 /* stuff at the end */
