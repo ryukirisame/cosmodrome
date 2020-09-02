@@ -768,12 +768,13 @@ body.modal-open {
 .page-description-container {
   /* min-width: 280px; */
   width: 100%;
-  background: url("./assets/page-description-backgound.png");
-  background-size: cover;
-  background-position: right center;
+  /* background: url("./assets/page-description-backgound.png"); */
+  /* background-size: cover; */
+  /* background-position: right center; */
   color: var(--light-text-color);
   padding: 4rem;
   transition: all 0.25s ease-out;
+  background: var(--theme-color);
 }
 /* .page-description-text {
   text-align: center;
