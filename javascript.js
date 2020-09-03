@@ -564,12 +564,51 @@ function hideQualitySelector() {
 //     };
 //   }
 // }
-
-function toggleNavBarMediaType() {
+function toggleNavBarMediaTypeToVideo() {
   const toggleVideoIcon1 = document.getElementById("toggle-video-icon");
   const toggleVideoIcon2 = document.getElementById("toggle-video-icon-desktop");
   const toggleImageIcon1 = document.getElementById("toggle-image-icon");
   const toggleImageIcon2 = document.getElementById("toggle-image-icon-desktop");
+  // hiding image icon
+  toggleImageIcon1.classList.add("inactive-media-type");
+  toggleImageIcon2.classList.add("inactive-media-type");
+
+  // displaying video icon
+  toggleVideoIcon1.classList.remove("inactive-media-type");
+  toggleVideoIcon2.classList.remove("inactive-media-type");
+
+  // checking  video buttons at all places
+  const videoRadioButtons = document.querySelectorAll(".video-radio-button");
+  videoRadioButtons.forEach((btn) => {
+    // excluding change media type button as its class is also the same
+    if (btn.id != "video-radio-button-2") {
+      btn.checked = true;
+    }
+  });
+}
+
+function toggleNavBarMediaTypeToImage() {
+  const toggleVideoIcon1 = document.getElementById("toggle-video-icon");
+  const toggleVideoIcon2 = document.getElementById("toggle-video-icon-desktop");
+  const toggleImageIcon1 = document.getElementById("toggle-image-icon");
+  const toggleImageIcon2 = document.getElementById("toggle-image-icon-desktop");
+  // console.log("we are here");
+  // hiding video icon
+  toggleVideoIcon1.classList.add("inactive-media-type");
+  toggleVideoIcon2.classList.add("inactive-media-type");
+  // displaying image icon
+  toggleImageIcon1.classList.remove("inactive-media-type");
+  toggleImageIcon2.classList.remove("inactive-media-type");
+  // checking home page image buttons
+  const imageRadioButtons = document.querySelectorAll(".image-radio-button");
+  imageRadioButtons.forEach((btn) => {
+    if (btn.id != "image-radio-button-2") {
+      btn.checked = true;
+    }
+  });
+}
+
+function toggleNavBarMediaType() {
   const inactiveMediaType = document.querySelector(".inactive-media-type");
 
   // if image is active (when video is not active)
@@ -577,42 +616,18 @@ function toggleNavBarMediaType() {
     inactiveMediaType.id == "toggle-video-icon" ||
     inactiveMediaType.id == "toggle-video-icon-desktop"
   ) {
-    // hiding image icon
-    toggleImageIcon1.classList.add("inactive-media-type");
-    toggleImageIcon2.classList.add("inactive-media-type");
-
-    // displaying video icon
-    toggleVideoIcon1.classList.remove("inactive-media-type");
-    toggleVideoIcon2.classList.remove("inactive-media-type");
-
-    // checking  video buttons at all places
-    const videoRadioButtons = document.querySelectorAll(".video-radio-button");
-    videoRadioButtons.forEach((btn) => {
-      // excluding change media type button as its class is also the same
-      if (btn.id != "video-radio-button-2") {
-        btn.checked = true;
-      }
-    });
+    // making video active
+    toggleNavBarMediaTypeToVideo();
   }
   // if image is inactive (when video is active)
   else {
-    // console.log("we are here");
-    // hiding video icon
-    toggleVideoIcon1.classList.add("inactive-media-type");
-    toggleVideoIcon2.classList.add("inactive-media-type");
-    // displaying image icon
-    toggleImageIcon1.classList.remove("inactive-media-type");
-    toggleImageIcon2.classList.remove("inactive-media-type");
-    // checking home page image buttons
-    const imageRadioButtons = document.querySelectorAll(".image-radio-button");
-    imageRadioButtons.forEach((btn) => {
-      if (btn.id != "image-radio-button-2") {
-        btn.checked = true;
-      }
-    });
+    // making image active
+    toggleNavBarMediaTypeToImage();
   }
 }
 
+// this function selects all the radio buttons of either image or video
+// depending on the value of selectedMediaType
 function selectRadioButtons() {
   const imageRadioButtons = document.querySelectorAll(".image-radio-button");
   const videoRadioButtons = document.querySelectorAll(".video-radio-button");
@@ -1696,12 +1711,15 @@ function handleRadioButtonChange() {
   } else {
     selectedMediaType = "video";
   }
-  selectRadioButtons();
+  // selectRadioButtons();
 
   queryResponse = [];
   pageReset();
   hitNum = 0;
   thumbNum = 0;
+
+  recordState("handleRadioButtonChange()", "resultsPage");
+
   getIvl(1);
 }
 
@@ -2187,39 +2205,8 @@ function hideMediaTypeRadioButtonsContainer() {
   elem.classList.remove("show");
 }
 
-function recordState(whoCalledMe, screen) {
-  if (whoCalledMe == "startSearch()" && screen == "resultsPage") {
-    const state = {
-      screen: "resultsPage",
-      searchString: search,
-      media_type: selectedMediaType,
-    };
-    const url =
-      "index.html?q=" +
-      search +
-      "&media_type=" +
-      selectedMediaType +
-      "&show=" +
-      false;
-    history.pushState(state, null, url);
-  } else {
-    if (whoCalledMe == "card.onclick()" && screen == "contentModal") {
-      const state = {
-        screen: "contentModal",
-        hitNum: hitNum,
-        pageNum: currentPage,
-      };
-      const url =
-        "index.html?q=" +
-        search +
-        "&media_type=" +
-        selectedMediaType +
-        "&show=" +
-        true;
-      history.pushState(state, null, url);
-    }
-  }
-}
+// -------------------------------------------------------
+
 function updateStateOfContentModal() {
   const state = {
     screen: "contentModal",
@@ -2235,6 +2222,104 @@ function updateStateOfContentModal() {
     true;
   history.replaceState(state, null, url);
 }
+
+// ------------------------------------------------------------------
+
+function updateStateOfResultsScreen() {
+  const state = {
+    screen: "resultsPage",
+    searchString: search,
+    media_type: selectedMediaType,
+  };
+  const url =
+    "index.html?q=" +
+    search +
+    "&media_type=" +
+    selectedMediaType +
+    "&show=" +
+    false;
+  history.replaceState(state, null, url);
+}
+
+// ---------------------------------------------------------------------
+// document.onload=()=>{
+//   recordState("document.onload","homePage");
+// };
+
+// ------------------------------------------------------------------------
+
+function recordState(whoCalledMe, screen) {
+  // record state of results page
+  if (
+    (whoCalledMe == "handleRadioButtonChange()" ||
+      whoCalledMe == "startSearch()") &&
+    screen == "resultsPage"
+  ) {
+    var inactiveMediaType = document.querySelector(".inactive-media-type").id;
+    if (inactiveMediaType.includes("video")) {
+      inactiveMediaType = "video";
+    } else {
+      inactiveMediaType = "image";
+    }
+
+    const state = {
+      screen: "resultsPage",
+      searchString: search,
+      media_type: selectedMediaType,
+      inactiveMediaType: inactiveMediaType,
+    };
+    const url =
+      "index.html?q=" +
+      search +
+      "&media_type=" +
+      selectedMediaType +
+      "&show=" +
+      false;
+    history.pushState(state, null, url);
+  }
+  // records state of content modal
+  else if (whoCalledMe == "card.onclick()" && screen == "contentModal") {
+    const state = {
+      screen: "contentModal",
+      hitNum: hitNum,
+      pageNum: currentPage,
+    };
+    const url =
+      "index.html?q=" +
+      search +
+      "&media_type=" +
+      selectedMediaType +
+      "&show=" +
+      true;
+    history.pushState(state, null, url);
+  } else if (whoCalledMe == "document.onload" && screen == "homePage") {
+  }
+  // // records state of results page when media type is changed
+  // else if (
+  //   whoCalledMe == "handleRadioButtonChange()" &&
+  //   screen == "resultsPage"
+  // ) {
+  //   // alert("i was called");
+  //   const state = {
+  //     screen: "resultsPage",
+  //     searchString: search,
+  //     media_type: selectedMediaType,
+  //   };
+  //   const url =
+  //     "index.html?q=" +
+  //     search +
+  //     "&media_type=" +
+  //     selectedMediaType +
+  //     "&show=" +
+  //     false;
+  //   history.pushState(state, null, url);
+  // }
+  else {
+  }
+}
+
+// ----------------------------------------------------------------
+
 window.onpopstate = (event) => {
   // console.log("i was called");
   if (event.state != null) {
@@ -2254,7 +2339,9 @@ window.onpopstate = (event) => {
       fetchMediaUrl(event.state.hitNum, event.state.pageNum);
     }
     // else (event.state.screen == "resultsPage")
+    // for resultsPage
     else {
+      // if we try to go back from content modal
       if (isContentModalOpen()) {
         console.log("iscontentmodalopen()");
         hideBlurredBackground();
@@ -2265,11 +2352,17 @@ window.onpopstate = (event) => {
         }
         hideContentModalScreen();
         hideDescription();
-      } else {
+      }
+
+      //if we try to go to a results page
+      else {
         console.log("resultspage()");
         // start listening to scroll
         // document.addEventListener("scroll", handleScroll);
         hideHomePageModal();
+        // revealing nav bar if its hidden
+        document.querySelector(".nav-bar").classList.remove("hidden");
+
         showCardsContainer();
         // putting the search string in nav bar search box
         // if the user used the search box of home screen then we need to fill
@@ -2283,6 +2376,21 @@ window.onpopstate = (event) => {
         disableBtns();
         queryResponse = [];
         selectedMediaType = event.state.media_type;
+        // var changeMediaRadioButtonsOnResultsPage=document.getElementsByName("media-type-2");
+        if (selectedMediaType == "image") {
+          document.querySelector("#image-radio-button-2").checked = true;
+        } else {
+          document.querySelector("#video-radio-button-2").checked = true;
+        }
+
+        // activating image or video search type
+        const inactiveMediaType = event.state.inactiveMediaType;
+        if (inactiveMediaType == "image") {
+          toggleNavBarMediaTypeToVideo();
+        } else {
+          toggleNavBarMediaTypeToImage();
+        }
+
         pageReset();
         hitNum = 0;
         thumbNum = 0;
@@ -2302,9 +2410,19 @@ window.onpopstate = (event) => {
 
     document.querySelector(".nav-bar").classList.remove("hidden");
 
+    // resetting search box values to empty
+    document.getElementById("nav-search-box").value = "";
+    document.getElementById("nav-search-box-desktop").value = "";
+    document.getElementById("home-page-search-box").value = "";
+    // resetting select
+    selectedMediaType = "image";
+    selectRadioButtons();
+    toggleNavBarMediaTypeToImage();
     showHomePageModal();
   }
 };
+
+// --------------------------------------------------------------------
 
 function hideHomePageModal() {
   document.querySelector(".home-page-modal").classList.add("hide");
