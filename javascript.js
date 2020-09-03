@@ -346,6 +346,11 @@ function enableBtns() {
   searchBtn.disabled = false;
   searchBtn.classList.remove("disabled");
 
+  const radioButtonsLabel = document.querySelectorAll(".radio-button-label");
+  radioButtonsLabel.forEach((btn) => {
+    btn.classList.remove("disabled");
+  });
+
   const mediaTypeImage = document.querySelectorAll(".image-radio-button");
   mediaTypeImage.forEach((btn) => {
     btn.disabled = false;
@@ -393,6 +398,11 @@ function disableBtns() {
   const mediaTypeVideo = document.querySelectorAll(".video-radio-button");
   mediaTypeVideo.forEach((btn) => {
     btn.disabled = true;
+    btn.classList.add("disabled");
+  });
+
+  const radioButtonsLabel = document.querySelectorAll(".radio-button-label");
+  radioButtonsLabel.forEach((btn) => {
     btn.classList.add("disabled");
   });
 
@@ -581,7 +591,7 @@ function toggleNavBarMediaType() {
   }
   // if image is inactive (when video is active)
   else {
-    console.log("we are here");
+    // console.log("we are here");
     // hiding video icon
     toggleVideoIcon1.classList.add("inactive-media-type");
     toggleVideoIcon2.classList.add("inactive-media-type");
@@ -772,9 +782,6 @@ function downloadNextPage(page) {
 function nextData() {
   console.log("nextDAta()");
   disableBtns();
-  pauseVideo();
-  hideVideo();
-  blurContentSection();
 
   hitNum++;
   //if hit number exceeds total number of hits in the current page and if there is a next page then transition to next page
@@ -804,7 +811,7 @@ function nextData() {
     // hideImage();
     pauseVideo();
     hideVideo();
-
+    blurContentSection();
     if (isMessageOnDisplay()) {
       hideMessage();
       showLoadingAnimation();
@@ -863,8 +870,7 @@ function nextPage() {
 function prevData() {
   console.log("prevData()");
   disableBtns();
-  pauseVideo();
-  hideVideo();
+
   hitNum--;
   // document.getElementById("message").innerHTML = "";
   //if hit number becomes less than 0 then transition to prev page
@@ -876,7 +882,7 @@ function prevData() {
     //else show message and undo changes to hitNum
     else {
       hitNum++;
-      showMessage(firstPage, 0);
+      // showMessage(firstPage, 0);
 
       enableBtns();
     }
@@ -1078,7 +1084,7 @@ function startIvlVideoListeners() {
 }
 //SHOWS THE IVL VIDEO
 function showIvlVideo() {
-  console.log("showIvlVideo()");
+  // console.log("showIvlVideo()");
   //console.log(mediaUrls[0]);
 
   if (mediaUrls.length > 0) {
@@ -1207,7 +1213,7 @@ function showIvlVideo() {
     // showing arrow buttons
     document.querySelector(".arrow-button-container").classList.remove("hide");
     enableBtns();
-    enableBtns();
+
     showMessage(notFound404, 0);
   }
 
@@ -1216,12 +1222,12 @@ function showIvlVideo() {
     document
       .querySelector(".arrow-button:nth-child(1)")
       .classList.add("disabled");
-    document.querySelector(".prev-item-icon").classList.add("disabled");
+    document.querySelector(".prev-item-icon span").classList.add("disabled");
   } else {
     document
       .querySelector(".arrow-button:nth-child(1)")
       .classList.remove("disabled");
-    document.querySelector(".prev-item-icon").classList.remove("disabled");
+    document.querySelector(".prev-item-icon span").classList.remove("disabled");
   }
 
   // for next button (for last item)
@@ -1232,12 +1238,12 @@ function showIvlVideo() {
     document
       .querySelector(".arrow-button:nth-child(2)")
       .classList.add("disabled");
-    document.querySelector(".next-item-icon").classList.add("disabled");
+    document.querySelector(".next-item-icon span").classList.add("disabled");
   } else {
     document
       .querySelector(".arrow-button:nth-child(2)")
       .classList.remove("disabled");
-    document.querySelector(".next-item-icon").classList.remove("disabled");
+    document.querySelector(".next-item-icon span").classList.remove("disabled");
   }
 }
 
@@ -1632,6 +1638,10 @@ function startSearch(event) {
     document.querySelector(".home-page-modal").style.display = "none";
 
     hideMessage();
+
+    // hiding change media type radio buttons
+    hideMediaTypeRadioButtonsContainer();
+
     // showing loading animation
     showLoadingAnimation();
 
@@ -1709,7 +1719,7 @@ function getIvl(page) {
           const cardsContainerGrid = document.querySelector(".cards-container");
           cardsContainerGrid.classList.remove("limit-cards-max-width");
         }
-
+        showMediaTypeRadioButtonsContainer();
         showResultCards();
       }
       //if there are no hits
@@ -1886,85 +1896,85 @@ function showResultCards() {
   // while(queryResponse[currentThumbPage]==undefined);
 }
 
-function showNextPrevCards(itemNum, pageNum) {
-  const nextPrevCardsContainer = document.querySelector(
-    ".next-prev-cards-container"
-  );
-  // removing previous cards
-  while (nextPrevCardsContainer.hasChildNodes()) {
-    nextPrevCardsContainer.removeChild(nextPrevCardsContainer.firstChild);
-  }
+// function showNextPrevCards(itemNum, pageNum) {
+//   const nextPrevCardsContainer = document.querySelector(
+//     ".next-prev-cards-container"
+//   );
+//   // removing previous cards
+//   while (nextPrevCardsContainer.hasChildNodes()) {
+//     nextPrevCardsContainer.removeChild(nextPrevCardsContainer.firstChild);
+//   }
 
-  // we have to start from one itemNum less as we want the
-  // user to see one previous item
-  itemNum--;
-  // if the user clicked on the first item of the first page
-  if (itemNum == -1 && pageNum == 1) {
-    itemNum = 0;
-  }
-  // if the user clicked on the first item of any page other than first page
-  if (itemNum == -1 && pageNum != 1) {
-    itemNum == 99;
-  }
+//   // we have to start from one itemNum less as we want the
+//   // user to see one previous item
+//   itemNum--;
+//   // if the user clicked on the first item of the first page
+//   if (itemNum == -1 && pageNum == 1) {
+//     itemNum = 0;
+//   }
+//   // if the user clicked on the first item of any page other than first page
+//   if (itemNum == -1 && pageNum != 1) {
+//     itemNum == 99;
+//   }
 
-  var i = 0;
+//   var i = 0;
 
-  for (i = 0; i < 5; i++) {
-    // console.log("we are here");
-    const resultNum = `result-num:${(pageNum - 1) * 100 + itemNum}`;
-    // console.log(resultNum);
-    // console.log(className);
-    var cardToClone = document.getElementsByClassName(resultNum);
-    cardToClone = cardToClone[0];
-    // console.log(cardToClone);
-    // if (cardToClone == undefined) {
-    //   if (isNextPageAvailable()) {
-    //     showResultCards();
-    //     i--;
-    //     continue;
-    //   }
-    //   // if we have reached the end of the total results
-    //   else {
-    //     break;
-    //   }
-    // }
-    if (cardToClone == undefined) {
-      break;
-    }
+//   for (i = 0; i < 5; i++) {
+//     // console.log("we are here");
+//     const resultNum = `result-num:${(pageNum - 1) * 100 + itemNum}`;
+//     // console.log(resultNum);
+//     // console.log(className);
+//     var cardToClone = document.getElementsByClassName(resultNum);
+//     cardToClone = cardToClone[0];
+//     // console.log(cardToClone);
+//     // if (cardToClone == undefined) {
+//     //   if (isNextPageAvailable()) {
+//     //     showResultCards();
+//     //     i--;
+//     //     continue;
+//     //   }
+//     //   // if we have reached the end of the total results
+//     //   else {
+//     //     break;
+//     //   }
+//     // }
+//     if (cardToClone == undefined) {
+//       break;
+//     }
 
-    const result_num_attribute = parseInt(
-      cardToClone.getAttribute("data-result-num")
-    );
-    // thumbNum stores current number of cards loaded
-    if (result_num_attribute + 20 > thumbNum) {
-      // load next 20 cards
-      console.log("loading more cards");
-      showResultCards();
-    }
+//     const result_num_attribute = parseInt(
+//       cardToClone.getAttribute("data-result-num")
+//     );
+//     // thumbNum stores current number of cards loaded
+//     if (result_num_attribute + 20 > thumbNum) {
+//       // load next 20 cards
+//       console.log("loading more cards");
+//       showResultCards();
+//     }
 
-    const card = cardToClone.cloneNode(true);
-    nextPrevCardsContainer.appendChild(card);
-    card.onclick = () => {
-      disableBtns();
+//     const card = cardToClone.cloneNode(true);
+//     nextPrevCardsContainer.appendChild(card);
+//     card.onclick = () => {
+//       disableBtns();
 
-      const itemNum = card.getAttribute("data-item-num");
-      const pageNum = card.getAttribute("data-page-num");
+//       const itemNum = card.getAttribute("data-item-num");
+//       const pageNum = card.getAttribute("data-page-num");
 
-      hitNum = itemNum;
-      currentPage = pageNum;
-      blurContentSection();
-      showMediaLoadingAnimation();
-      fetchMediaUrl(itemNum, pageNum);
+//       hitNum = itemNum;
+//       currentPage = pageNum;
+//       blurContentSection();
+//       showMediaLoadingAnimation();
+//       fetchMediaUrl(itemNum, pageNum);
 
-      showNextPrevCards(itemNum, pageNum);
-    };
-    itemNum++;
-    // if (itemNum == 80) {
-    //   console.log("calling showResultCards()");
-    //   showResultCards();
-    // }
-  }
-}
+//       showNextPrevCards(itemNum, pageNum);
+//     };
+//     itemNum++;
+//     // if (itemNum == 80) {
+//     //   console.log("calling showResultCards()");
+//     //   showResultCards();
+//     // }
+//   }
+// }
 
 function removeResults() {
   // hiding total hits
@@ -1992,7 +2002,8 @@ function handleBackButtonClick() {
 }
 
 function showContentModal() {
-  const contentModal = document.getElementById("contentModal");
+  // const contentModal = document.getElementById("contentModal");
+  const contentModal = document.querySelector(".content-modal-container");
   //displaying modal screen
   contentModal.classList.add("open");
   // preventing background scroll
@@ -2006,7 +2017,8 @@ function hideContentModalScreen() {
   // allowing body scroll again
   allowBodyScroll();
   // get the modal
-  const contentModal = document.getElementById("contentModal");
+  // const contentModal = document.getElementById("contentModal");
+  const contentModal = document.querySelector(".content-modal-container");
 
   //removing event listener of arrow key press
   document.removeEventListener("keyup", handleArrowKeyPress);
@@ -2019,7 +2031,8 @@ function hideContentModalScreen() {
 }
 
 function isContentModalOpen() {
-  var modal = document.getElementById("contentModal");
+  // var modal = document.getElementById("contentModal");
+  var modal = document.querySelector(".content-modal-container");
   const opacity = window.getComputedStyle(modal).opacity;
   // console.log(opacity);
   if (opacity != 0) {
@@ -2139,4 +2152,17 @@ function openFullScreen() {
     /* IE/Edge */
     elem.msRequestFullscreen();
   }
+}
+
+function showMediaTypeRadioButtonsContainer() {
+  const elem = document.querySelector(
+    ".results-container .media-type-radio-buttons-container"
+  );
+  elem.classList.add("show");
+}
+function hideMediaTypeRadioButtonsContainer() {
+  const elem = document.querySelector(
+    ".results-container .media-type-radio-buttons-container"
+  );
+  elem.classList.remove("show");
 }

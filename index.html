@@ -329,7 +329,9 @@
               checked
               onchange="toggleNavBarMediaType()"
             />
-            <label for="image-radio-button-1">Image</label>
+            <label for="image-radio-button-1" class="radio-button-label"
+              >Image</label
+            >
             <input
               type="radio"
               name="media-type-1"
@@ -338,7 +340,9 @@
               value="video"
               onchange="toggleNavBarMediaType()"
             />
-            <label for="video-radio-button-1">Video</label>
+            <label for="video-radio-button-1" class="radio-button-label"
+              >Video</label
+            >
           </div>
         </div>
       </div>
@@ -403,7 +407,9 @@
               value="image"
               onchange="handleRadioButtonChange()"
             />
-            <label for="image-radio-button-2">Image</label>
+            <label for="image-radio-button-2" class="radio-button-label"
+              >Image</label
+            >
             <input
               type="radio"
               id="video-radio-button-2"
@@ -412,7 +418,9 @@
               value="video"
               onchange="handleRadioButtonChange()"
             />
-            <label for="video-radio-button-2">Video</label>
+            <label for="video-radio-button-2" class="radio-button-label"
+              >Video</label
+            >
           </div>
         </div>
       </div>
@@ -424,132 +432,138 @@
     <!-- Main body section (in which the result section is) ends -->
 
     <!-- content modal start-->
-
-    <div id="contentModal" class="content-modal">
-      <!--  media loading animation -->
-      <div class="loading-animation-container card-click hide">
-        <div class="bowlG">
-          <div class="bowl_ringG">
-            <div class="ball_holderG">
-              <div class="ballG"></div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="content-modal-container">
       <!-- background blur effect -->
-
       <img src="" class="background-blur" />
 
-      <!-- -------------------------------- -->
-
-      <p class="message" id="messageInsideModal"></p>
-
-      <!-- ------------------ -->
-
-      <div class="content-modal-grid">
-        <!-- close button -->
-        <div class="back-button-container">
-          <span class="material-icons md-24" onclick="handleBackButtonClick()">
-            arrow_back
-          </span>
-        </div>
-
-        <!-- quality selector -->
-        <div class="select-quality-container">
-          <select
-            id="quality-selector"
-            class="select-quality"
-            onchange="changeMediaQuality(document.getElementById('quality-selector').value);"
-          ></select>
-        </div>
-
-        <!-- full screen icon -->
-        <div class="full-screen-icon-container">
-          <span
-            class="material-icons md-24 full-screen-icon"
-            onclick="openFullScreen();"
-          >
-            open_in_full
-          </span>
-        </div>
-
-        <!-- back arrow button -->
-        <div class="prev-item-icon change-item-icon-button">
-          <span class="material-icons md-36" onclick="prevData();">
-            arrow_back_ios
-          </span>
-        </div>
-
-        <!-- Content Section -->
-        <div class="content-section">
-          <!--  media loading animation -->
-          <div class="loading-animation-container hide media-loading-animation">
-            <div class="bowlG">
-              <div class="bowl_ringG">
-                <div class="ball_holderG">
-                  <div class="ballG"></div>
-                </div>
+      <div id="contentModal" class="content-modal">
+        <!--  media loading animation -->
+        <div class="loading-animation-container card-click hide">
+          <div class="bowlG">
+            <div class="bowl_ringG">
+              <div class="ball_holderG">
+                <div class="ballG"></div>
               </div>
             </div>
           </div>
-          <!-- Arrow buttons -->
-          <div class="arrow-button-container hide">
-            <!-- Prev Button -->
+        </div>
 
-            <span
-              class="material-icons arrow-button md-24"
-              onclick="prevData()"
-            >
-              arrow_back_ios
-            </span>
+        <!-- -------------------------------- -->
 
-            <!-- next button -->
-            <!-- we have used the back button and rotated it 180 deg to maintain icon experience -->
-            <!-- google icons are messed up. the next button is wider than the prev button -->
+        <p class="message" id="messageInsideModal"></p>
+
+        <!-- ------------------ -->
+
+        <div class="content-modal-grid">
+          <!-- close button -->
+          <div class="back-button-container">
             <span
-              class="material-icons arrow-button md-24"
-              onclick="nextData()"
+              class="material-icons md-24"
+              onclick="handleBackButtonClick()"
             >
-              arrow_back_ios
+              arrow_back
             </span>
           </div>
 
-          <!-- content (pic/video) -->
-          <div id="media-container" class="media-container">
-            <img id="pic" />
+          <!-- quality selector -->
+          <div class="select-quality-container">
+            <select
+              id="quality-selector"
+              class="select-quality"
+              onchange="changeMediaQuality(document.getElementById('quality-selector').value);"
+            ></select>
           </div>
 
-          <!-- message -->
-        </div>
-        <!-- Content Section End -->
-
-        <!-- next icon-->
-        <!-- we have used back arrow. we will rotate it. -->
-        <div class="next-item-icon change-item-icon-button">
-          <span class="material-icons md-36" onclick="nextData();">
-            arrow_forward_ios
-          </span>
-        </div>
-
-        <!-- Know More Data -->
-        <div class="know-more-data-container">
-          <!-- <div id="cosmic-object-num" class="modal-text"></div> -->
-          <!-- <div id="resolution" class="modal-text"></div> -->
-
-          <!-- dummy divs to fill the grid. DONT DELETE THEM! -->
-          <div></div>
-          <div class="description-card">
-            <div id="title" class="modal-text"></div>
-            <div id="date" class="modal-text"></div>
-            <div id="description" class="modal-text"></div>
+          <!-- full screen icon -->
+          <div class="full-screen-icon-container">
+            <span
+              class="material-icons md-24 full-screen-icon"
+              onclick="openFullScreen();"
+            >
+              open_in_full
+            </span>
           </div>
-          <div></div>
+
+          <!-- back arrow button -->
+          <div class="prev-item-icon change-item-icon-button">
+            <span class="material-icons md-36" onclick="prevData();">
+              arrow_back_ios
+            </span>
+          </div>
+
+          <!-- Content Section -->
+          <div class="content-section">
+            <!--  media loading animation -->
+            <div
+              class="loading-animation-container hide media-loading-animation"
+            >
+              <div class="bowlG">
+                <div class="bowl_ringG">
+                  <div class="ball_holderG">
+                    <div class="ballG"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Arrow buttons -->
+            <div class="arrow-button-container hide">
+              <!-- Prev Button -->
+
+              <span
+                class="material-icons arrow-button md-24"
+                onclick="prevData()"
+              >
+                arrow_back_ios
+              </span>
+
+              <!-- next button -->
+              <!-- we have used the back button and rotated it 180 deg to maintain icon experience -->
+              <!-- google icons are messed up. the next button is wider than the prev button -->
+              <span
+                class="material-icons arrow-button md-24"
+                onclick="nextData()"
+              >
+                arrow_back_ios
+              </span>
+            </div>
+
+            <!-- content (pic/video) -->
+            <div id="media-container" class="media-container">
+              <img id="pic" />
+            </div>
+
+            <!-- message -->
+          </div>
+          <!-- Content Section End -->
+
+          <!-- next icon-->
+          <!-- we have used back arrow. we will rotate it. -->
+          <div class="next-item-icon change-item-icon-button">
+            <span class="material-icons md-36" onclick="nextData();">
+              arrow_forward_ios
+            </span>
+          </div>
+
+          <!-- Know More Data -->
+          <div class="know-more-data-container">
+            <!-- <div id="cosmic-object-num" class="modal-text"></div> -->
+            <!-- <div id="resolution" class="modal-text"></div> -->
+
+            <!-- dummy divs to fill the grid. DONT DELETE THEM! -->
+            <div></div>
+            <div class="description-card">
+              <div id="title" class="modal-text"></div>
+              <div id="date" class="modal-text"></div>
+              <div id="description" class="modal-text"></div>
+            </div>
+            <div></div>
+          </div>
         </div>
+
+        <!-- </div> -->
       </div>
-
-      <!-- </div> -->
+      <!-- content modal end -->
     </div>
-    <!-- content modal end -->
 
     <!-- displays message -->
 
