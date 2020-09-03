@@ -772,6 +772,9 @@ body.modal-open {
   z-index: 1;
   background-color: white;
 }
+.home-page-modal.hide {
+  display: none;
+}
 .page-description-container {
   /* min-width: 280px; */
   width: 100%;
@@ -1013,6 +1016,9 @@ input[type="radio"]:checked + label {
 }
 .cards-container.limit-cards-max-width {
   grid-template-columns: repeat(auto-fit, minmax(250px, 450px));
+}
+.cards-container.hide {
+  display: none;
 }
 .card {
   overflow: hidden;

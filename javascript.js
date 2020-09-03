@@ -137,7 +137,8 @@ function doTheJobFor1280px(matchMedia) {
 }
 
 // code for nav bar hiding on scroll down and infinite scroll
-document.addEventListener("scroll", handleScroll);
+// we have moved the following event listener to startSearch()
+// document.addEventListener("scroll", handleScroll);
 
 var prevScrollPos = window.pageYOffset;
 
@@ -167,13 +168,17 @@ function handleScroll() {
     //  than currentscrollpos
     if (prevScrollPos > currentScrollPos) {
       navBar.classList.remove("hidden");
+      // console.log("we are revealing nav bar");
     }
     // when the user scrolls down then prevscrollpos is less than
     // currentscrollpos
     else {
       navBar.classList.add("hidden");
+      // console.log("we are hiding nav-bar");
     }
-
+    // console.log(
+    //   "prevScrollPos:" + prevScrollPos + " currentScrollpos:" + currentScrollPos
+    // );
     prevScrollPos = currentScrollPos;
   }
 }
@@ -780,7 +785,7 @@ function downloadNextPage(page) {
 }
 
 function nextData() {
-  console.log("nextDAta()");
+  // console.log("nextDAta()");
   disableBtns();
 
   hitNum++;
@@ -828,7 +833,9 @@ function nextData() {
     // document.getElementById("pic").src = "loading.gif";
 
     // showContentModal();
+    updateStateOfContentModal();
     fetchMediaUrl(hitNum, currentPage);
+
     // showNextPrevCards(hitNum, currentPage);
     // showDescription(hitNum, currentPage);
   }
@@ -908,7 +915,9 @@ function prevData() {
     }
     // showMessage(loading, 0);
     //document.getElementById("pic").src = "loading.gif";
+    updateStateOfContentModal();
     fetchMediaUrl(hitNum, currentPage);
+
     // showDescription(hitNum, currentPage);
   }
 }
@@ -1635,12 +1644,11 @@ function startSearch(event) {
     document.querySelector("#nav-search-box-desktop").value = search;
 
     //hiding home page modal
-    document.querySelector(".home-page-modal").style.display = "none";
+    hideHomePageModal();
+    //showing cards container
+    showCardsContainer();
 
     hideMessage();
-
-    // hiding change media type radio buttons
-    hideMediaTypeRadioButtonsContainer();
 
     // showing loading animation
     showLoadingAnimation();
@@ -1666,8 +1674,14 @@ function startSearch(event) {
     search = search.trim();
     // hide total hits and delete cards
     removeResults();
+
+    recordState("startSearch()", "resultsPage");
+
     //getting url and fetching query results (initial data)
     getIvl(1);
+
+    // start listening to scroll
+    document.addEventListener("scroll", handleScroll);
   }
 }
 function handleRadioButtonChange() {
@@ -1850,7 +1864,7 @@ function showResultCards() {
           //   .querySelector(".nav-media-control-bar")
           //   .classList.add("open");
           // revealing nav bar if its hidden
-          document.querySelector(".nav-bar").classList.remove("hidden");
+          // document.querySelector(".nav-bar").classList.remove("hidden");
 
           disableBtns();
 
@@ -1859,6 +1873,7 @@ function showResultCards() {
 
           hitNum = itemNum;
           currentPage = pageNum;
+          console.log("hitnum:" + hitNum + " currentPage:" + currentPage);
           // showDescription(itemNum, pageNum);
           hideImage();
           hideVideo();
@@ -1866,7 +1881,9 @@ function showResultCards() {
           showContentModal();
           showLoadingAnimation();
           // showMessage(loading, 0);
+          recordState("card.onclick()", "contentModal");
           fetchMediaUrl(itemNum, pageNum);
+
           // showNextPrevCards(itemNum, pageNum);
         };
 
@@ -1977,7 +1994,8 @@ function showResultCards() {
 // }
 
 function removeResults() {
-  // hiding total hits
+  // hiding change media type radio buttons
+  hideMediaTypeRadioButtonsContainer();
 
   var cardsContainer = document.getElementById("cards-container");
   // deleting cards
@@ -1988,17 +2006,19 @@ function removeResults() {
 
 function handleBackButtonClick() {
   // hiding blurred background image of content modal
-  hideBlurredBackground();
-  hideImage();
-  if (mediaType == "video") {
-    pauseVideo();
-    hideVideo();
-  }
-  // hiding nav bar of content modal
-  // document.querySelector(".nav-media-control-bar").classList.remove("open");
-  // hiding modal
-  hideContentModalScreen();
-  hideDescription();
+  // hideBlurredBackground();
+  // hideImage();
+  // if (mediaType == "video") {
+  //   pauseVideo();
+  //   hideVideo();
+  // }
+  // // hiding nav bar of content modal
+  // // document.querySelector(".nav-media-control-bar").classList.remove("open");
+  // // hiding modal
+  // hideContentModalScreen();
+  // hideDescription();
+
+  window.history.back();
 }
 
 function showContentModal() {
@@ -2100,13 +2120,13 @@ function preventBodyScroll() {
 }
 function allowBodyScroll() {
   // to prevent the hiding of the nav bar due to scrollTo
-  window.removeEventListener("scroll", handleScroll);
+  document.removeEventListener("scroll", handleScroll);
 
   document.body.classList.remove("modal-open");
   window.scrollTo(0, bodyScrollPos);
   setTimeout(() => {
-    window.addEventListener("scroll", handleScroll);
-  }, 1000);
+    document.addEventListener("scroll", handleScroll);
+  }, 100);
 }
 function revealSideBar() {
   var sideBarModal = document.querySelector(".sidebar-menu-modal");
@@ -2165,4 +2185,144 @@ function hideMediaTypeRadioButtonsContainer() {
     ".results-container .media-type-radio-buttons-container"
   );
   elem.classList.remove("show");
+}
+
+function recordState(whoCalledMe, screen) {
+  if (whoCalledMe == "startSearch()" && screen == "resultsPage") {
+    const state = {
+      screen: "resultsPage",
+      searchString: search,
+      media_type: selectedMediaType,
+    };
+    const url =
+      "index.html?q=" +
+      search +
+      "&media_type=" +
+      selectedMediaType +
+      "&show=" +
+      false;
+    history.pushState(state, null, url);
+  } else {
+    if (whoCalledMe == "card.onclick()" && screen == "contentModal") {
+      const state = {
+        screen: "contentModal",
+        hitNum: hitNum,
+        pageNum: currentPage,
+      };
+      const url =
+        "index.html?q=" +
+        search +
+        "&media_type=" +
+        selectedMediaType +
+        "&show=" +
+        true;
+      history.pushState(state, null, url);
+    }
+  }
+}
+function updateStateOfContentModal() {
+  const state = {
+    screen: "contentModal",
+    hitNum: hitNum,
+    pageNum: currentPage,
+  };
+  const url =
+    "index.html?q=" +
+    search +
+    "&media_type=" +
+    selectedMediaType +
+    "&show=" +
+    true;
+  history.replaceState(state, null, url);
+}
+window.onpopstate = (event) => {
+  // console.log("i was called");
+  if (event.state != null) {
+    // for going back from contentModal
+
+    // clicking on next button to go to contentmodal
+    if (event.state.screen == "contentModal") {
+      console.log("contentmodal()");
+      disableBtns();
+      hideImage();
+      hideVideo();
+      hideMessage();
+      showContentModal();
+      showLoadingAnimation();
+      hitNum = event.state.hitNum;
+      currentPage = event.state.pageNum;
+      fetchMediaUrl(event.state.hitNum, event.state.pageNum);
+    }
+    // else (event.state.screen == "resultsPage")
+    else {
+      if (isContentModalOpen()) {
+        console.log("iscontentmodalopen()");
+        hideBlurredBackground();
+        hideImage();
+        if (mediaType == "video") {
+          pauseVideo();
+          hideVideo();
+        }
+        hideContentModalScreen();
+        hideDescription();
+      } else {
+        console.log("resultspage()");
+        // start listening to scroll
+        // document.addEventListener("scroll", handleScroll);
+        hideHomePageModal();
+        showCardsContainer();
+        // putting the search string in nav bar search box
+        // if the user used the search box of home screen then we need to fill
+        // the search box of nav bar too
+        document.querySelector("#nav-search-box").value =
+          event.state.searchString;
+        document.querySelector("#nav-search-box-desktop").value =
+          event.state.searchString;
+
+        hideMessage();
+        disableBtns();
+        queryResponse = [];
+        selectedMediaType = event.state.media_type;
+        pageReset();
+        hitNum = 0;
+        thumbNum = 0;
+        search = event.state.searchString;
+        removeResults();
+        getIvl(1);
+      }
+    }
+  }
+  // return back to home page
+  else {
+    console.log("home page()");
+    hideCardsContainer();
+    // document.removeEventListener("scroll", handleScroll);
+
+    removeResults();
+
+    document.querySelector(".nav-bar").classList.remove("hidden");
+
+    showHomePageModal();
+  }
+};
+
+function hideHomePageModal() {
+  document.querySelector(".home-page-modal").classList.add("hide");
+}
+function showHomePageModal() {
+  document.querySelector(".home-page-modal").classList.remove("hide");
+}
+function isHomePageModalOpen() {
+  if (document.querySelector(".home-page-modal").classList.contains("hide")) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+function showCardsContainer() {
+  document.querySelector(".cards-container").classList.remove("hide");
+}
+function hideCardsContainer() {
+  document.querySelector(".cards-container").classList.add("hide");
 }
