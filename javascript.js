@@ -1523,7 +1523,7 @@ function showDescription(itemNum, pageNum) {
     date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
 
   document.getElementById("title").innerText = descriptiveData.title;
-  document.getElementById("description").innerText =
+  document.getElementById("description").innerHTML =
     descriptiveData.description;
   // document.getElementById("resolution").innerText = "Calculating...";
 
@@ -1549,11 +1549,15 @@ function fetchMediaUrl(itemNum, pageNum) {
   var nasa_id =
     queryResponse[pageNum - 1].collection.items[itemNum].data[0].nasa_id;
   //appending it to url
-  url = "https://images-api.nasa.gov/asset/" + nasa_id;
+
+  url = "https://images-api.nasa.gov/asset/" + encodeURIComponent(nasa_id);
+
   //getting media type
   mediaType =
     queryResponse[pageNum - 1].collection.items[itemNum].data[0].media_type;
   // }
+
+  console.log(url);
 
   //sending http request for media links
   sendHttpRequest(method, url, mode)
@@ -1727,7 +1731,8 @@ function handleRadioButtonChange() {
 function getIvl(page) {
   //console.log(search);
   var searchUrl = calSearchUrl(page);
-  // console.log(searchURL);
+
+  console.log(searchUrl);
   sendHttpRequest(method, searchUrl, mode)
     .then((response) => {
       hideLoadingAnimation();
@@ -2218,8 +2223,10 @@ function updateStateOfContentModal() {
     search +
     "&media_type=" +
     selectedMediaType +
-    "&show=" +
-    true;
+    "&hitNum=" +
+    hitNum +
+    "&pageNum=" +
+    currentPage;
   history.replaceState(state, null, url);
 }
 
@@ -2231,13 +2238,7 @@ function updateStateOfResultsScreen() {
     searchString: search,
     media_type: selectedMediaType,
   };
-  const url =
-    "index.html?q=" +
-    search +
-    "&media_type=" +
-    selectedMediaType +
-    "&show=" +
-    false;
+  const url = "index.html?q=" + search + "&media_type=" + selectedMediaType;
   history.replaceState(state, null, url);
 }
 
@@ -2268,13 +2269,7 @@ function recordState(whoCalledMe, screen) {
       media_type: selectedMediaType,
       inactiveMediaType: inactiveMediaType,
     };
-    const url =
-      "index.html?q=" +
-      search +
-      "&media_type=" +
-      selectedMediaType +
-      "&show=" +
-      false;
+    const url = "index.html?q=" + search + "&media_type=" + selectedMediaType;
     history.pushState(state, null, url);
   }
   // records state of content modal
@@ -2289,8 +2284,10 @@ function recordState(whoCalledMe, screen) {
       search +
       "&media_type=" +
       selectedMediaType +
-      "&show=" +
-      true;
+      "&hitNum=" +
+      hitNum +
+      "&pageNum=" +
+      currentPage;
     history.pushState(state, null, url);
   } else if (whoCalledMe == "document.onload" && screen == "homePage") {
   }
@@ -2400,7 +2397,7 @@ window.onpopstate = (event) => {
       }
     }
   }
-  // return back to home page
+  // for returning back to home page
   else {
     console.log("home page()");
     hideCardsContainer();
