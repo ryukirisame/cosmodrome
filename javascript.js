@@ -54,7 +54,7 @@ var lastPage = "This is the last item!";
 var firstPage = "This is the first item!";
 
 // body scroll position when a modal is opened
-var bodyScrollPos;
+var bodyScrollPos = 0;
 
 // ----------------------------------------------------------------------
 
@@ -143,6 +143,7 @@ function doTheJobFor1280px(matchMedia) {
 var prevScrollPos = window.pageYOffset;
 
 function handleScroll() {
+  // console.log("handleScroll()");
   // console.log(window.pageYOffset);
   // console.log(window.scrollY+window.innerHeight);
   // console.log(document.documentElement.scrollHeight);
@@ -338,7 +339,7 @@ function sendHttpRequest(method, url, mode) {
 }
 
 function enableBtns() {
-  console.log("enableBtns()");
+  // console.log("enableBtns()");
   // const nextBtn = document.getElementById("nextBtn");
   // nextBtn.disabled = false;
   // nextBtn.classList.remove("disabled");
@@ -389,7 +390,7 @@ function enableBtns() {
 }
 
 function disableBtns() {
-  console.log("disabling buttons");
+  // console.log("disabling buttons");
   const searchBtn = document.getElementById("searchBtn");
   searchBtn.disabled = true;
   searchBtn.classList.add("disabled");
@@ -739,6 +740,66 @@ function isPrevPageAvailable() {
     currentPage++;
     return true;
   }
+}
+function downloadPageAndShowMedia(page) {
+  var searchUrl = calSearchUrl(page);
+  sendHttpRequest(method, searchUrl, mode)
+    .then((response) => {
+      console.log("page " + page + "downloaded");
+      console.log(response);
+      //storing new page in queryResponse
+
+      queryResponse[page - 1] = response;
+      // console.log(queryResponse[page - 1]);
+      // hitNum = -1;
+      // nextData();
+      fetchMediaUrl(hitNum, currentPage);
+    })
+    .catch((errCode) => {
+      console.log("error code: " + errCode);
+
+      enableBtns();
+      if (errCode == 404) {
+        pauseVideo();
+        hideVideo();
+        hideImage();
+        if (isContentModalOpen()) {
+          showMessage(notFound404, 0);
+        } else {
+          showMessage(notFound404, 1);
+        }
+      } else if (errCode > 499 && errCode < 600) {
+        pauseVideo();
+        hideVideo();
+        hideImage();
+        if (isContentModalOpen()) {
+          showMessage(problemWithNasaServer, 0);
+        } else {
+          showMessage(problemWithNasaServer, 1);
+        }
+      } else if (errCode == 400) {
+        pauseVideo();
+        hideVideo();
+        hideImage();
+        if (isContentModalOpen()) {
+          showMessage(badResquest400, 0);
+        } else {
+          showMessage(badResquest400, 1);
+        }
+      }
+
+      //for no internet connection
+      else {
+        pauseVideo();
+        hideVideo();
+        hideImage();
+        if (isContentModalOpen()) {
+          showMessage(onErrorMessage, 0);
+        } else {
+          showMessage(onErrorMessage, 1);
+        }
+      }
+    });
 }
 function downloadNextPage(page) {
   var searchUrl = calSearchUrl(page);
@@ -1757,7 +1818,32 @@ function getIvl(page) {
           cardsContainerGrid.classList.remove("limit-cards-max-width");
         }
         showMediaTypeRadioButtonsContainer();
+
+        // console.log(!isBodyOverflowing());
+        // while (!isBodyOverflowing()) {
         showResultCards();
+        // }
+
+        var runloop = setInterval(() => {
+          console.log(!isBodyOverflowing());
+
+          const totalCardsShown = (currentThumbPage - 1) * 100 + thumbNum;
+
+          if (
+            !isBodyOverflowing() &&
+            totalCardsShown < totalHits &&
+            !isContentModalOpen()
+          ) {
+            console.log("calling show result cards");
+            // if (!isContentModalOpen()) {
+            console.log("iscontentModalopen ");
+            showResultCards();
+            // }
+          } else {
+            console.log("clearing");
+            clearInterval(runloop);
+          }
+        }, 100);
       }
       //if there are no hits
       else {
@@ -2132,21 +2218,36 @@ function closeNavSearchBar() {
 function preventBodyScroll() {
   // getting current scroll position
   bodyScrollPos = window.scrollY;
-
+  // console.log("bodyScrollPos:" + bodyScrollPos);
   // fixing body position
   document.body.classList.add("modal-open");
   // briging back the body to the bodyScrollPos because when
   // the body position is fixed then we come back to the top of the page
   //  as the top of the body element tries to start from the top of the
   // window
+
   document.body.style.top = -bodyScrollPos + "px";
 }
 function allowBodyScroll() {
+  // console.log("bodyScrollPos:" + bodyScrollPos);
   // to prevent the hiding of the nav bar due to scrollTo
   document.removeEventListener("scroll", handleScroll);
 
   document.body.classList.remove("modal-open");
-  window.scrollTo(0, bodyScrollPos);
+  // window.scrollTo(0, bodyScrollPos);
+
+  // the next setTimeout is to get around with the scrollTop bug. a mysterious bug.so dont touch it.
+  // bug: when the user is on the contentModal and refreshes the page.
+  //  and then goes back, then we dont end up at the top of the page, instead
+  // we end up at the bottom. which is a mystery. why. the next piece of
+  // code is to getaround with that bug.
+  setTimeout(() => {
+    // brings user back to the original position
+    document.documentElement.scrollTop = bodyScrollPos;
+  }, 100);
+
+  document.body.scrollTop = bodyScrollPos;
+
   setTimeout(() => {
     document.addEventListener("scroll", handleScroll);
   }, 100);
@@ -2213,10 +2314,14 @@ function hideMediaTypeRadioButtonsContainer() {
 // -------------------------------------------------------
 
 function updateStateOfContentModal() {
+  const nasa_id = encodeURIComponent(
+    queryResponse[currentPage - 1].collection.items[hitNum].data[0].nasa_id
+  );
   const state = {
     screen: "contentModal",
     hitNum: hitNum,
     pageNum: currentPage,
+    nasa_id: nasa_id,
   };
   const url =
     "index.html?q=" +
@@ -2226,7 +2331,9 @@ function updateStateOfContentModal() {
     "&hitNum=" +
     hitNum +
     "&pageNum=" +
-    currentPage;
+    currentPage +
+    "&show=" +
+    nasa_id;
   history.replaceState(state, null, url);
 }
 
@@ -2256,6 +2363,7 @@ function recordState(whoCalledMe, screen) {
       whoCalledMe == "startSearch()") &&
     screen == "resultsPage"
   ) {
+    // checking for inactive media type
     var inactiveMediaType = document.querySelector(".inactive-media-type").id;
     if (inactiveMediaType.includes("video")) {
       inactiveMediaType = "video";
@@ -2274,10 +2382,15 @@ function recordState(whoCalledMe, screen) {
   }
   // records state of content modal
   else if (whoCalledMe == "card.onclick()" && screen == "contentModal") {
+    const nasa_id = encodeURIComponent(
+      queryResponse[currentPage - 1].collection.items[hitNum].data[0].nasa_id
+    );
+
     const state = {
       screen: "contentModal",
       hitNum: hitNum,
       pageNum: currentPage,
+      nasa_id: nasa_id,
     };
     const url =
       "index.html?q=" +
@@ -2287,7 +2400,9 @@ function recordState(whoCalledMe, screen) {
       "&hitNum=" +
       hitNum +
       "&pageNum=" +
-      currentPage;
+      currentPage +
+      "&show=" +
+      nasa_id;
     history.pushState(state, null, url);
   } else if (whoCalledMe == "document.onload" && screen == "homePage") {
   }
@@ -2315,7 +2430,87 @@ function recordState(whoCalledMe, screen) {
   }
 }
 
+// ---------------------------------------------------------------
+// when the user pressed reload button
+
+window.onload = () => {
+  // check if this was a reload
+  var urlParams = new URLSearchParams(window.location.search);
+
+  // checking if the user was on the content modal screen
+  if (urlParams.has("show")) {
+    disableBtns();
+
+    showContentModal();
+
+    showLoadingAnimation();
+    hideHomePageModal();
+    showSearchSection();
+    showCardsContainer();
+    hideMessage();
+
+    const encodedNasa_id = urlParams.get("show");
+    hitNum = urlParams.get("hitNum");
+    currentPage = urlParams.get("pageNum");
+
+    search = urlParams.get("q");
+    // console.log("SEARCH STRING:" + search);
+    selectedMediaType = urlParams.get("media_type");
+    mediaType = selectedMediaType;
+
+    // showLoadingAnimation();
+    // disableBtns();
+
+    downloadPageAndShowMedia(currentPage);
+    getIvl(1);
+
+    // some cleanup work
+    selectRadioButtons();
+    document.querySelector("#nav-search-box").value = search;
+    document.querySelector("#nav-search-box-desktop").value = search;
+
+    // disableBtns();
+    // showContentModal();
+    // showLoadingAnimation();
+    // console.log(document.documentElement.scrollTop);
+    // document.body.classList.add("modal-open");
+
+    // document.body.scrollTop = 0; // For Safari
+    // document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    // hitNum = event.state.hitNum;
+    // currentPage = event.state.pageNum;
+    // fetchMediaUrl(event.state.hitNum, event.state.pageNum);
+  } else if (urlParams.has("q") && !urlParams.has("show")) {
+    search = urlParams.get("q");
+
+    hideHomePageModal();
+    hideMessage();
+    // show search section on nav bar on desktop/ tablet landscape
+    showSearchSection();
+
+    showCardsContainer();
+    showLoadingAnimation();
+    document.addEventListener("scroll", handleScroll);
+    disableBtns();
+
+    document.querySelector("#nav-search-box").value = search;
+    document.querySelector("#nav-search-box-desktop").value = search;
+
+    selectedMediaType = urlParams.get("media_type");
+    if (selectedMediaType == "image") {
+      document.querySelector("#image-radio-button-2").checked = true;
+    } else {
+      document.querySelector("#video-radio-button-2").checked = true;
+    }
+
+    getIvl(1);
+  } else {
+  }
+};
+
 // ----------------------------------------------------------------
+
+// when the user clicks on back or next button of the browser, this function function is called
 
 window.onpopstate = (event) => {
   // console.log("i was called");
@@ -2324,7 +2519,7 @@ window.onpopstate = (event) => {
 
     // clicking on next button to go to contentmodal
     if (event.state.screen == "contentModal") {
-      console.log("contentmodal()");
+      // console.log("contentmodal()");
       disableBtns();
       hideImage();
       hideVideo();
@@ -2333,29 +2528,53 @@ window.onpopstate = (event) => {
       showLoadingAnimation();
       hitNum = event.state.hitNum;
       currentPage = event.state.pageNum;
-      fetchMediaUrl(event.state.hitNum, event.state.pageNum);
+      downloadPageAndShowMedia(event.state.hitNum, event.state.pageNum);
+      // fetchMediaUrl(event.state.hitNum, event.state.pageNum);
     }
     // else (event.state.screen == "resultsPage")
     // for resultsPage
     else {
       // if we try to go back from content modal
       if (isContentModalOpen()) {
-        console.log("iscontentmodalopen()");
+        // console.log("iscontentmodalopen()");
         hideBlurredBackground();
         hideImage();
         if (mediaType == "video") {
           pauseVideo();
           hideVideo();
         }
+
         hideContentModalScreen();
         hideDescription();
+
+        // showing cards if the body is not overflowing
+        var runloop = setInterval(() => {
+          console.log(!isBodyOverflowing());
+
+          const totalCardsShown = (currentThumbPage - 1) * 100 + thumbNum;
+
+          if (
+            !isBodyOverflowing() &&
+            totalCardsShown < totalHits &&
+            !isContentModalOpen()
+          ) {
+            console.log("calling show result cards");
+            // if (!isContentModalOpen()) {
+            console.log("iscontentModalopen ");
+            showResultCards();
+            // }
+          } else {
+            console.log("clearing");
+            clearInterval(runloop);
+          }
+        }, 100);
       }
 
       //if we try to go to a results page
       else {
         console.log("resultspage()");
         // start listening to scroll
-        // document.addEventListener("scroll", handleScroll);
+        document.addEventListener("scroll", handleScroll);
         hideHomePageModal();
         // revealing nav bar if its hidden
         document.querySelector(".nav-bar").classList.remove("hidden");
@@ -2399,7 +2618,7 @@ window.onpopstate = (event) => {
   }
   // for returning back to home page
   else {
-    console.log("home page()");
+    // console.log("home page()");
     hideCardsContainer();
     // document.removeEventListener("scroll", handleScroll);
 
@@ -2440,4 +2659,13 @@ function showCardsContainer() {
 }
 function hideCardsContainer() {
   document.querySelector(".cards-container").classList.add("hide");
+}
+
+function isBodyOverflowing() {
+  // console.log(document.documentElement.scrollHeight);
+  // console.log(document.documentElement.clientHeight);
+  return (
+    document.documentElement.scrollHeight >
+    document.documentElement.clientHeight
+  );
 }
