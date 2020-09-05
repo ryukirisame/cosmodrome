@@ -2112,7 +2112,7 @@ function showResultCards() {
     // showResultCards is fired. and this else block executes. we have to prevent
     //  that from happening till the next page is downloaded.
     if (queryResponse[currentThumbPage - 1] != undefined) {
-      var nextLimit = thumbNum + 25;
+      var nextLimit = thumbNum + 20;
 
       while (
         thumbNum <
