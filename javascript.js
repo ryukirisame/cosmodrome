@@ -1894,6 +1894,10 @@ function startSearch(event) {
 
     // displaying search section on nav bar in desktop/tablet landscape mode
     showSearchSection();
+
+    //  open nav search bar without focus
+    document.querySelector(".nav-search-bar").classList.add("open");
+
     // putting the search string in nav bar search box
     // if the user used the search box of home screen then we need to fill
     // the search box of nav bar too

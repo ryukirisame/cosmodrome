@@ -1572,6 +1572,9 @@ option {
 
 /* Medium devices (landscape tablets, 772px and up) */
 @media only screen and (min-width: 800px) {
+  .sidebar-menu-modal {
+    display: none;
+  }
   .nav-bar-left-side {
     margin-left: 2.4rem;
     /* background-color: lightcoral; */
@@ -1651,6 +1654,10 @@ option {
     4.
 */
 @media only screen and (min-width: 900px) {
+  .nav-search-bar {
+    display: none;
+  }
+
   .loading-animation-container.card-click .bowl_ringG {
     border-color: var(--white);
   }
