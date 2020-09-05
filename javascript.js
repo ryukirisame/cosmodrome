@@ -150,7 +150,7 @@ function handleScroll() {
 
   // code for infinite scroll
   if (
-    window.scrollY + window.innerHeight + 100 >=
+    window.scrollY + window.innerHeight + 480 >=
     document.documentElement.scrollHeight
   ) {
     if (!isContentModalOpen()) {
@@ -745,8 +745,8 @@ function downloadPageAndShowMedia(page) {
   var searchUrl = calSearchUrl(page);
   sendHttpRequest(method, searchUrl, mode)
     .then((response) => {
-      console.log("page " + page + "downloaded");
-      console.log(response);
+      // console.log("page " + page + "downloaded");
+      // console.log(response);
       //storing new page in queryResponse
 
       queryResponse[page - 1] = response;
@@ -811,7 +811,67 @@ function downloadNextPage(page) {
       //storing new page in queryResponse
       queryResponse[page - 1] = response;
       hitNum = -1;
+
       nextData();
+    })
+    .catch((errCode) => {
+      console.log("error code: " + errCode);
+
+      enableBtns();
+      if (errCode == 404) {
+        pauseVideo();
+        hideVideo();
+        hideImage();
+        if (isContentModalOpen()) {
+          showMessage(notFound404, 0);
+        } else {
+          showMessage(notFound404, 1);
+        }
+      } else if (errCode > 499 && errCode < 600) {
+        pauseVideo();
+        hideVideo();
+        hideImage();
+        if (isContentModalOpen()) {
+          showMessage(problemWithNasaServer, 0);
+        } else {
+          showMessage(problemWithNasaServer, 1);
+        }
+      } else if (errCode == 400) {
+        pauseVideo();
+        hideVideo();
+        hideImage();
+        if (isContentModalOpen()) {
+          showMessage(badResquest400, 0);
+        } else {
+          showMessage(badResquest400, 1);
+        }
+      }
+
+      //for no internet connection
+      else {
+        pauseVideo();
+        hideVideo();
+        hideImage();
+        if (isContentModalOpen()) {
+          showMessage(onErrorMessage, 0);
+        } else {
+          showMessage(onErrorMessage, 1);
+        }
+      }
+    });
+}
+
+function downloadPrevPage(page) {
+  var searchUrl = calSearchUrl(page);
+
+  sendHttpRequest(method, searchUrl, mode)
+    .then((response) => {
+      console.log("new page downloaded");
+      console.log(response);
+      //storing new page in queryResponse
+      queryResponse[page - 1] = response;
+      hitNum = 100;
+      prevData();
     })
     .catch((errCode) => {
       console.log("error code: " + errCode);
@@ -876,6 +936,7 @@ function nextData() {
     if (isNextPageAvailable()) {
       hitNum = 0;
       hideMessage();
+
       nextPage();
     }
     //if next page is not available then display message
@@ -919,6 +980,7 @@ function nextData() {
 
 //tries going to next page. shows error if its already the last page
 function nextPage() {
+  console.log("we are here");
   //if next page exists
   if (isNextPageAvailable()) {
     // hideImage();
@@ -1003,7 +1065,7 @@ function prevPage() {
   // document.getElementById("message").innerHTML = "";
   //if the page we are trying to access is less than 1 then throw error
   if (currentPage < 1) {
-    showMessage(firstPage, 0);
+    // showMessage(firstPage, 0);
 
     enableBtns();
     //hitNum = 0;
@@ -1020,9 +1082,12 @@ function prevPage() {
       showMediaLoadingAnimation();
     }
 
-    // showMessage(loading, 0);
-    hitNum = 100;
-    prevData();
+    if (queryResponse[currentPage - 1] == undefined) {
+      downloadPrevPage(currentPage);
+    } else {
+      hitNum = 100;
+      prevData();
+    }
   }
 }
 
@@ -1399,15 +1464,27 @@ function changeMediaQuality(qualityKey) {
 //     image.style.maxWidth = contentSectionWidth * 0.9;
 //   }
 // }
+// function blurContentModal() {
+//   const preBackgroundBlurElement = document.querySelector(
+//     ".pre-background-blur"
+//   );
+//   preBackgroundBlurElement.classList.add("show");
+// }
+
 function showBlurredBackground(href) {
   const backgroundBlurElement = document.querySelector(".background-blur");
+
   backgroundBlurElement.src = href;
   backgroundBlurElement.classList.add("show");
 }
 function hideBlurredBackground() {
   const backgroundBlurElement = document.querySelector(".background-blur");
+  // const preBackgroundBlurElement = document.querySelector(
+  //   ".pre-background-blur"
+  // );
   backgroundBlurElement.src = "";
   backgroundBlurElement.classList.remove("show");
+  // preBackgroundBlurElement.classList.remove("show");
 }
 function showIvlImage() {
   var image = document.getElementById("pic");
@@ -1593,7 +1670,7 @@ function showDescription(itemNum, pageNum) {
 
 //fetches media urls of a specific hit and calls showIvl()
 function fetchMediaUrl(itemNum, pageNum) {
-  console.log("fetchMediaUrl()");
+  // console.log("fetchMediaUrl()");
   // console.log("itemNum: " + itemNum + " " + "pageNum: " + pageNum);
 
   var url;
@@ -1618,7 +1695,7 @@ function fetchMediaUrl(itemNum, pageNum) {
     queryResponse[pageNum - 1].collection.items[itemNum].data[0].media_type;
   // }
 
-  console.log(url);
+  // console.log(url);
 
   //sending http request for media links
   sendHttpRequest(method, url, mode)
@@ -1730,6 +1807,10 @@ function startSearch(event) {
 
     hideMessage();
 
+    //  hiding page loading animation.
+    // if the user searches when the page loading animation was displaying
+    // this will hide it
+    hidePageLoadingAnimation();
     // showing loading animation
     showLoadingAnimation();
 
@@ -1790,14 +1871,16 @@ function handleRadioButtonChange() {
 
 //gets Ivl initial data, sets total page and fetches media url
 function getIvl(page) {
+  hideMessage();
   //console.log(search);
   var searchUrl = calSearchUrl(page);
 
-  console.log(searchUrl);
+  // console.log(searchUrl);
   sendHttpRequest(method, searchUrl, mode)
     .then((response) => {
       hideLoadingAnimation();
-
+      hidePageLoadingAnimation();
+      hideMessage();
       enableBtns();
       totalHits = response.collection.metadata.total_hits;
 
@@ -1826,6 +1909,7 @@ function getIvl(page) {
 
         var runloop = setInterval(() => {
           console.log(!isBodyOverflowing());
+          // console.log("we are here");
 
           const totalCardsShown = (currentThumbPage - 1) * 100 + thumbNum;
 
@@ -1834,16 +1918,21 @@ function getIvl(page) {
             totalCardsShown < totalHits &&
             !isContentModalOpen()
           ) {
-            console.log("calling show result cards");
+            // console.log("calling show result cards");
             // if (!isContentModalOpen()) {
-            console.log("iscontentModalopen ");
+            // console.log("iscontentModalopen ");
             showResultCards();
             // }
           } else {
-            console.log("clearing");
             clearInterval(runloop);
+            console.log("clearing");
           }
-        }, 100);
+        }, 200);
+        // while (!isBodyOverflowing()) {
+        //   console.log(!isBodyOverflowing());
+        //   showResultCards();
+        //   console.log("we are here");
+        // }
       }
       //if there are no hits
       else {
@@ -1898,6 +1987,7 @@ function getIvl(page) {
 
 function showResultCards() {
   console.log("showResultCards()");
+
   var cardsContainer = document.getElementById("cards-container");
   // var column = document.getElementsByClassName("column");
 
@@ -1910,6 +2000,7 @@ function showResultCards() {
     //if the page doesn't exist in queryResponse array then download another page using getIvl
     // which will call showResultCards again when the page is downloaded
     if (queryResponse[currentThumbPage - 1] == undefined) {
+      showPageLoadingAnimation();
       getIvl(currentThumbPage);
     }
   }
@@ -1921,7 +2012,7 @@ function showResultCards() {
     // showResultCards is fired. and this else block executes. we have to prevent
     //  that from happening till the next page is downloaded.
     if (queryResponse[currentThumbPage - 1] != undefined) {
-      var nextLimit = thumbNum + 20;
+      var nextLimit = thumbNum + 25;
 
       while (
         thumbNum <
@@ -1934,11 +2025,15 @@ function showResultCards() {
 
         // putting image inside it
         const image = document.createElement("img");
+        image.onerror = () => {
+          image.src = "./assets/nothumbnail.png";
+        };
         var thumbURL = encodeURI(
           queryResponse[currentThumbPage - 1].collection.items[thumbNum]
             .links[0].href
         );
         image.src = thumbURL;
+
         card.appendChild(image);
 
         // card.style.backgroundSize = "cover";
@@ -2169,6 +2264,17 @@ function isContentModalOpen() {
   } else {
     return false;
   }
+}
+
+function showPageLoadingAnimation() {
+  document
+    .querySelector(".loading-animation-container.page-loading-animation")
+    .classList.add("show");
+}
+function hidePageLoadingAnimation() {
+  document
+    .querySelector(".loading-animation-container.page-loading-animation")
+    .classList.remove("show");
 }
 function showMediaLoadingAnimation() {
   document
@@ -2519,7 +2625,7 @@ window.onpopstate = (event) => {
 
     // clicking on next button to go to contentmodal
     if (event.state.screen == "contentModal") {
-      // console.log("contentmodal()");
+      console.log("contentmodal()");
       disableBtns();
       hideImage();
       hideVideo();
@@ -2528,7 +2634,8 @@ window.onpopstate = (event) => {
       showLoadingAnimation();
       hitNum = event.state.hitNum;
       currentPage = event.state.pageNum;
-      downloadPageAndShowMedia(event.state.hitNum, event.state.pageNum);
+      console.log("hitNum: " + hitNum + " currentPage: " + currentPage);
+      downloadPageAndShowMedia(currentPage);
       // fetchMediaUrl(event.state.hitNum, event.state.pageNum);
     }
     // else (event.state.screen == "resultsPage")
@@ -2548,8 +2655,8 @@ window.onpopstate = (event) => {
         hideDescription();
 
         // showing cards if the body is not overflowing
-        var runloop = setInterval(() => {
-          console.log(!isBodyOverflowing());
+        var runloop2 = setInterval(() => {
+          console.log(!isBodyOverflowing() + ":2");
 
           const totalCardsShown = (currentThumbPage - 1) * 100 + thumbNum;
 
@@ -2558,16 +2665,16 @@ window.onpopstate = (event) => {
             totalCardsShown < totalHits &&
             !isContentModalOpen()
           ) {
-            console.log("calling show result cards");
+            // console.log("calling show result cards");
             // if (!isContentModalOpen()) {
-            console.log("iscontentModalopen ");
+            // console.log("iscontentModalopen ");
             showResultCards();
             // }
           } else {
             console.log("clearing");
-            clearInterval(runloop);
+            clearInterval(runloop2);
           }
-        }, 100);
+        }, 200);
       }
 
       //if we try to go to a results page
