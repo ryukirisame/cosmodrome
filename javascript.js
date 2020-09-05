@@ -93,14 +93,27 @@ function doTheJobFor900px(matchMedia) {
     backButton.classList.add("md-36");
     // fullScreenIcon.classList.remove("md-24");
     // fullScreenIcon.classList.add("md-36");
+
+    // focusing the search box on home screen
+    const homeScreenSearchBox = document.querySelector(
+      ".home-page-search-box-container input"
+    );
+    homeScreenSearchBox.focus();
+
+    document
+      .querySelector(".home-page-search-box-search-icon-container")
+      .classList.add("splash-effect");
   } else {
     backButton.classList.remove("md-36");
     backButton.classList.add("md-24");
+
+    document
+      .querySelector(".home-page-search-box-search-icon-container")
+      .classList.remove("splash-effect");
+
     // fullScreenIcon.classList.remove("md-36");
     // fullScreenIcon.classList.add("md-24");
   }
-
-  // show blurred background image of content modal
 }
 
 // ---------------------------------------------------------------------
@@ -115,7 +128,14 @@ function showSearchSection() {
     .querySelector(".nav-bar-search-section-desktop")
     .classList.add("show");
 }
-
+function hideSearchSection() {
+  // hiding cosmodrome logo
+  document.querySelector(".cosmodrome").classList.remove("hide");
+  // showing search section
+  document
+    .querySelector(".nav-bar-search-section-desktop")
+    .classList.remove("show");
+}
 // --------------------------------------------------------------
 // code to prevent nav bar from hiding on scroll down on desktop
 const navBar = document.querySelector(".nav-bar");
@@ -284,19 +304,23 @@ function listenToButtonClickForSplashEffect() {
     btn.addEventListener("click", function (e) {
       // console.log(btn.disabled);
       // if (btn.disabled == false) {
-      var elem = btn.getBoundingClientRect();
-      var x = e.clientX - elem.left;
-      var y = e.clientY - elem.top;
 
-      let ripple = document.createElement("span");
-      ripple.className = "ripple";
-      ripple.style.left = x + "px";
-      ripple.style.top = y + "px";
-      this.appendChild(ripple);
+      if (btn.classList.contains("splash-effect")) {
+        var elem = btn.getBoundingClientRect();
+        var x = e.clientX - elem.left;
+        var y = e.clientY - elem.top;
 
-      setTimeout(() => {
-        ripple.remove();
-      }, 700);
+        let ripple = document.createElement("span");
+        ripple.classList.add("ripple");
+        ripple.style.left = x + "px";
+        ripple.style.top = y + "px";
+        this.appendChild(ripple);
+
+        setTimeout(() => {
+          ripple.remove();
+        }, 700);
+      }
+
       // }
     });
   });
@@ -339,7 +363,7 @@ function sendHttpRequest(method, url, mode) {
 }
 
 function enableBtns() {
-  // console.log("enableBtns()");
+  console.log("enableBtns()");
   // const nextBtn = document.getElementById("nextBtn");
   // nextBtn.disabled = false;
   // nextBtn.classList.remove("disabled");
@@ -390,7 +414,7 @@ function enableBtns() {
 }
 
 function disableBtns() {
-  // console.log("disabling buttons");
+  console.log("disabling buttons");
   const searchBtn = document.getElementById("searchBtn");
   searchBtn.disabled = true;
   searchBtn.classList.add("disabled");
@@ -441,6 +465,7 @@ function displayVideo() {
 }
 
 function createVideoElement(url) {
+  console.log("video url:" + url);
   // var contentSectionWidth = window.innerWidth;
   // var contentSectionHeight = window.innerHeight * 0.9;
 
@@ -471,6 +496,9 @@ function createVideoElement(url) {
   stopPreviousIvlVideoListeners();
   startIvlVideoListeners();
   vid.src = url;
+  vid.oncanplay = () => {
+    vid.play();
+  };
 }
 
 function hideVideo() {
@@ -946,6 +974,43 @@ function nextData() {
       showMessage(lastPage, 0);
 
       enableBtns();
+
+      // for previous button (the first item)
+      if (hitNum == 0 && currentPage == 1) {
+        document
+          .querySelector(".arrow-button:nth-child(1)")
+          .classList.add("disabled");
+        document
+          .querySelector(".prev-item-icon span")
+          .classList.add("disabled");
+      } else {
+        document
+          .querySelector(".arrow-button:nth-child(1)")
+          .classList.remove("disabled");
+        document
+          .querySelector(".prev-item-icon span")
+          .classList.remove("disabled");
+      }
+
+      // for next button (for last item)
+      if (
+        hitNum == queryResponse[currentPage - 1].collection.items.length - 1 &&
+        currentPage == totalPage
+      ) {
+        document
+          .querySelector(".arrow-button:nth-child(2)")
+          .classList.add("disabled");
+        document
+          .querySelector(".next-item-icon span")
+          .classList.add("disabled");
+      } else {
+        document
+          .querySelector(".arrow-button:nth-child(2)")
+          .classList.remove("disabled");
+        document
+          .querySelector(".next-item-icon span")
+          .classList.remove("disabled");
+      }
     }
   }
   //else show next data from the current page
@@ -960,8 +1025,10 @@ function nextData() {
     } else {
       hideMessage();
       if (mediaType == "image") {
+        hideLoadingAnimation();
         showMediaLoadingAnimation();
       } else {
+        hideArrowButtonContainer();
         hideDescription();
       }
     }
@@ -1030,6 +1097,43 @@ function prevData() {
       // showMessage(firstPage, 0);
 
       enableBtns();
+
+      // for previous button (the first item)
+      if (hitNum == 0 && currentPage == 1) {
+        document
+          .querySelector(".arrow-button:nth-child(1)")
+          .classList.add("disabled");
+        document
+          .querySelector(".prev-item-icon span")
+          .classList.add("disabled");
+      } else {
+        document
+          .querySelector(".arrow-button:nth-child(1)")
+          .classList.remove("disabled");
+        document
+          .querySelector(".prev-item-icon span")
+          .classList.remove("disabled");
+      }
+
+      // for next button (for last item)
+      if (
+        hitNum == queryResponse[currentPage - 1].collection.items.length - 1 &&
+        currentPage == totalPage
+      ) {
+        document
+          .querySelector(".arrow-button:nth-child(2)")
+          .classList.add("disabled");
+        document
+          .querySelector(".next-item-icon span")
+          .classList.add("disabled");
+      } else {
+        document
+          .querySelector(".arrow-button:nth-child(2)")
+          .classList.remove("disabled");
+        document
+          .querySelector(".next-item-icon span")
+          .classList.remove("disabled");
+      }
     }
   }
   //else show previous data from the current page
@@ -1046,6 +1150,7 @@ function prevData() {
     } else {
       hideMessage();
       if (mediaType == "image") {
+        hideLoadingAnimation();
         showMediaLoadingAnimation();
       } else {
         hideDescription();
@@ -1217,7 +1322,7 @@ function handleVideoLoadingError() {
   showMessage(onErrorMessage, 0);
 
   // showing arrow buttons
-  document.querySelector(".arrow-button-container").classList.remove("hide");
+  showArrowButtonContainer();
   enableBtns();
 }
 
@@ -1246,9 +1351,7 @@ function showIvlVideo() {
       createVideoElement(mediaUrls[qualityIndices["Large"]].href);
       displayVideo();
       // showing arrow buttons
-      document
-        .querySelector(".arrow-button-container")
-        .classList.remove("hide");
+      showArrowButtonContainer();
       enableBtns();
       if (isContentModalOpen()) {
         showDescription(hitNum, currentPage);
@@ -1263,9 +1366,7 @@ function showIvlVideo() {
       createVideoElement(mediaUrls[qualityIndices["Medium"]].href);
       displayVideo();
       // showing arrow buttons
-      document
-        .querySelector(".arrow-button-container")
-        .classList.remove("hide");
+      showArrowButtonContainer();
       enableBtns();
       if (isContentModalOpen()) {
         showDescription(hitNum, currentPage);
@@ -1280,9 +1381,7 @@ function showIvlVideo() {
       createVideoElement(mediaUrls[qualityIndices["Original"]].href);
       displayVideo();
       // showing arrow buttons
-      document
-        .querySelector(".arrow-button-container")
-        .classList.remove("hide");
+      showArrowButtonContainer();
       enableBtns();
       if (isContentModalOpen()) {
         showDescription(hitNum, currentPage);
@@ -1297,9 +1396,7 @@ function showIvlVideo() {
       createVideoElement(mediaUrls[qualityIndices["Small"]].href);
       displayVideo();
       // showing arrow buttons
-      document
-        .querySelector(".arrow-button-container")
-        .classList.remove("hide");
+      showArrowButtonContainer();
       enableBtns();
       if (isContentModalOpen()) {
         showDescription(hitNum, currentPage);
@@ -1314,9 +1411,7 @@ function showIvlVideo() {
       createVideoElement(mediaUrls[qualityIndices["Preview"]].href);
       displayVideo();
       // showing arrow buttons
-      document
-        .querySelector(".arrow-button-container")
-        .classList.remove("hide");
+      showArrowButtonContainer();
       enableBtns();
       if (isContentModalOpen()) {
         showDescription(hitNum, currentPage);
@@ -1331,9 +1426,7 @@ function showIvlVideo() {
       createVideoElement(mediaUrls[qualityIndices["Mobile"]].href);
       displayVideo();
       // showing arrow buttons
-      document
-        .querySelector(".arrow-button-container")
-        .classList.remove("hide");
+      showArrowButtonContainer();
       enableBtns();
       if (isContentModalOpen()) {
         showDescription(hitNum, currentPage);
@@ -1347,10 +1440,7 @@ function showIvlVideo() {
       hideLoadingAnimation();
       hideMediaLoadingAnimation();
       // showing arrow buttons
-      document
-        .querySelector(".arrow-button-container")
-        .classList.remove("hide");
-
+      showArrowButtonContainer();
       enableBtns();
       showMessage(notFound404, 0);
     }
@@ -1361,7 +1451,7 @@ function showIvlVideo() {
     hideLoadingAnimation();
     hideMediaLoadingAnimation();
     // showing arrow buttons
-    document.querySelector(".arrow-button-container").classList.remove("hide");
+    showArrowButtonContainer();
     enableBtns();
 
     showMessage(notFound404, 0);
@@ -1518,7 +1608,7 @@ function showIvlImage() {
     removeBlurFromContentSection();
     displayImage();
     // showing arrow buttons
-    document.querySelector(".arrow-button-container").classList.remove("hide");
+    showArrowButtonContainer();
     // enableBtns();
   };
 
@@ -1527,6 +1617,8 @@ function showIvlImage() {
       document.getElementById("Large").selected = "true";
 
       image.src = mediaUrls[qualityIndices["Large"]].href;
+      image.alt =
+        queryResponse[currentPage - 1].collection.items[hitNum].data[0].title;
       highestQualityAvailableForBlurredBackgroundUrl = image.src;
 
       // console.log("Quality: Large url num: " + qualityIndices["Large"]);
@@ -1534,18 +1626,24 @@ function showIvlImage() {
       document.getElementById("Original").selected = true;
 
       image.src = mediaUrls[qualityIndices["Original"]].href;
+      image.alt =
+        queryResponse[currentPage - 1].collection.items[hitNum].data[0].title;
       highestQualityAvailableForBlurredBackgroundUrl = image.src;
       // console.log("Quality: Original url num: " + qualityIndices["Original"]);
     } else if (qualityIndices.hasOwnProperty("Medium")) {
       document.getElementById("Medium").selected = true;
 
       image.src = mediaUrls[qualityIndices["Medium"]].href;
+      image.alt =
+        queryResponse[currentPage - 1].collection.items[hitNum].data[0].title;
       highestQualityAvailableForBlurredBackgroundUrl = image.src;
       // console.log("Quality: Medium url num: " + qualityIndices["Medium"]);
     } else if (qualityIndices.hasOwnProperty("Small")) {
       document.getElementById("Small").selected = true;
 
       image.src = mediaUrls[qualityIndices["Small"]].href;
+      image.alt =
+        queryResponse[currentPage - 1].collection.items[hitNum].data[0].title;
       highestQualityAvailableForBlurredBackgroundUrl = image.src;
 
       // console.log("Quality: Preview url num: " + qualityIndices["Small"]);
@@ -1599,27 +1697,31 @@ function getCurrentCosmicObjectNum(itemNum, pageNum) {
 }
 
 function showMedia() {
-  if (mediaType == "video") {
-    findMediaQualities();
-    createMediaQualityOptions();
-    showQualitySelector();
+  // extra check to show media only when the content modal is open
 
-    enableBtns();
-    // showControls();
+  if (isContentModalOpen()) {
+    if (mediaType == "video") {
+      findMediaQualities();
+      createMediaQualityOptions();
+      showQualitySelector();
 
-    showIvlVideo();
-  }
+      enableBtns();
+      // showControls();
 
-  //contains image
-  else {
-    findMediaQualities();
-    createMediaQualityOptions();
-    showQualitySelector();
+      showIvlVideo();
+    }
 
-    enableBtns();
-    // showControls();
+    //contains image
+    else {
+      findMediaQualities();
+      createMediaQualityOptions();
+      showQualitySelector();
 
-    showIvlImage();
+      enableBtns();
+      // showControls();
+
+      showIvlImage();
+    }
   }
 }
 function hideDescription() {
@@ -1726,9 +1828,7 @@ function fetchMediaUrl(itemNum, pageNum) {
       hideLoadingAnimation();
       hideMediaLoadingAnimation();
       // showing arrow buttons
-      document
-        .querySelector(".arrow-button-container")
-        .classList.remove("hide");
+      showArrowButtonContainer();
       removeBlurFromContentSection();
       enableBtns();
       if (errCode == 404) {
@@ -1786,9 +1886,9 @@ function startSearch(event) {
     search = document.getElementById("home-page-search-box").value;
   }
 
-  console.log("searching for: " + search);
-
   if (search != "") {
+    console.log("searching for: " + search);
+
     // removing focus from the search input
     event.target.blur();
 
@@ -2099,12 +2199,14 @@ function showResultCards() {
         title.classList.add("overlay-title");
 
         title.innerText =
-          thumbNum +
-          ": " +
-          currentThumbPage +
-          ": " +
-          queryResponse[currentThumbPage - 1].collection.items[thumbNum].data[0]
-            .title;
+          queryResponse[currentThumbPage - 1].collection.items[
+            thumbNum
+          ].data[0].title;
+        // thumbNum +
+        // ": " +
+        // currentThumbPage +
+        // ": " +
+
         titleOverlay.appendChild(title);
         card.appendChild(titleOverlay);
 
@@ -2251,7 +2353,8 @@ function hideContentModalScreen() {
   hideMediaLoadingAnimation();
   contentModal.classList.remove("open");
 
-  document.querySelector(".arrow-button-container").classList.add("hide");
+  // hiding arrow button container
+  hideArrowButtonContainer();
 }
 
 function isContentModalOpen() {
@@ -2683,10 +2786,13 @@ window.onpopstate = (event) => {
         // start listening to scroll
         document.addEventListener("scroll", handleScroll);
         hideHomePageModal();
+        showSearchSection();
         // revealing nav bar if its hidden
         document.querySelector(".nav-bar").classList.remove("hidden");
 
         showCardsContainer();
+        showLoadingAnimation();
+
         // putting the search string in nav bar search box
         // if the user used the search box of home screen then we need to fill
         // the search box of nav bar too
@@ -2741,6 +2847,8 @@ window.onpopstate = (event) => {
     selectedMediaType = "image";
     selectRadioButtons();
     toggleNavBarMediaTypeToImage();
+
+    hideSearchSection();
     showHomePageModal();
   }
 };
@@ -2775,4 +2883,11 @@ function isBodyOverflowing() {
     document.documentElement.scrollHeight >
     document.documentElement.clientHeight
   );
+}
+
+function showArrowButtonContainer() {
+  document.querySelector(".arrow-button-container").classList.remove("hide");
+}
+function hideArrowButtonContainer() {
+  document.querySelector(".arrow-button-container").classList.add("hide");
 }

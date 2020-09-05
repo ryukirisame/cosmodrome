@@ -3,11 +3,40 @@
   <head>
     <meta charset="UTF-8" />
 
+    <meta
+      name="keywords"
+      content="NASA, image library, video library, nasa image library, nasa video libray, nasa image and video library, nasa image & video library"
+    />
+
+    <meta name="description" content="Explore Image and Videos from NASA." />
+
+    <meta name="author" content="Siddharth Kumar" />
+
     <!-- viewport -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- browser theming -->
     <meta name="theme-color" content="#0D47A1" />
+
+    <!-- favicon -->
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="./assets/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./assets/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="./assets/favicon-16x16.png"
+    />
+    <link rel="manifest" href="./assets/site.webmanifest" />
 
     <!-- css file -->
     <link rel="stylesheet" type="text/css" href="ivlstyles.css" />
@@ -294,7 +323,7 @@
             nasa image and <br />
             video library
           </p>
-          <p>Start exploring images and videos from NASA database.</p>
+          <p>Explore Image and Videos from NASA.</p>
         </div>
       </div>
       <!-- PAGE DESCRIPTION SECTION ENDS -->
@@ -304,14 +333,22 @@
       <div class="home-page-search-section">
         <!-- Search Box -->
         <div class="home-page-search-box-container">
-          <input tye="text" id="home-page-search-box" placeholder="Search" />
-          <span
-            class="material-icons"
-            id="searchBtn"
-            onclick="console.clear();startSearch(event);"
-          >
-            search
-          </span>
+          <input
+            tye="text"
+            id="home-page-search-box"
+            placeholder="Search"
+            autocomplete="off"
+          />
+          <div class="home-page-search-box-search-icon-container splash-effect">
+            <span
+              class="material-icons"
+              id="searchBtn"
+              onclick="console.clear();startSearch(event);"
+            >
+              search
+            </span>
+          </div>
+
           <!-- <button id="searchBtn" onclick="console.clear();startSearch();">
               Search
             </button> -->
@@ -471,7 +508,7 @@
               class="material-icons md-24"
               onclick="handleBackButtonClick()"
             >
-              arrow_back
+              close
             </span>
           </div>
 
@@ -539,7 +576,7 @@
 
             <!-- content (pic/video) -->
             <div id="media-container" class="media-container">
-              <img id="pic" />
+              <img id="pic" alt="" />
             </div>
 
             <!-- message -->
