@@ -17,7 +17,7 @@ var qualityIndices = {};
 var currentPage = 1;
 
 var totalPage = 0;
-//the selected media type from radio button
+//the selected media type from radio button (image/video)
 var selectedMediaType;
 //media type of the current hit num value="image" or "video"
 var mediaType;
@@ -363,7 +363,7 @@ function sendHttpRequest(method, url, mode) {
 }
 
 function enableBtns() {
-  console.log("enableBtns()");
+  // console.log("enableBtns()");
   // const nextBtn = document.getElementById("nextBtn");
   // nextBtn.disabled = false;
   // nextBtn.classList.remove("disabled");
@@ -414,7 +414,7 @@ function enableBtns() {
 }
 
 function disableBtns() {
-  console.log("disabling buttons");
+  // console.log("disabling buttons");
   const searchBtn = document.getElementById("searchBtn");
   searchBtn.disabled = true;
   searchBtn.classList.add("disabled");
@@ -1958,7 +1958,7 @@ function startSearch(event) {
   }
 }
 function handleRadioButtonChange() {
-  console.log("handleRadiobuttonchange()");
+  // console.log("handleRadiobuttonchange()");
   hideMessage();
   removeResults();
   disableBtns();
@@ -1966,8 +1966,10 @@ function handleRadioButtonChange() {
 
   if (event.target.classList.contains("image-radio-button")) {
     selectedMediaType = "image";
+    // console.log("we are here");
   } else {
     selectedMediaType = "video";
+    // console.log("we are here");
   }
   // selectRadioButtons();
 
@@ -2025,7 +2027,7 @@ function getIvl(page) {
         // }
 
         var runloop = setInterval(() => {
-          console.log(!isBodyOverflowing());
+          // console.log(!isBodyOverflowing());
           // console.log("we are here");
 
           const totalCardsShown = (currentThumbPage - 1) * 100 + thumbNum;
@@ -2035,14 +2037,14 @@ function getIvl(page) {
             totalCardsShown < totalHits &&
             !isContentModalOpen()
           ) {
-            // console.log("calling show result cards");
+            console.log("calling show result cards");
             // if (!isContentModalOpen()) {
             // console.log("iscontentModalopen ");
             showResultCards();
             // }
           } else {
             clearInterval(runloop);
-            console.log("clearing");
+            // console.log("clearing");
           }
         }, 200);
         // while (!isBodyOverflowing()) {
@@ -2145,7 +2147,18 @@ function showResultCards() {
         console.log("creating card");
         // creating card
         const card = document.createElement("div");
-        card.className = "card";
+        card.classList.add("card");
+
+        // inserting video icon
+        if (selectedMediaType == "video") {
+          const videoIcon = document.createElement("span");
+          videoIcon.classList.add("material-icons");
+          videoIcon.classList.add("md-36");
+
+          videoIcon.classList.add("videoIcon");
+          videoIcon.innerText = "play_arrow";
+          card.appendChild(videoIcon);
+        }
 
         // putting image inside it
         const image = document.createElement("img");
@@ -2226,13 +2239,12 @@ function showResultCards() {
         title.classList.add("overlay-title");
 
         title.innerText =
-          queryResponse[currentThumbPage - 1].collection.items[
-            thumbNum
-          ].data[0].title;
-        // thumbNum +
-        // ": " +
-        // currentThumbPage +
-        // ": " +
+          thumbNum +
+          ": " +
+          currentThumbPage +
+          ": " +
+          queryResponse[currentThumbPage - 1].collection.items[thumbNum].data[0]
+            .title;
 
         titleOverlay.appendChild(title);
         card.appendChild(titleOverlay);
@@ -2720,6 +2732,13 @@ window.onload = () => {
     search = urlParams.get("q");
 
     hideHomePageModal();
+    // if home page modal is not open then show search icon
+    if (!isHomePageModalOpen()) {
+      showSearchIconOnNavBar();
+    } else {
+      hideSearchIconOnNavBar();
+    }
+
     hideMessage();
     // show search section on nav bar on desktop/ tablet landscape
     showSearchSection();

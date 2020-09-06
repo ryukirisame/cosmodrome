@@ -59,6 +59,9 @@ body.modal-open {
 .material-icons.md-48 {
   font-size: 48px;
 }
+.material-icons.md-56 {
+  font-size: 56px;
+}
 .material-icons.md-32 {
   font-size: 32px;
 }
@@ -1068,6 +1071,14 @@ input[type="radio"]:checked + label {
   -ms-user-select: none; /* IE 10+ and Edge */
   user-select: none; /* Standard syntax */
 }
+.card .videoIcon {
+  position: absolute;
+  z-index: 3;
+  top: 3rem;
+  left: 3rem;
+  transform: translate(-50%, -50%);
+  color: rgba(255, 255, 255, 0.5);
+}
 .card img {
   position: absolute;
   top: 0;
@@ -1758,6 +1769,22 @@ option {
     .home-page-search-box-search-icon-container:hover
     span:not(.ripple) {
     color: var(--white);
+  }
+
+  .card .videoIcon {
+    opacity: 0;
+    pointer-events: none;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 56px;
+    color: rgba(255, 255, 255, 0.8);
+    filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.36));
+    /* transition: opacity 0.1s ease-out; */
+  }
+  .card:hover .videoIcon {
+    opacity: 1;
+    pointer-events: all;
   }
 
   .content-modal-container {
