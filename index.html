@@ -463,6 +463,7 @@
       </div>
 
       <div class="cards-container" id="cards-container"></div>
+
       <div class="loading-animation-container page-loading-animation">
         <div class="bowlG">
           <div class="bowl_ringG">
@@ -471,6 +472,17 @@
             </div>
           </div>
         </div>
+      </div>
+
+      <div class="page-loading-error-message-section">
+        <div class="page-loading-error-message">Error loading page</div>
+        <button
+          id="retryLoadingPageButton"
+          class="retry-loading-page-button"
+          onclick="retryLoadingPage()"
+        >
+          Retry
+        </button>
       </div>
     </div>
 

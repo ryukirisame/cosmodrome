@@ -497,7 +497,7 @@ function createVideoElement(url) {
   startIvlVideoListeners();
   vid.src = url;
   vid.oncanplay = () => {
-    vid.play();
+    // vid.play();
   };
 }
 
@@ -1343,22 +1343,7 @@ function showIvlVideo() {
   //console.log(mediaUrls[0]);
 
   if (mediaUrls.length > 0) {
-    if (qualityIndices.hasOwnProperty("Large")) {
-      document.getElementById("Large").selected = "true";
-      hideMessage();
-      hideLoadingAnimation();
-      // vid.src = mediaUrls[qualityIndices["Large"]].href;
-      createVideoElement(mediaUrls[qualityIndices["Large"]].href);
-      displayVideo();
-      // showing arrow buttons
-      showArrowButtonContainer();
-      enableBtns();
-      if (isContentModalOpen()) {
-        showDescription(hitNum, currentPage);
-      }
-      removeBlurFromContentSection();
-      console.log("Quality: Large url num: " + qualityIndices["Large"]);
-    } else if (qualityIndices.hasOwnProperty("Medium")) {
+    if (qualityIndices.hasOwnProperty("Medium")) {
       document.getElementById("Medium").selected = true;
       hideMessage();
       hideLoadingAnimation();
@@ -1373,6 +1358,21 @@ function showIvlVideo() {
       }
       removeBlurFromContentSection();
       console.log("Quality: Medium url num: " + qualityIndices["Medium"]);
+    } else if (qualityIndices.hasOwnProperty("Large")) {
+      document.getElementById("Large").selected = "true";
+      hideMessage();
+      hideLoadingAnimation();
+      // vid.src = mediaUrls[qualityIndices["Large"]].href;
+      createVideoElement(mediaUrls[qualityIndices["Large"]].href);
+      displayVideo();
+      // showing arrow buttons
+      showArrowButtonContainer();
+      enableBtns();
+      if (isContentModalOpen()) {
+        showDescription(hitNum, currentPage);
+      }
+      removeBlurFromContentSection();
+      console.log("Quality: Large url num: " + qualityIndices["Large"]);
     } else if (qualityIndices.hasOwnProperty("Original")) {
       document.getElementById("Original").selected = true;
       hideMessage();
@@ -1982,6 +1982,11 @@ function getIvl(page) {
   // console.log(searchUrl);
   sendHttpRequest(method, searchUrl, mode)
     .then((response) => {
+      // hiding page loading error
+      if (page != 1) {
+        hidePageLoadingError();
+      }
+
       hideLoadingAnimation();
       hidePageLoadingAnimation();
       hideMessage();
@@ -2051,40 +2056,46 @@ function getIvl(page) {
       }
     })
     .catch((errCode) => {
-      console.log("error code: " + errCode);
+      if (page != 1) {
+        hidePageLoadingAnimation();
+        showPageLoadingError();
+        console.log("error code: " + errCode);
+      } else {
+        console.log("error code: " + errCode);
 
-      enableBtns();
-      if (errCode == 404) {
-        hideLoadingAnimation();
-        pauseVideo();
-        hideVideo();
-        hideImage();
+        enableBtns();
+        if (errCode == 404) {
+          hideLoadingAnimation();
+          pauseVideo();
+          hideVideo();
+          hideImage();
 
-        showMessage(notFound404, 1);
-      } else if (errCode > 499 && errCode < 600) {
-        hideLoadingAnimation();
-        pauseVideo();
-        hideVideo();
-        hideImage();
+          showMessage(notFound404, 1);
+        } else if (errCode > 499 && errCode < 600) {
+          hideLoadingAnimation();
+          pauseVideo();
+          hideVideo();
+          hideImage();
 
-        showMessage(problemWithNasaServer, 1);
-      } else if (errCode == 400) {
-        hideLoadingAnimation();
-        pauseVideo();
-        hideVideo();
-        hideImage();
+          showMessage(problemWithNasaServer, 1);
+        } else if (errCode == 400) {
+          hideLoadingAnimation();
+          pauseVideo();
+          hideVideo();
+          hideImage();
 
-        showMessage(badResquest400, 1);
-      }
+          showMessage(badResquest400, 1);
+        }
 
-      //for no internet connection
-      else {
-        hideLoadingAnimation();
-        pauseVideo();
-        hideVideo();
-        hideImage();
+        //for no internet connection
+        else {
+          hideLoadingAnimation();
+          pauseVideo();
+          hideVideo();
+          hideImage();
 
-        showMessage(onErrorMessage, 1);
+          showMessage(onErrorMessage, 1);
+        }
       }
     });
 }
@@ -2098,7 +2109,7 @@ function showResultCards() {
   //if we have shown all the thumbs from current page and there is a next page
   if (thumbNum == 100 && currentThumbPage < totalPage) {
     currentThumbPage++;
-
+    console.log("we are here");
     thumbNum = 0;
 
     //if the page doesn't exist in queryResponse array then download another page using getIvl
@@ -2123,6 +2134,7 @@ function showResultCards() {
           queryResponse[currentThumbPage - 1].collection.items.length &&
         thumbNum < nextLimit
       ) {
+        console.log("creating card");
         // creating card
         const card = document.createElement("div");
         card.className = "card";
@@ -2130,7 +2142,10 @@ function showResultCards() {
         // putting image inside it
         const image = document.createElement("img");
         image.onerror = () => {
-          image.src = "./assets/nothumbnail.png";
+          // image.src = "./assets/nothumbnail.png";
+          // image.alt = "Thumbnail not available";
+          image.style.display = "none";
+          card.classList.add("no-thumbnail");
         };
         var thumbURL = encodeURI(
           queryResponse[currentThumbPage - 1].collection.items[thumbNum]
@@ -2203,13 +2218,12 @@ function showResultCards() {
         title.classList.add("overlay-title");
 
         title.innerText =
-          queryResponse[currentThumbPage - 1].collection.items[
-            thumbNum
-          ].data[0].title;
-        // thumbNum +
-        // ": " +
-        // currentThumbPage +
-        // ": " +
+          thumbNum +
+          ": " +
+          currentThumbPage +
+          ": " +
+          queryResponse[currentThumbPage - 1].collection.items[thumbNum].data[0]
+            .title;
 
         titleOverlay.appendChild(title);
         card.appendChild(titleOverlay);
@@ -2894,4 +2908,21 @@ function showArrowButtonContainer() {
 }
 function hideArrowButtonContainer() {
   document.querySelector(".arrow-button-container").classList.add("hide");
+}
+
+// page loading error section
+function showPageLoadingError() {
+  document
+    .querySelector(".page-loading-error-message-section")
+    .classList.add("show");
+}
+function hidePageLoadingError() {
+  document
+    .querySelector(".page-loading-error-message-section")
+    .classList.remove("show");
+}
+function retryLoadingPage() {
+  hidePageLoadingError();
+  showPageLoadingAnimation();
+  getIvl(currentThumbPage);
 }
