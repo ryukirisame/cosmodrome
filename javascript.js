@@ -182,7 +182,7 @@ function handleScroll() {
   // hide the nav bar only when the user has scrolled atleast 360px
   //  from the top. so that there is no white space shown when the
   // nav bar hides itself
-  if (window.scrollY >= 360 && shouldWeHideNavBar) {
+  if (window.scrollY >= 480 && shouldWeHideNavBar) {
     var currentScrollPos = window.pageYOffset;
 
     // when the user scrolls up then prevscrollpos is greater
