@@ -3024,7 +3024,7 @@ function handleSwipe(event) {
       nextData();
     }
   }
-  if (x - initialPositionX > 50 && Math.abs(y - initialPositionY) < 32) {
+  if (x - initialPositionX > 40 && Math.abs(y - initialPositionY) < 32) {
     initialPositionX = window.innerWidth;
     initialPositionY = window.innerHeight;
     console.log(
