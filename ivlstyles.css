@@ -1435,14 +1435,15 @@ option {
   width: 100%;
   z-index: 1;
   opacity: 1;
-  pointer-events: all;
+  pointer-events: none;
   /* background: tomato; */
 }
 .content-section .arrow-button-container.hide {
   opacity: 0;
-  pointer-events: none;
+  /* pointer-events: none; */
 }
 
+/* back button */
 .content-section .arrow-button-container .arrow-button:nth-child(1) {
   margin-left: 1.6rem;
 
@@ -1457,6 +1458,7 @@ option {
   -webkit-user-select: none; /* Safari */
   -ms-user-select: none; /* IE 10+ and Edge */
   user-select: none; /* Standard syntax */
+  pointer-events: all;
 }
 .content-section .arrow-button-container .arrow-button.hide:nth-child(1) {
   opacity: 0;
@@ -1476,6 +1478,7 @@ option {
   -webkit-user-select: none; /* Safari */
   -ms-user-select: none; /* IE 10+ and Edge */
   user-select: none; /* Standard syntax */
+  pointer-events: all;
 }
 .content-section .arrow-button-container .arrow-button.hide:nth-child(2) {
   opacity: 0;
@@ -1546,6 +1549,7 @@ option {
   max-height: inherit;
   background-color: black;
   z-index: 700;
+  background-color: khaki;
 }
 
 .know-more-data-container {
