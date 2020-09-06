@@ -2245,14 +2245,17 @@ function showResultCards() {
         const title = document.createElement("p");
         title.classList.add("overlay-title");
 
+        // title.innerText =
+        //   thumbNum +
+        //   ": " +
+        //   currentThumbPage +
+        //   ": " +
+        //   queryResponse[currentThumbPage - 1].collection.items[thumbNum].data[0]
+        //     .title;
         title.innerText =
-          thumbNum +
-          ": " +
-          currentThumbPage +
-          ": " +
-          queryResponse[currentThumbPage - 1].collection.items[thumbNum].data[0]
-            .title;
-
+          queryResponse[currentThumbPage - 1].collection.items[
+            thumbNum
+          ].data[0].title;
         titleOverlay.appendChild(title);
         card.appendChild(titleOverlay);
 
@@ -3024,28 +3027,28 @@ function handleSwipe(event) {
   if (initialPositionX - x > 40 && Math.abs(initialPositionY - y) < 16) {
     initialPositionX = 0;
     initialPositionY = 0;
-    console.log(
-      "initialPositionX: " +
-        initialPositionX +
-        " intialPositionY: " +
-        initialPositionY
-    );
+    // console.log(
+    //   "initialPositionX: " +
+    //     initialPositionX +
+    //     " intialPositionY: " +
+    //     initialPositionY
+    // );
     if (!isMediaLoadingAnimationShowing()) {
       nextData();
     }
-  }
-  if (x - initialPositionX > 40 && Math.abs(y - initialPositionY) < 16) {
+  } else if (x - initialPositionX > 40 && Math.abs(y - initialPositionY) < 16) {
     initialPositionX = window.innerWidth;
     initialPositionY = window.innerHeight;
-    console.log(
-      "initialPositionX: " +
-        initialPositionX +
-        " intialPositionY: " +
-        initialPositionY
-    );
+    // console.log(
+    //   "initialPositionX: " +
+    //     initialPositionX +
+    //     " intialPositionY: " +
+    //     initialPositionY
+    // );
     if (!isMediaLoadingAnimationShowing()) {
       prevData();
     }
+  } else {
   }
   // document.getElementById("demo").innerHTML = x + ", " + y;
 }
