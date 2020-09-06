@@ -2693,6 +2693,7 @@ window.onload = () => {
 
     showLoadingAnimation();
     hideHomePageModal();
+    showSearchIconOnNavBar();
     showSearchSection();
     showCardsContainer();
     hideMessage();
@@ -2832,6 +2833,14 @@ window.onpopstate = (event) => {
         // start listening to scroll
         document.addEventListener("scroll", handleScroll);
         hideHomePageModal();
+        openNavSearchBar();
+        // if home page modal is not open then show search icon
+        if (!isHomePageModalOpen()) {
+          showSearchIconOnNavBar();
+        } else {
+          hideSearchIconOnNavBar();
+        }
+
         showSearchSection();
         // revealing nav bar if its hidden
         document.querySelector(".nav-bar").classList.remove("hidden");
@@ -2895,6 +2904,11 @@ window.onpopstate = (event) => {
     toggleNavBarMediaTypeToImage();
 
     hideSearchSection();
+
+    // if home page modal is not open then show search icon
+    closeNavSearchBar();
+    hideSearchIconOnNavBar();
+
     showHomePageModal();
   }
 };
