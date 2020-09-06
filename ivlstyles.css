@@ -1545,6 +1545,7 @@ option {
   outline: none;
   max-height: inherit;
   background-color: black;
+  z-index: 700;
 }
 
 .know-more-data-container {
