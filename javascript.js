@@ -1767,8 +1767,9 @@ function showDescription(itemNum, pageNum) {
   document.getElementById("date").innerText =
     date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
 
-  document.getElementById("title").innerText =
-    hitNum + " " + pageNum + " " + descriptiveData.title;
+  // document.getElementById("title").innerText =
+  //   hitNum + " " + pageNum + " " + descriptiveData.title;
+  document.getElementById("title").innerText = descriptiveData.title;
   document.getElementById("description").innerHTML =
     descriptiveData.description;
   // document.getElementById("resolution").innerText = "Calculating...";
