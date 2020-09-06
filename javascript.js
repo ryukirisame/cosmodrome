@@ -2220,9 +2220,8 @@ function showResultCards() {
         title.innerText =
           queryResponse[currentThumbPage - 1].collection.items[
             thumbNum
-          ].data[0];
-        //   .title;
-        //   thumbNum +
+          ].data[0].title;
+        // thumbNum +
         // ": " +
         // currentThumbPage +
         // ": " +
