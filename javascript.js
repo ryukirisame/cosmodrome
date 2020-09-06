@@ -236,6 +236,11 @@ function getViewportDimensions() {
     // console.log(vw);
     document.documentElement.style.setProperty("--vh", `${vh}px`);
     document.documentElement.style.setProperty("--vw", `${vw}px`);
+
+    const cardsContainer = document.querySelector(".cards-container");
+    var columns = window.getComputedStyle(cardsContainer).gridTemplateColumns;
+    columns = columns.split(" ");
+    console.log(" number of columns: " + columns.length);
   });
 }
 
@@ -949,7 +954,7 @@ function downloadPrevPage(page) {
 }
 
 function nextData() {
-  // console.log("nextDAta()");
+  console.log("nextDAta()");
   disableBtns();
 
   hitNum++;
@@ -1762,7 +1767,8 @@ function showDescription(itemNum, pageNum) {
   document.getElementById("date").innerText =
     date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
 
-  document.getElementById("title").innerText = descriptiveData.title;
+  document.getElementById("title").innerText =
+    hitNum + " " + pageNum + " " + descriptiveData.title;
   document.getElementById("description").innerHTML =
     descriptiveData.description;
   // document.getElementById("resolution").innerText = "Calculating...";
@@ -1814,7 +1820,7 @@ function fetchMediaUrl(itemNum, pageNum) {
       );
 
       mediaUrls = fetchedMediaUrls.collection.items;
-      console.log(mediaUrls);
+      // console.log(mediaUrls);
       // showDescription(itemNum, pageNum);
 
       showMedia();
@@ -2418,6 +2424,17 @@ function hidePageLoadingAnimation() {
     .querySelector(".loading-animation-container.page-loading-animation")
     .classList.remove("show");
 }
+function isMediaLoadingAnimationShowing() {
+  if (
+    document
+      .querySelector(".loading-animation-container.media-loading-animation")
+      .classList.contains("hide")
+  ) {
+    return false;
+  } else {
+    return true;
+  }
+}
 function showMediaLoadingAnimation() {
   document
     .querySelector(".loading-animation-container.media-loading-animation")
@@ -2976,4 +2993,48 @@ function showSearchIconOnNavBar() {
 // hide search icon on nav bar
 function hideSearchIconOnNavBar() {
   document.querySelector(".search-icon-container").classList.remove("show");
+}
+
+// code for swipe left and right on touch devices
+var initialPositionX;
+var initialPositionY;
+// var shouldWeLoad = false;
+function setInitialPosition(event) {
+  // console.log(event);
+  initialPositionX = event.touches[0].clientX;
+  initialPositionY = event.touches[0].clientY;
+  //  document.getElementById("demo").innerHTML = initialPositionX + ", " + initialPositionY;
+}
+// function signalLoading() {}
+
+function handleSwipe(event) {
+  var x = event.touches[0].clientX;
+  var y = event.touches[0].clientY;
+  if (initialPositionX - x > 100 && Math.abs(initialPositionY - y) < 32) {
+    initialPositionX = 0;
+    initialPositionY = 0;
+    console.log(
+      "initialPositionX: " +
+        initialPositionX +
+        " intialPositionY: " +
+        initialPositionY
+    );
+    if (!isMediaLoadingAnimationShowing()) {
+      nextData();
+    }
+  }
+  if (x - initialPositionX > 100 && Math.abs(y - initialPositionY) < 32) {
+    initialPositionX = window.innerWidth;
+    initialPositionY = window.innerHeight;
+    console.log(
+      "initialPositionX: " +
+        initialPositionX +
+        " intialPositionY: " +
+        initialPositionY
+    );
+    if (!isMediaLoadingAnimationShowing()) {
+      prevData();
+    }
+  }
+  // document.getElementById("demo").innerHTML = x + ", " + y;
 }

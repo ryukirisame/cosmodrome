@@ -585,7 +585,12 @@
 
             <!-- content (pic/video) -->
             <div id="media-container" class="media-container">
-              <img id="pic" alt="" />
+              <img
+                id="pic"
+                alt=""
+                ontouchmove="handleSwipe(event);"
+                ontouchstart="setInitialPosition(event);"
+              />
             </div>
 
             <!-- message -->
