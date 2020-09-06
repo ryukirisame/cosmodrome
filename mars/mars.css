@@ -1,0 +1,847 @@
+html {
+  scroll-behavior: smooth;
+}
+* {
+  box-sizing: border-box;
+  padding: 0px;
+  margin: 0px;
+}
+
+body {
+  background-color: #fff;
+  /* background:linear-gradient(45deg,orange,red); */
+}
+
+/* 
+* The code underneath this comment is for actual designing.
+*/
+.main
+{
+  background-color: teal;
+}
+
+
+/*
+
+
+
+.intro {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: auto;
+  align-items: center;
+}
+.main h1 {
+  color: black;
+  padding: 30px;
+  font-family: "Montserrat", sans-serif;
+  font-size: 62px;
+}
+.main h4 {
+  color: black;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 300;
+  font-size: 30px;
+}
+.introBtn {
+  width: auto;
+  height: auto;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  width: 200px;
+}
+
+.introBtn a img {
+  height: 80px;
+}
+
+.introBtn a {
+}
+
+.intro a img:hover {
+  transform: translate(0, 20%);
+  transition: all 0.3s ease-out;
+}
+
+#rovers_intro_heading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 20vh;
+  color: black;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  font-size: 40px;
+} */
+
+#rover_section {
+  height: 210vh;
+  width: 100%;
+}
+
+#curiosity_intro,
+#opportunity_intro,
+#spirit_intro {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 70vh;
+}
+
+#opportunity_intro {
+  flex-direction: row-reverse;
+}
+
+.text {
+  color: black;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 300;
+  display: flex;
+  flex-direction: column;
+  font-size: 33px;
+  height: 350px;
+  width: 580px;
+}
+.rover {
+  display: flex;
+  flex-direction: column;
+  /* height: 550px; */
+  width: 400px;
+}
+.text p {
+  font-size: 25px;
+  transform: translate(0, 10%);
+}
+.text h2 {
+  transform: translate(0, 10%);
+}
+.rover img {
+  height: 500px;
+  border-radius: 2px;
+  box-shadow: 4px 4px 5px black;
+}
+
+#choose_rover_section {
+  padding-top: 160px;
+  background-color: transparent;
+  width: 100%;
+  height: 100vh;
+  /* position: absolute; */
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.select_rover {
+  height: 80vh;
+  width: 400px;
+}
+
+.rover_img a img {
+  width: 100%;
+  height: 100%;
+  box-shadow: 2px 0px 3px black;
+  
+}
+.rover_img {
+  height: 70vh;  
+  
+
+}
+.rover_img:hover {
+  transition: all 0.2s ease-in-out;
+  box-shadow: 2px 2px 5px black;
+  transform:scale(1.01);
+}
+
+.rover_name {
+  height: 10vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: black;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 300;
+  font-size: 18px;
+  /* border: 1px solid black; */
+
+  box-shadow: 2px 2px 5px black;
+}
+
+
+
+#choose_rover_selection_heading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 10vh;
+  color: black;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  font-size: 30px;
+  /* background-color: #fff; */
+  position: absolute;
+  top: 335vh;
+}
+
+#choose_date_for_curiosity {
+  height: 100vh;
+  width: 100%;
+  background-color: blue;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+#date_box,#rover_div
+{
+  
+  width: 500px;
+}
+
+#date_box
+{
+  height: 200px;
+  background-color: yellow;
+}
+#rover_div
+{
+  height: 600px;
+  background-color: black;
+}
+
+
+.footer
+{
+  height: 50vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.footer_heading
+{
+  margin: 5px;
+  color: black;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 200;
+  font-size: 12px;
+  opacity: 0.8;
+
+}
+.footer_logo a img
+{
+  height: 40px;
+}
+
+/* #date_box
+{
+  height: 100px;
+  width: 100px;
+  background-color: yellow;
+}
+#rover_box
+{
+  height: 100px;
+  width: 100px;
+  background-color: black;
+} */
+
+[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* IMAGE STYLES */
+/* [type="radio"] + img {
+  cursor: pointer;
+} */
+
+/* CHECKED STYLES */
+/* [type="radio"]:checked + img {
+  outline: 2px solid #f00;
+} */
+
+.camera_angles
+{
+  width: 98%;
+  margin: auto;
+  height: 4vh;
+  display: flex;
+  
+}
+.camera_heading
+{
+  display: flex;
+  margin:5px;
+  /* justify-content: center;
+  align-items: center; */
+  
+}
+#camera_heading
+{
+  color: black;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+}
+
+.rover_button
+{
+  height: 3vh;
+  width: 75px;
+  border:none;
+  outline:none;
+  border-radius: 3px;
+  margin: 5px;
+  cursor: pointer;
+  color: black;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 800;
+  font-size: 12px;
+  box-shadow: 1px 1px 3px black;
+}
+
+
+
+.rover_container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 1080px;
+}
+.rover_heading {
+  z-index: 1;
+  height: 100px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.rover_heading h3 {
+  color: black;
+  font-family: "Montserrat", sans-serif;
+  font-size: 58px;
+  transform: translateY(10%);
+}
+
+.rover_box {
+  position: absolute;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  grid-gap: 0.5rem;
+  width: 100%;
+  height: 1080px;
+}
+
+
+#choose_date_page
+{
+  height: 20vh;
+  width: 100%;
+  display: none;
+ /* display: flex;
+  align-items: center; */
+  /* justify-content: center;
+  align-items: center */
+
+  
+}
+
+
+
+#search_btn
+{
+  /* height: 100px; */
+  width: 100%;
+}
+
+.choose_date_box
+{
+  display: flex;
+  height: 15vh;
+  justify-content: space-around;
+  flex-direction: column;
+  width: 600px;
+  margin: auto;
+  align-items: center;
+  
+
+}
+
+.choose_date_selector select
+{
+  cursor: pointer;
+  width: 110px;
+  height: 35px;
+  outline:none;
+  border:none;
+  background-color: white;
+  border-radius: 3px;
+  color: black;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 800;
+  font-size: 12px;
+  box-shadow: 0.2px 0.2px 4px black;
+  
+}
+.choose_date_selector select option
+{
+  width: 110px;
+  background-color: white;
+  border-radius: 3px;
+  color: black;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 800;
+  font-size: 12px;
+  cursor: pointer;
+  
+}
+.choose_date_heading
+{
+  color: black;
+  font-family: "Montserrat", sans-serif;
+  font-size: 22px;
+}
+#search_btn
+{
+  display: flex;
+  justify-content: center;
+}
+#search_btn button
+{
+  height: 40px;
+  width: 200px;
+  border: none;
+  outline: none;
+  /* background: linear-gradient(45deg,blue,white); */
+  border-radius: 5px;
+  color: black;
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  box-shadow: 1px 1px 3px black;
+  cursor: pointer; 
+}
+#search_btn button:hover{
+  background-color: black;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.rover_box_img_container {
+}
+
+.rover_box_img_container label img {
+  transform: translate(23%, 35%);
+  width: 70%;
+  height: 50%;
+  object-fit: cover;
+  box-shadow: 4px 4px 5px black;
+}
+.rover_box_img_container label img:hover {
+  box-shadow: 7px 7px 8px black;
+  transition: all 0.3s ease-in-out;
+}
+
+.rover_names {
+  width: 100%;
+  height: 90px;
+  display: flex;
+  z-index: 1;
+  justify-content: space-around;
+  align-items: center;
+}
+#l1,
+#l2,
+#l3 {
+  color: black;
+  font-family: "Montserrat", sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+}
+#l2 {
+  transform: translateX(-10%);
+}
+#l3 {
+  transform: translateX(-20%);
+}
+
+.dateBox {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 1080px;
+  background: linear-gradient(45deg, orange, red);
+  z-index: 1;
+  position: absolute;
+}
+
+.button-container {
+  display: flex;
+  position: absolute;
+  top: 12%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  /*            background-color: aqua;*/
+}
+
+.button {
+  box-sizing: content-box;
+  display: flex;
+  float: left;
+  margin: 10px;
+  outline: none;
+  cursor: pointer;
+  padding: 10px 32px;
+
+  /*            border: 1px solid rgba(66,165,245 ,1);*/
+  border-radius: 1px;
+
+  border: none;
+
+  background-color: transparent;
+}
+
+button:focus {
+  outline: 0;
+}
+
+#next,
+#prev {
+  fill: white;
+  height: 32px;
+  width: 32px;
+}
+
+/*        button-background-color */
+.button-background-color-splash {
+  position: relative;
+
+  overflow: hidden;
+}
+
+.button-background-color {
+  background: linear-gradient(
+    90deg,
+    rgba(19, 180, 255, 0.719),
+    rgba(86, 14, 255, 0.808)
+  );
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: animateBackgroundColor 0.5s ease-out;
+  animation-fill-mode: forwards;
+}
+
+@keyframes animateBackgroundColor {
+  0% {
+    width: 0px;
+    height: 0px;
+  }
+
+  100% {
+    width: 325px;
+    height: 325px;
+  }
+}
+
+/*splash effect*/
+.splash-effect {
+  position: relative;
+
+  overflow: hidden;
+}
+
+.splash-effect-ripple {
+  position: absolute;
+  background-color: white;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  border-radius: 50%;
+  animation: animate 0.75s ease-out;
+}
+
+@keyframes animate {
+  0% {
+    width: 0px;
+    height: 0px;
+    opacity: 0.5;
+  }
+
+  100% {
+    width: 300px;
+    height: 300px;
+    opacity: 0;
+  }
+}
+
+
+
+.imageContainer {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.card {
+  margin: auto;
+  overflow: hidden;
+}
+
+.cardImage {
+  transition: all 0.2s ease-in-out;
+  margin: 10px auto;
+  padding: 3px;
+  height: 240px;
+  width: 360px;
+  border-radius: 8px;
+  cursor: pointer;
+  justify-content: center;
+}
+.cardImage:hover {
+  transform: scale(1.03);
+}
+
+#box {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  z-index: 1000;
+  display: none;
+}
+
+#box.active {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes modalImageOpenAnimation {
+  0% {
+    transform: scale(0);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes modalImageCloseAnimation {
+  0% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(0);
+  }
+}
+
+#box img {
+  max-width: 100%;
+  max-height: 80%;
+  animation: modalImageOpenAnimation 0.3s linear;
+}
+
+#modalHeader {
+  position: absolute;
+  height: 80px;
+  width: 100%;
+  top: 0;
+  display: none;
+}
+
+#modalHeader.active {
+  display: flex;
+  flex-direction: row-reverse;
+  background-color: rgba(0, 0, 0, 0.096);
+
+  animation: modalImageOpenAnimation 0.3s linear;
+}
+
+/* #next,
+#prev,
+#close {
+
+    margin: 20px;
+    height: 50px;
+    font-size: 100px;
+    cursor: pointer;
+   
+}
+#next,#prev
+{
+    margin-top: 0px;
+    padding: 12px;
+} */
+
+#closeDiv {
+  /* margin-right: 25px; */
+  margin-right: 50px;
+  margin-top: 20px;
+
+  height: 52px;
+  border-radius: 100px;
+  border: 1px solid transparent;
+}
+
+#closeDiv:hover {
+  border-color: #fff;
+  transition: all 0.25s ease-out;
+}
+
+.close {
+  fill: white;
+}
+
+#close {
+  padding: 10px;
+
+  background-color: transparent;
+  height: 52px;
+  width: 52px;
+
+  border: 2px solid transparent;
+}
+
+.lrb.active {
+  fill: black;
+}
+
+.lrb.inactive {
+  fill: white;
+}
+
+.btn {
+  margin-top: 8px;
+  margin-left: 10px;
+  margin-right: 10px;
+  border: none;
+  background: none;
+  position: relative;
+  display: inline-block;
+  color: #fff;
+  text-transform: uppercase;
+  font-size: 18px;
+  letter-spacing: 2px;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.btn:focus {
+  outline: 0;
+}
+
+.btn:hover {
+  background: linear-gradient(90deg, #0162c8, #55e8fc);
+  cursor: pointer;
+}
+
+span {
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.226);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  border-radius: 80%;
+  animation: animate 1s linear infinite;
+}
+
+@keyframes animate {
+  0% {
+    width: 0px;
+    height: 0px;
+    opacity: 0.1;
+  }
+
+  100% {
+    width: 500px;
+    height: 500px;
+    opacity: 0;
+  }
+}
+
+#Top {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+}
+
+#mybtn {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 30px;
+  z-index: 99;
+  font-size: 18px;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  color: white;
+  cursor: pointer;
+  padding: 15px;
+  height: 70px;
+  width: 70px;
+  border-radius: 100px;
+  background-color: rgb(255, 0, 0);
+  opacity: 0.8;
+  box-shadow: 1px 1px 5px black;
+}
+
+#mybtn:hover {
+  background-color: white;
+  color: black;
+  transition: 0.5s;
+  opacity: 1;
+}
+
+#mybtn i {
+  filter: drop-shadow(2px 3px 2px rgb(26, 26, 26));
+}
