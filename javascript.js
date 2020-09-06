@@ -3011,7 +3011,7 @@ function setInitialPosition(event) {
 function handleSwipe(event) {
   var x = event.touches[0].clientX;
   var y = event.touches[0].clientY;
-  if (initialPositionX - x > 50 && Math.abs(initialPositionY - y) < 32) {
+  if (initialPositionX - x > 40 && Math.abs(initialPositionY - y) < 32) {
     initialPositionX = 0;
     initialPositionY = 0;
     console.log(
