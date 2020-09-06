@@ -1906,6 +1906,14 @@ function startSearch(event) {
 
     //hiding home page modal
     hideHomePageModal();
+
+    // if home page modal is not open then show search icon
+    if (!isHomePageModalOpen()) {
+      showSearchIconOnNavBar();
+    } else {
+      hideSearchIconOnNavBar();
+    }
+
     //showing cards container
     showCardsContainer();
 
@@ -2926,4 +2934,13 @@ function retryLoadingPage() {
   hidePageLoadingError();
   showPageLoadingAnimation();
   getIvl(currentThumbPage);
+}
+
+// show search icon on nav bar
+function showSearchIconOnNavBar() {
+  document.querySelector(".search-icon-container").classList.add("show");
+}
+// hide search icon on nav bar
+function hideSearchIconOnNavBar() {
+  document.querySelector(".search-icon-container").classList.remove("show");
 }
