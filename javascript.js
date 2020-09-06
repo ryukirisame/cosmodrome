@@ -2218,12 +2218,14 @@ function showResultCards() {
         title.classList.add("overlay-title");
 
         title.innerText =
-          thumbNum +
-          ": " +
-          currentThumbPage +
-          ": " +
-          queryResponse[currentThumbPage - 1].collection.items[thumbNum].data[0]
-            .title;
+          queryResponse[currentThumbPage - 1].collection.items[
+            thumbNum
+          ].data[0];
+        //   .title;
+        //   thumbNum +
+        // ": " +
+        // currentThumbPage +
+        // ": " +
 
         titleOverlay.appendChild(title);
         card.appendChild(titleOverlay);

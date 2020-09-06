@@ -1548,8 +1548,8 @@ option {
   outline: none;
   max-height: inherit;
   background-color: black;
-  z-index: 700;
-  background-color: khaki;
+  /* z-index: 700; */
+  /* background-color: khaki; */
 }
 
 .know-more-data-container {
