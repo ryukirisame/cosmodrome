@@ -3010,7 +3010,7 @@ function setInitialPosition(event) {
 function handleSwipe(event) {
   var x = event.touches[0].clientX;
   var y = event.touches[0].clientY;
-  if (initialPositionX - x > 100 && Math.abs(initialPositionY - y) < 32) {
+  if (initialPositionX - x > 75 && Math.abs(initialPositionY - y) < 32) {
     initialPositionX = 0;
     initialPositionY = 0;
     console.log(
@@ -3023,7 +3023,7 @@ function handleSwipe(event) {
       nextData();
     }
   }
-  if (x - initialPositionX > 100 && Math.abs(y - initialPositionY) < 32) {
+  if (x - initialPositionX > 75 && Math.abs(y - initialPositionY) < 32) {
     initialPositionX = window.innerWidth;
     initialPositionY = window.innerHeight;
     console.log(
