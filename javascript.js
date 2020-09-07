@@ -258,7 +258,7 @@ function startListeningToEnterKeyPress() {
     // console.log("char code:" + char);
     if (char == 13) {
       startSearch(event);
-      console.log("enter key was pressed");
+      // console.log("enter key was pressed");
     }
   });
   homePageSearchBox.addEventListener("keyup", (event) => {
@@ -548,7 +548,7 @@ function showMessage(messageString, messageBoxNum) {
 
   var messageBoxInsideModal = document.getElementById("messageInsideModal");
   var messageBox = document.getElementById("message");
-  console.log(messageString);
+  // console.log(messageString);
   // message inside modal box
   if (messageBoxNum == 0) {
     messageBoxInsideModal.innerText = messageString;
@@ -777,7 +777,7 @@ function isPrevPageAvailable() {
   }
 }
 function downloadPageAndShowMedia(page) {
-  console.log("downloadPageAndShowMedia()");
+  // console.log("downloadPageAndShowMedia()");
   var searchUrl = calSearchUrl(page);
   sendHttpRequest(method, searchUrl, mode)
     .then((response) => {
@@ -792,7 +792,7 @@ function downloadPageAndShowMedia(page) {
       fetchMediaUrl(hitNum, currentPage);
     })
     .catch((errCode) => {
-      console.log("error code: " + errCode);
+      // console.log("error code: " + errCode);
 
       enableBtns();
       if (errCode == 404) {
@@ -838,13 +838,13 @@ function downloadPageAndShowMedia(page) {
     });
 }
 function downloadNextPage(page) {
-  console.log("downloadNextPage()");
+  // console.log("downloadNextPage()");
   var searchUrl = calSearchUrl(page);
 
   sendHttpRequest(method, searchUrl, mode)
     .then((response) => {
       // console.log("new page downloaded");
-      console.log(response);
+      // console.log(response);
       //storing new page in queryResponse
       queryResponse[page - 1] = response;
       hitNum = -1;
@@ -852,7 +852,7 @@ function downloadNextPage(page) {
       nextData();
     })
     .catch((errCode) => {
-      console.log("error code: " + errCode);
+      // console.log("error code: " + errCode);
 
       enableBtns();
       if (errCode == 404) {
@@ -899,20 +899,20 @@ function downloadNextPage(page) {
 }
 
 function downloadPrevPage(page) {
-  console.log("downloadPrevPage()");
+  // console.log("downloadPrevPage()");
   var searchUrl = calSearchUrl(page);
 
   sendHttpRequest(method, searchUrl, mode)
     .then((response) => {
       // console.log("new page downloaded");
-      console.log(response);
+      // console.log(response);
       //storing new page in queryResponse
       queryResponse[page - 1] = response;
       hitNum = 100;
       prevData();
     })
     .catch((errCode) => {
-      console.log("error code: " + errCode);
+      // console.log("error code: " + errCode);
 
       enableBtns();
       if (errCode == 404) {
@@ -960,7 +960,7 @@ function downloadPrevPage(page) {
 
 function nextData() {
   // console.log("nextDAta()");
-  console.log(visitedImages);
+  // console.log(visitedImages);
   disableBtns();
 
   hitNum++;
@@ -1040,7 +1040,7 @@ function nextData() {
         if (
           visitedImages[(currentPage - 1) * 100 + parseInt(hitNum)] == undefined
         ) {
-          console.log("showing media loading animation");
+          // console.log("showing media loading animation");
           showMediaLoadingAnimation();
         }
       } else {
@@ -1105,7 +1105,7 @@ function nextPage() {
 
 function prevData() {
   // console.log("prevData()");
-  console.log(visitedImages);
+  // console.log(visitedImages);
   disableBtns();
 
   hitNum--;
@@ -1179,7 +1179,7 @@ function prevData() {
         if (
           visitedImages[(currentPage - 1) * 100 + parseInt(hitNum)] == undefined
         ) {
-          console.log("showing media loading animation");
+          // console.log("showing media loading animation");
           showMediaLoadingAnimation();
         }
       } else {
@@ -1364,7 +1364,7 @@ function findMediaQualities() {
   // console.log("findMediaQualities()");
 }
 function handleVideoLoadingError() {
-  console.log("handleVideoLoadingError()");
+  // console.log("handleVideoLoadingError()");
   pauseVideo();
   hideVideo();
   hideImage();
@@ -1892,7 +1892,7 @@ function cacheMediaUrl(itemNum, pageNum) {
       // check if the next mediaurl does not exist. if yes then proceed and cache 5 sets of mediaUrls
       if (mediaUrls[(pageNum - 1) * 100 + parseInt(itemNum)] == undefined) {
         // console.clear();
-        console.log("CACHING NEXT 5");
+        // console.log("CACHING NEXT 5");
 
         var url;
         var nasa_id =
@@ -1925,7 +1925,7 @@ function cacheMediaUrl(itemNum, pageNum) {
           // console.log("itemNum");
           // console.log(itemNum);
           // console.clear();
-          console.log("CACHING ONE");
+          // console.log("CACHING ONE");
 
           var url;
           var nasa_id =
@@ -1959,7 +1959,7 @@ function cacheMediaUrl(itemNum, pageNum) {
       // check if the last  mediaurls does not exist. if yes then proceed and cache 5 sets of mediaUrls
       if (mediaUrls[(pageNum - 1) * 100 + parseInt(itemNum)] == undefined) {
         // console.clear();
-        console.log("CACHING PREV 5");
+        // console.log("CACHING PREV 5");
 
         var url;
         var nasa_id =
@@ -1997,7 +1997,7 @@ function cacheMediaUrl(itemNum, pageNum) {
 
         // making itemNum equal to the next desirable mediaUrl
         // itemNum = mediaUrls.length - (currentPage - 1) * 100;
-        console.log("CACHING ONE PREV");
+        // console.log("CACHING ONE PREV");
         var url;
         var nasa_id =
           queryResponse[pageNum - 1].collection.items[itemNum].data[0].nasa_id;
@@ -2058,7 +2058,7 @@ function fetchMediaUrl(itemNum, pageNum) {
       showMedia();
     })
     .catch((errCode) => {
-      console.log("error code: " + errCode);
+      // console.log("error code: " + errCode);
       hideDescription();
       pauseVideo();
       hideVideo();
@@ -2125,7 +2125,7 @@ function startSearch(event) {
   }
 
   if (search != "") {
-    console.log("searching for: " + search);
+    // console.log("searching for: " + search);
 
     // removing focus from the search input
     event.target.blur();
@@ -2244,8 +2244,8 @@ function getIvl(page) {
       enableBtns();
       totalHits = response.collection.metadata.total_hits;
 
-      console.log("Total hits:" + totalHits);
-      console.log(response);
+      // console.log("Total hits:" + totalHits);
+      // console.log(response);
       queryResponse[page - 1] = response;
 
       //if there are hits then we are ready to fetch media
@@ -2278,7 +2278,7 @@ function getIvl(page) {
             totalCardsShown < totalHits &&
             !isContentModalOpen()
           ) {
-            console.log("calling show result cards");
+            // console.log("calling show result cards");
             // if (!isContentModalOpen()) {
             // console.log("iscontentModalopen ");
             showResultCards();
@@ -2310,9 +2310,9 @@ function getIvl(page) {
       if (page != 1) {
         hidePageLoadingAnimation();
         showPageLoadingError();
-        console.log("error code: " + errCode);
+        // console.log("error code: " + errCode);
       } else {
-        console.log("error code: " + errCode);
+        // console.log("error code: " + errCode);
 
         enableBtns();
         if (errCode == 404) {
@@ -2360,7 +2360,7 @@ function showResultCards() {
   //if we have shown all the thumbs from current page and there is a next page
   if (thumbNum == 100 && currentThumbPage < totalPage) {
     currentThumbPage++;
-    console.log("we are here");
+    // console.log("we are here");
     thumbNum = 0;
 
     //if the page doesn't exist in queryResponse array then download another page using getIvl
@@ -2502,86 +2502,6 @@ function showResultCards() {
   }
   // while(queryResponse[currentThumbPage]==undefined);
 }
-
-// function showNextPrevCards(itemNum, pageNum) {
-//   const nextPrevCardsContainer = document.querySelector(
-//     ".next-prev-cards-container"
-//   );
-//   // removing previous cards
-//   while (nextPrevCardsContainer.hasChildNodes()) {
-//     nextPrevCardsContainer.removeChild(nextPrevCardsContainer.firstChild);
-//   }
-
-//   // we have to start from one itemNum less as we want the
-//   // user to see one previous item
-//   itemNum--;
-//   // if the user clicked on the first item of the first page
-//   if (itemNum == -1 && pageNum == 1) {
-//     itemNum = 0;
-//   }
-//   // if the user clicked on the first item of any page other than first page
-//   if (itemNum == -1 && pageNum != 1) {
-//     itemNum == 99;
-//   }
-
-//   var i = 0;
-
-//   for (i = 0; i < 5; i++) {
-//     // console.log("we are here");
-//     const resultNum = `result-num:${(pageNum - 1) * 100 + itemNum}`;
-//     // console.log(resultNum);
-//     // console.log(className);
-//     var cardToClone = document.getElementsByClassName(resultNum);
-//     cardToClone = cardToClone[0];
-//     // console.log(cardToClone);
-//     // if (cardToClone == undefined) {
-//     //   if (isNextPageAvailable()) {
-//     //     showResultCards();
-//     //     i--;
-//     //     continue;
-//     //   }
-//     //   // if we have reached the end of the total results
-//     //   else {
-//     //     break;
-//     //   }
-//     // }
-//     if (cardToClone == undefined) {
-//       break;
-//     }
-
-//     const result_num_attribute = parseInt(
-//       cardToClone.getAttribute("data-result-num")
-//     );
-//     // thumbNum stores current number of cards loaded
-//     if (result_num_attribute + 20 > thumbNum) {
-//       // load next 20 cards
-//       console.log("loading more cards");
-//       showResultCards();
-//     }
-
-//     const card = cardToClone.cloneNode(true);
-//     nextPrevCardsContainer.appendChild(card);
-//     card.onclick = () => {
-//       disableBtns();
-
-//       const itemNum = card.getAttribute("data-item-num");
-//       const pageNum = card.getAttribute("data-page-num");
-
-//       hitNum = itemNum;
-//       currentPage = pageNum;
-//       blurContentSection();
-//       showMediaLoadingAnimation();
-//       fetchMediaUrl(itemNum, pageNum);
-
-//       showNextPrevCards(itemNum, pageNum);
-//     };
-//     itemNum++;
-//     // if (itemNum == 80) {
-//     //   console.log("calling showResultCards()");
-//     //   showResultCards();
-//     // }
-//   }
-// }
 
 function removeResults() {
   // hiding change media type radio buttons
@@ -3031,7 +2951,7 @@ window.onpopstate = (event) => {
 
     // clicking on next button to go to contentmodal
     if (event.state.screen == "contentModal") {
-      console.log("contentmodal()");
+      // console.log("contentmodal()");
       disableBtns();
       hideImage();
       hideVideo();
@@ -3040,7 +2960,7 @@ window.onpopstate = (event) => {
       showLoadingAnimation();
       hitNum = event.state.hitNum;
       currentPage = event.state.pageNum;
-      console.log("hitNum: " + hitNum + " currentPage: " + currentPage);
+      // console.log("hitNum: " + hitNum + " currentPage: " + currentPage);
       downloadPageAndShowMedia(currentPage);
       // fetchMediaUrl(event.state.hitNum, event.state.pageNum);
     }
@@ -3085,7 +3005,7 @@ window.onpopstate = (event) => {
 
       //if we try to go to a results page
       else {
-        console.log("resultspage()");
+        // console.log("resultspage()");
         // start listening to scroll
         document.addEventListener("scroll", handleScroll);
         hideHomePageModal();
@@ -3250,16 +3170,16 @@ function setInitialPosition(event) {
 function handleSwipe(event) {
   var x = event.touches[0].clientX;
   var y = event.touches[0].clientY;
-  console.log(
-    "initialPositionX: " +
-      initialPositionX +
-      " intialPositionY: " +
-      initialPositionY +
-      " x: " +
-      x +
-      " y: " +
-      y
-  );
+  // console.log(
+  //   "initialPositionX: " +
+  //     initialPositionX +
+  //     " intialPositionY: " +
+  //     initialPositionY +
+  //     " x: " +
+  //     x +
+  //     " y: " +
+  //     y
+  // );
   if (initialPositionX - x > 40 && Math.abs(initialPositionY - y) < 16) {
     initialPositionX = 0;
     initialPositionY = 0;
