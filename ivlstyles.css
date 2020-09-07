@@ -1351,6 +1351,9 @@ input[type="radio"]:checked + label {
   /* font-style: italic; */
   border: none;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.24);
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10+ and Edge */
+  user-select: none; /* Standard syntax */
   /* filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.24)); */
 }
 .select-quality:focus {
