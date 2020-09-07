@@ -1,5 +1,4 @@
 var method = "GET";
-const key = "U0PqJ5UprbVQExkXc7ZgsGVfIM7Z1O8Uiv7g2hOO";
 
 var mode = true;
 
