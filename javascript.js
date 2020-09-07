@@ -8,7 +8,7 @@ var totalHits = 0;
 //contains initial search response
 var queryResponse = [];
 //mediaUrls is an array of urls of a specific hit media
-var mediaUrls;
+var mediaUrls = [];
 
 // contains an object with key as quality and value as the index number of the url in mediaUrls
 // eg. qualityIndices={"orig":0,"large":1}
@@ -237,10 +237,10 @@ function getViewportDimensions() {
     document.documentElement.style.setProperty("--vh", `${vh}px`);
     document.documentElement.style.setProperty("--vw", `${vw}px`);
 
-    const cardsContainer = document.querySelector(".cards-container");
-    var columns = window.getComputedStyle(cardsContainer).gridTemplateColumns;
-    columns = columns.split(" ");
-    console.log(" number of columns: " + columns.length);
+    // const cardsContainer = document.querySelector(".cards-container");
+    // var columns = window.getComputedStyle(cardsContainer).gridTemplateColumns;
+    // columns = columns.split(" ");
+    // console.log(" number of columns: " + columns.length);
   });
 }
 
@@ -332,7 +332,7 @@ function listenToButtonClickForSplashEffect() {
 }
 function handleArrowKeyPress(event) {
   var char = event.keyCode;
-  console.log("key pressed: " + char);
+  // console.log("key pressed: " + char);
   if (char == 37) {
     // extra if check to not fire prevData() while the button is disabled (media is still loading)
     // if (document.getElementById("prevBtn").disabled == false) {
@@ -775,6 +775,7 @@ function isPrevPageAvailable() {
   }
 }
 function downloadPageAndShowMedia(page) {
+  console.log("downloadPageAndShowMedia()");
   var searchUrl = calSearchUrl(page);
   sendHttpRequest(method, searchUrl, mode)
     .then((response) => {
@@ -835,11 +836,12 @@ function downloadPageAndShowMedia(page) {
     });
 }
 function downloadNextPage(page) {
+  console.log("downloadNextPage()");
   var searchUrl = calSearchUrl(page);
 
   sendHttpRequest(method, searchUrl, mode)
     .then((response) => {
-      console.log("new page downloaded");
+      // console.log("new page downloaded");
       console.log(response);
       //storing new page in queryResponse
       queryResponse[page - 1] = response;
@@ -895,11 +897,12 @@ function downloadNextPage(page) {
 }
 
 function downloadPrevPage(page) {
+  console.log("downloadPrevPage()");
   var searchUrl = calSearchUrl(page);
 
   sendHttpRequest(method, searchUrl, mode)
     .then((response) => {
-      console.log("new page downloaded");
+      // console.log("new page downloaded");
       console.log(response);
       //storing new page in queryResponse
       queryResponse[page - 1] = response;
@@ -954,7 +957,7 @@ function downloadPrevPage(page) {
 }
 
 function nextData() {
-  console.log("nextDAta()");
+  // console.log("nextDAta()");
   disableBtns();
 
   hitNum++;
@@ -1043,7 +1046,13 @@ function nextData() {
 
     // showContentModal();
     updateStateOfContentModal();
-    fetchMediaUrl(hitNum, currentPage);
+
+    if (mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)] == undefined) {
+      // console.log("calling fetchMediaUrl");
+      fetchMediaUrl(hitNum, currentPage);
+    } else {
+      showMedia();
+    }
 
     // showNextPrevCards(hitNum, currentPage);
     // showDescription(hitNum, currentPage);
@@ -1052,14 +1061,16 @@ function nextData() {
 
 //tries going to next page. shows error if its already the last page
 function nextPage() {
-  console.log("we are here");
+  // console.log("we are here");
   //if next page exists
   if (isNextPageAvailable()) {
     // hideImage();
     pauseVideo();
     hideVideo();
     if (isContentModalOpen()) {
-      showMediaLoadingAnimation();
+      if (mediaType == "image") {
+        showMediaLoadingAnimation();
+      }
     }
 
     // showMessage(loading, 0);
@@ -1085,7 +1096,7 @@ function nextPage() {
 }
 
 function prevData() {
-  console.log("prevData()");
+  // console.log("prevData()");
   disableBtns();
 
   hitNum--;
@@ -1164,7 +1175,13 @@ function prevData() {
     // showMessage(loading, 0);
     //document.getElementById("pic").src = "loading.gif";
     updateStateOfContentModal();
-    fetchMediaUrl(hitNum, currentPage);
+
+    if (mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)] == undefined) {
+      console.log("calling fetchMediaUrl");
+      fetchMediaUrl(hitNum, currentPage);
+    } else {
+      showMedia();
+    }
 
     // showDescription(hitNum, currentPage);
   }
@@ -1189,7 +1206,9 @@ function prevPage() {
     pauseVideo();
     hideVideo();
     if (isContentModalOpen()) {
-      showMediaLoadingAnimation();
+      if (mediaType == "image") {
+        showMediaLoadingAnimation();
+      }
     }
 
     if (queryResponse[currentPage - 1] == undefined) {
@@ -1203,7 +1222,9 @@ function prevPage() {
 
 //returns the file extension of current urlNum (url index) of mediaUrls
 function getFileExtension(urlNum) {
-  var urlStr = mediaUrls[urlNum].href;
+  // console.log("getFileExtension()");
+  var urlStr =
+    mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][urlNum].href;
   var lastIndex = urlStr.lastIndexOf(".");
   var extension = urlStr.slice(lastIndex);
   return extension;
@@ -1258,15 +1279,20 @@ function createMediaQualityOptions() {
 // IN THE FORMAT qualityIndices={"quality_name":indexOfTheUrl}
 function findMediaQualities() {
   var extension, urlStr, firstIndex, lastIndex, qualityName;
-
+  // console.log("findMediaQualities()");
   qualityIndices = {};
   if (mediaType == "video") {
-    for (var i = 0; i < mediaUrls.length; i++) {
+    // console.log("we are here");
+    for (
+      var i = 0;
+      i < mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)].length;
+      i++
+    ) {
       //stores the file extension of the current urlNum
       extension = getFileExtension(i);
       if (extension == ".mp4" || extension == ".ogg" || extension == "mpeg") {
         //extracting quality name. eg: orig
-        urlStr = mediaUrls[i].href;
+        urlStr = mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][i].href;
         firstIndex = urlStr.lastIndexOf("~");
         lastIndex = urlStr.lastIndexOf(".");
         qualityName = urlStr.slice(firstIndex + 1, lastIndex);
@@ -1282,7 +1308,12 @@ function findMediaQualities() {
   }
   //for image
   else {
-    for (var i = 0; i < mediaUrls.length; i++) {
+    // console.log(mediaUrls);
+    for (
+      var i = 0;
+      i < mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)].length;
+      i++
+    ) {
       //stores the file extension of the current urlNum
       extension = getFileExtension(i);
       if (
@@ -1300,12 +1331,14 @@ function findMediaQualities() {
         extension == ".webp"
       ) {
         //extracting quality name. eg: orig
-        urlStr = mediaUrls[i].href;
+        urlStr = mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][i].href;
         firstIndex = urlStr.lastIndexOf("~");
         lastIndex = urlStr.lastIndexOf(".");
         qualityName = urlStr.slice(firstIndex + 1, lastIndex);
+        // console.log(qualityName);
         qualityName =
           qualityName.charAt(0).toUpperCase() + qualityName.slice(1);
+        // console.log(qualityName);
         if (qualityName == "Orig") qualityName = "Original";
 
         if (qualityName == "Thumb") continue;
@@ -1314,6 +1347,7 @@ function findMediaQualities() {
     }
     // console.log(qualityIndices);
   }
+  // console.log("findMediaQualities()");
 }
 function handleVideoLoadingError() {
   console.log("handleVideoLoadingError()");
@@ -1344,16 +1378,22 @@ function startIvlVideoListeners() {
 }
 //SHOWS THE IVL VIDEO
 function showIvlVideo() {
+  hideMediaLoadingAnimation();
   // console.log("showIvlVideo()");
-  //console.log(mediaUrls[0]);
+  //console.log(mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][0]);
 
-  if (mediaUrls.length > 0) {
+  if (mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)].length > 0) {
     if (qualityIndices.hasOwnProperty("Medium")) {
       document.getElementById("Medium").selected = true;
       hideMessage();
       hideLoadingAnimation();
+
       // vid.src = mediaUrls[qualityIndices["Medium"]].href;
-      createVideoElement(mediaUrls[qualityIndices["Medium"]].href);
+      createVideoElement(
+        mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][
+          qualityIndices["Medium"]
+        ].href
+      );
       displayVideo();
       // showing arrow buttons
       showArrowButtonContainer();
@@ -1367,8 +1407,12 @@ function showIvlVideo() {
       document.getElementById("Large").selected = "true";
       hideMessage();
       hideLoadingAnimation();
-      // vid.src = mediaUrls[qualityIndices["Large"]].href;
-      createVideoElement(mediaUrls[qualityIndices["Large"]].href);
+      // vid.src = mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][qualityIndices["Large"]].href;
+      createVideoElement(
+        mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][
+          qualityIndices["Large"]
+        ].href
+      );
       displayVideo();
       // showing arrow buttons
       showArrowButtonContainer();
@@ -1382,8 +1426,12 @@ function showIvlVideo() {
       document.getElementById("Original").selected = true;
       hideMessage();
       hideLoadingAnimation();
-      // vid.src = mediaUrls[qualityIndices["Original"]].href;
-      createVideoElement(mediaUrls[qualityIndices["Original"]].href);
+      // vid.src = mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][qualityIndices["Original"]].href;
+      createVideoElement(
+        mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][
+          qualityIndices["Original"]
+        ].href
+      );
       displayVideo();
       // showing arrow buttons
       showArrowButtonContainer();
@@ -1397,8 +1445,12 @@ function showIvlVideo() {
       document.getElementById("Small").selected = true;
       hideMessage();
       hideLoadingAnimation();
-      // vid.src = mediaUrls[qualityIndices["Small"]].href;
-      createVideoElement(mediaUrls[qualityIndices["Small"]].href);
+      // vid.src = mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][qualityIndices["Small"]].href;
+      createVideoElement(
+        mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][
+          qualityIndices["Small"]
+        ].href
+      );
       displayVideo();
       // showing arrow buttons
       showArrowButtonContainer();
@@ -1412,8 +1464,12 @@ function showIvlVideo() {
       document.getElementById("Preview").selected = true;
       hideMessage();
       hideLoadingAnimation();
-      // vid.src = mediaUrls[qualityIndices["Preview"]].href;
-      createVideoElement(mediaUrls[qualityIndices["Preview"]].href);
+      // vid.src = mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][qualityIndices["Preview"]].href;
+      createVideoElement(
+        mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][
+          qualityIndices["Preview"]
+        ].href
+      );
       displayVideo();
       // showing arrow buttons
       showArrowButtonContainer();
@@ -1427,8 +1483,12 @@ function showIvlVideo() {
       document.getElementById("Mobile").selected = true;
       hideMessage();
       hideLoadingAnimation();
-      // vid.src = mediaUrls[qualityIndices["Mobile"]].href;
-      createVideoElement(mediaUrls[qualityIndices["Mobile"]].href);
+      // vid.src = mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][qualityIndices["Mobile"]].href;
+      createVideoElement(
+        mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][
+          qualityIndices["Mobile"]
+        ].href
+      );
       displayVideo();
       // showing arrow buttons
       showArrowButtonContainer();
@@ -1517,7 +1577,10 @@ function changeMediaQuality(qualityKey) {
     // showLoadingAnimation();
 
     var vid = document.getElementById("vid");
-    vid.src = mediaUrls[qualityIndices[qualityKey]].href;
+    vid.src =
+      mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][
+        qualityIndices[qualityKey]
+      ].href;
     vid.currentTime = prevTime;
     enableBtns();
     // console.log(
@@ -1530,7 +1593,10 @@ function changeMediaQuality(qualityKey) {
 
     showMediaLoadingAnimation();
     var image = document.getElementById("pic");
-    image.src = mediaUrls[qualityIndices[qualityKey]].href;
+    image.src =
+      mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][
+        qualityIndices[qualityKey]
+      ].href;
 
     enableBtns();
     // console.log(
@@ -1581,6 +1647,90 @@ function hideBlurredBackground() {
   backgroundBlurElement.classList.remove("show");
   // preBackgroundBlurElement.classList.remove("show");
 }
+
+function cacheNextPic(itemNum, pageNum) {
+  itemNum++;
+  console.log("hitnum: " + itemNum + "pageNum:" + pageNum);
+  // console.log(queryResponse);
+  const picCached = document.querySelector("#pic-cache");
+  let qualityName;
+  var url;
+  //getting nasa_id
+  var nasa_id =
+    queryResponse[pageNum - 1].collection.items[itemNum].data[0].nasa_id;
+  //appending it to url
+
+  url = "https://images-api.nasa.gov/asset/" + encodeURIComponent(nasa_id);
+  // console.log(url);
+
+  //sending http request for pic link
+  sendHttpRequest(method, url, mode).then((fetchedMediaUrls) => {
+    // console.log(fetchedMediaUrls);
+    // console.log(fetchedMediaUrls);
+    let mediaUrls = fetchedMediaUrls.collection.items;
+    console.log(mediaUrls);
+    for (
+      var i = 0;
+      i < mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)].length;
+      i++
+    ) {
+      //stores the file extension of the current urlNum
+      var urlStr =
+        mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][i].href;
+      var lastIndex = urlStr.lastIndexOf(".");
+      var extension = urlStr.slice(lastIndex);
+      if (
+        extension == ".apng" ||
+        extension == ".bmp" ||
+        extension == ".gif" ||
+        extension == ".jpg" ||
+        extension == ".jpeg" ||
+        extension == ".jfif" ||
+        extension == ".pjpeg" ||
+        extension == ".pjpg" ||
+        extension == ".pjp" ||
+        extension == ".png" ||
+        extension == ".svg" ||
+        extension == ".webp"
+      ) {
+        //extracting quality name. eg: orig
+        urlStr = mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][i].href;
+        firstIndex = urlStr.lastIndexOf("~");
+        lastIndex = urlStr.lastIndexOf(".");
+        qualityName = urlStr.slice(firstIndex + 1, lastIndex);
+
+        // console.log(qualityName);
+
+        qualityName =
+          qualityName.charAt(0).toUpperCase() + qualityName.slice(1);
+
+        if (qualityName == "Orig") qualityName = "Original";
+
+        if (qualityName == "Thumb") continue;
+
+        if (qualityName == "Medium") {
+          picCached.src =
+            mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][i].href;
+          // console.log("we downloaded " + qualityName + " " + mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][i].href);
+        } else if (qualityName == "Large") {
+          picCached.src =
+            mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][i].href;
+          // console.log("we downloaded " + qualityName + " " + mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][i].href);
+        } else if (qualityName == "Original") {
+          picCached.src =
+            mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][i].href;
+          // console.log("we downloaded " + qualityName + " " + mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][i].href);
+        } else if (qualityName == "Small") {
+          picCached.src =
+            mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][i].href;
+          // console.log("we downloaded " + qualityName + " " + mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][i].href);
+        } else {
+          // console.log("nothing found");
+        }
+      }
+    }
+  });
+}
 function showIvlImage() {
   var image = document.getElementById("pic");
   var highestQualityAvailableForBlurredBackgroundUrl;
@@ -1614,14 +1764,30 @@ function showIvlImage() {
     displayImage();
     // showing arrow buttons
     showArrowButtonContainer();
+    cacheMediaUrl(hitNum, currentPage);
+    // cacheNextPic(hitNum, currentPage);
     // enableBtns();
   };
 
-  if (mediaUrls.length > 0) {
-    if (qualityIndices.hasOwnProperty("Large")) {
+  if (mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)].length > 0) {
+    if (qualityIndices.hasOwnProperty("Medium")) {
+      document.getElementById("Medium").selected = true;
+
+      image.src =
+        mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][
+          qualityIndices["Medium"]
+        ].href;
+      image.alt =
+        queryResponse[currentPage - 1].collection.items[hitNum].data[0].title;
+      highestQualityAvailableForBlurredBackgroundUrl = image.src;
+      // console.log("Quality: Medium url num: " + qualityIndices["Medium"]);
+    } else if (qualityIndices.hasOwnProperty("Large")) {
       document.getElementById("Large").selected = "true";
 
-      image.src = mediaUrls[qualityIndices["Large"]].href;
+      image.src =
+        mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][
+          qualityIndices["Large"]
+        ].href;
       image.alt =
         queryResponse[currentPage - 1].collection.items[hitNum].data[0].title;
       highestQualityAvailableForBlurredBackgroundUrl = image.src;
@@ -1630,23 +1796,21 @@ function showIvlImage() {
     } else if (qualityIndices.hasOwnProperty("Original")) {
       document.getElementById("Original").selected = true;
 
-      image.src = mediaUrls[qualityIndices["Original"]].href;
+      image.src =
+        mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][
+          qualityIndices["Original"]
+        ].href;
       image.alt =
         queryResponse[currentPage - 1].collection.items[hitNum].data[0].title;
       highestQualityAvailableForBlurredBackgroundUrl = image.src;
       // console.log("Quality: Original url num: " + qualityIndices["Original"]);
-    } else if (qualityIndices.hasOwnProperty("Medium")) {
-      document.getElementById("Medium").selected = true;
-
-      image.src = mediaUrls[qualityIndices["Medium"]].href;
-      image.alt =
-        queryResponse[currentPage - 1].collection.items[hitNum].data[0].title;
-      highestQualityAvailableForBlurredBackgroundUrl = image.src;
-      // console.log("Quality: Medium url num: " + qualityIndices["Medium"]);
     } else if (qualityIndices.hasOwnProperty("Small")) {
       document.getElementById("Small").selected = true;
 
-      image.src = mediaUrls[qualityIndices["Small"]].href;
+      image.src =
+        mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][
+          qualityIndices["Small"]
+        ].href;
       image.alt =
         queryResponse[currentPage - 1].collection.items[hitNum].data[0].title;
       highestQualityAvailableForBlurredBackgroundUrl = image.src;
@@ -1767,9 +1931,9 @@ function showDescription(itemNum, pageNum) {
   document.getElementById("date").innerText =
     date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
 
-  // document.getElementById("title").innerText =
-  //   hitNum + " " + pageNum + " " + descriptiveData.title;
-  document.getElementById("title").innerText = descriptiveData.title;
+  document.getElementById("title").innerText =
+    hitNum + " " + pageNum + " " + descriptiveData.title;
+  // document.getElementById("title").innerText = descriptiveData.title;
   document.getElementById("description").innerHTML =
     descriptiveData.description;
   // document.getElementById("resolution").innerText = "Calculating...";
@@ -1777,21 +1941,148 @@ function showDescription(itemNum, pageNum) {
   document.querySelector(".know-more-data-container").classList.add("show");
 }
 
+// pass current hitNum and currentpage. it will determine itself which ones to cache.
+function cacheMediaUrl(itemNum, pageNum) {
+  // console.log(itemNum);
+
+  //  FOR CACHING NEXT ITEMS
+  if (mediaUrls[(pageNum - 1) * 100 + parseInt(itemNum) + 5] == undefined) {
+    // console.log("we entered here");
+    itemNum++;
+
+    // if the itemnum is less than the totals hits of the current page
+    if (itemNum < queryResponse[currentPage - 1].collection.items.length) {
+      // check if the next mediaurl does not exist. if yes then proceed and cache 5 sets of mediaUrls
+      if (mediaUrls[(pageNum - 1) * 100 + parseInt(itemNum)] == undefined) {
+        // console.clear();
+        console.log("CACHING NEXT ITEM SET OF 5");
+
+        var url;
+        var nasa_id =
+          queryResponse[pageNum - 1].collection.items[itemNum].data[0].nasa_id;
+
+        url =
+          "https://images-api.nasa.gov/asset/" + encodeURIComponent(nasa_id);
+
+        //sending http request for media links
+        sendHttpRequest(method, url, mode).then((fetchedMediaUrls) => {
+          mediaUrls[(pageNum - 1) * 100 + parseInt(itemNum)] =
+            fetchedMediaUrls.collection.items;
+
+          console.log(mediaUrls);
+
+          // cache the next 5 sets of mediaUrls
+          var limit = parseInt(parseInt(hitNum) + 5);
+          if (itemNum < limit) {
+            cacheMediaUrl(itemNum, currentPage);
+          }
+        });
+      }
+      // else cache only one
+      else {
+        // making itemNum equal to the next desirable mediaUrl
+
+        itemNum = mediaUrls.length - (currentPage - 1) * 100;
+
+        if (itemNum < queryResponse[currentPage - 1].collection.items.length) {
+          // console.log("itemNum");
+          console.log(itemNum);
+          // console.clear();
+          console.log("WE ARE GOING TO CACHE ONE NEXT MEDIA URL");
+
+          var url;
+          var nasa_id =
+            queryResponse[pageNum - 1].collection.items[itemNum].data[0]
+              .nasa_id;
+
+          url =
+            "https://images-api.nasa.gov/asset/" + encodeURIComponent(nasa_id);
+
+          //sending http request for media links
+          sendHttpRequest(method, url, mode).then((fetchedMediaUrls) => {
+            mediaUrls[(pageNum - 1) * 100 + parseInt(itemNum)] =
+              fetchedMediaUrls.collection.items;
+
+            console.log(mediaUrls);
+          });
+        }
+      }
+    }
+  }
+
+  // FOR CACHING PREVIOUS ITEMS
+  // check if the last media url has not been cached
+  else if (
+    mediaUrls[(pageNum - 1) * 100 + parseInt(itemNum) - 5] == undefined &&
+    itemNum - 5 > -1
+  ) {
+    itemNum--;
+    // if the itemnum is greater than -1
+    if (itemNum > -1) {
+      // check if the last  mediaurls does not exist. if yes then proceed and cache 5 sets of mediaUrls
+      if (mediaUrls[(pageNum - 1) * 100 + parseInt(itemNum)] == undefined) {
+        // console.clear();
+        console.log("WE ARE GOING TO CACHE 5 SET PREV URLS");
+
+        var url;
+        var nasa_id =
+          queryResponse[pageNum - 1].collection.items[itemNum].data[0].nasa_id;
+
+        url =
+          "https://images-api.nasa.gov/asset/" + encodeURIComponent(nasa_id);
+
+        //sending http request for media links
+        sendHttpRequest(method, url, mode).then((fetchedMediaUrls) => {
+          mediaUrls[(pageNum - 1) * 100 + parseInt(itemNum)] =
+            fetchedMediaUrls.collection.items;
+
+          console.log(mediaUrls);
+
+          // cache the previous 5 sets of mediaUrls
+          var limit = parseInt(parseInt(hitNum) - 5);
+          if (itemNum > limit) {
+            cacheMediaUrl(itemNum, currentPage);
+          }
+        });
+      }
+      // else cache only one
+      else {
+        //trying to find the empty location from the current hitNum towards left
+        var i = hitNum;
+        i--;
+        while (
+          mediaUrls[(pageNum - 1) * 100 + parseInt(i)] != undefined &&
+          i > 0
+        ) {
+          i--;
+        }
+        itemNum = i;
+
+        // making itemNum equal to the next desirable mediaUrl
+        // itemNum = mediaUrls.length - (currentPage - 1) * 100;
+        console.log("WE ARE GOING TO CACHE ONE PREV MEDIA URL");
+        var url;
+        var nasa_id =
+          queryResponse[pageNum - 1].collection.items[itemNum].data[0].nasa_id;
+        url =
+          "https://images-api.nasa.gov/asset/" + encodeURIComponent(nasa_id);
+        // sending http request for media links
+        sendHttpRequest(method, url, mode).then((fetchedMediaUrls) => {
+          mediaUrls[(pageNum - 1) * 100 + parseInt(itemNum)] =
+            fetchedMediaUrls.collection.items;
+          console.log(mediaUrls);
+        });
+      }
+    }
+  } else {
+  }
+}
 //fetches media urls of a specific hit and calls showIvl()
 function fetchMediaUrl(itemNum, pageNum) {
-  // console.log("fetchMediaUrl()");
-  // console.log("itemNum: " + itemNum + " " + "pageNum: " + pageNum);
+  console.log("fetchMediaUrl()");
 
   var url;
 
-  //checking if the current hit num contains an album then set media_type and prepare the required url
-  // if (queryResponse.collection.items[hitNum].data[0].album) {
-  //   var album_name = queryResponse.collection.items[hitNum].data[0].album;
-  //   url = "https://images-api.nasa.gov/album/" + album_name + "?page=1";
-  //   mediaType = "album";
-  // }
-  //contains a video or image
-  // else {
   //getting nasa_id
   var nasa_id =
     queryResponse[pageNum - 1].collection.items[itemNum].data[0].nasa_id;
@@ -1809,19 +2100,22 @@ function fetchMediaUrl(itemNum, pageNum) {
   //sending http request for media links
   sendHttpRequest(method, url, mode)
     .then((fetchedMediaUrls) => {
-      console.log(
-        "Page:" +
-          pageNum +
-          " / " +
-          totalPage +
-          " HitNum: " +
-          itemNum +
-          " Media type:" +
-          mediaType
-      );
+      // console.log(
+      //   "Page:" +
+      //     pageNum +
+      //     " / " +
+      //     totalPage +
+      //     " HitNum: " +
+      //     itemNum +
+      //     " Media type:" +
+      //     mediaType
+      // );
+      console.log("itemNum: " + itemNum + " " + "pageNum: " + pageNum);
 
-      mediaUrls = fetchedMediaUrls.collection.items;
-      // console.log(mediaUrls);
+      // console.log(itemNumFormula);
+      mediaUrls[(pageNum - 1) * 100 + parseInt(itemNum)] =
+        fetchedMediaUrls.collection.items;
+      console.log(mediaUrls);
       // showDescription(itemNum, pageNum);
 
       showMedia();
@@ -1942,6 +2236,7 @@ function startSearch(event) {
     // showLoadingAnimation();
     // showMessage(loading, 0);
 
+    mediaUrls = [];
     queryResponse = [];
 
     //get selected media type
@@ -1979,7 +2274,7 @@ function handleRadioButtonChange() {
     // console.log("we are here");
   }
   // selectRadioButtons();
-
+  mediaUrls = [];
   queryResponse = [];
   pageReset();
   hitNum = 0;
@@ -1992,6 +2287,7 @@ function handleRadioButtonChange() {
 
 //gets Ivl initial data, sets total page and fetches media url
 function getIvl(page) {
+  console.log("getIvl()");
   hideMessage();
   //console.log(search);
   var searchUrl = calSearchUrl(page);
@@ -2118,7 +2414,7 @@ function getIvl(page) {
 }
 
 function showResultCards() {
-  console.log("showResultCards()");
+  // console.log("showResultCards()");
 
   var cardsContainer = document.getElementById("cards-container");
   // var column = document.getElementsByClassName("column");
@@ -2151,7 +2447,7 @@ function showResultCards() {
           queryResponse[currentThumbPage - 1].collection.items.length &&
         thumbNum < nextLimit
       ) {
-        console.log("creating card");
+        // console.log("creating card");
         // creating card
         const card = document.createElement("div");
         card.classList.add("card");
@@ -2180,6 +2476,7 @@ function showResultCards() {
             .links[0].href
         );
         image.src = thumbURL;
+        image.alt = " ";
 
         card.appendChild(image);
 
@@ -2245,17 +2542,17 @@ function showResultCards() {
         const title = document.createElement("p");
         title.classList.add("overlay-title");
 
-        // title.innerText =
-        //   thumbNum +
-        //   ": " +
-        //   currentThumbPage +
-        //   ": " +
-        //   queryResponse[currentThumbPage - 1].collection.items[thumbNum].data[0]
-        //     .title;
         title.innerText =
-          queryResponse[currentThumbPage - 1].collection.items[
-            thumbNum
-          ].data[0].title;
+          thumbNum +
+          ": " +
+          currentThumbPage +
+          ": " +
+          queryResponse[currentThumbPage - 1].collection.items[thumbNum].data[0]
+            .title;
+        // title.innerText =
+        //   queryResponse[currentThumbPage - 1].collection.items[
+        //     thumbNum
+        //   ].data[0].title;
         titleOverlay.appendChild(title);
         card.appendChild(titleOverlay);
 
@@ -2787,7 +3084,7 @@ window.onload = () => {
 
 // ----------------------------------------------------------------
 
-// when the user clicks on back or next button of the browser, this function function is called
+// when the user clicks on back or next button of the browser, this function  is called
 
 window.onpopstate = (event) => {
   // console.log("i was called");
@@ -2827,7 +3124,7 @@ window.onpopstate = (event) => {
 
         // showing cards if the body is not overflowing
         var runloop2 = setInterval(() => {
-          console.log(!isBodyOverflowing() + ":2");
+          // console.log(!isBodyOverflowing() + ":2");
 
           const totalCardsShown = (currentThumbPage - 1) * 100 + thumbNum;
 
@@ -2842,7 +3139,7 @@ window.onpopstate = (event) => {
             showResultCards();
             // }
           } else {
-            console.log("clearing");
+            // console.log("clearing");
             clearInterval(runloop2);
           }
         }, 200);
@@ -2879,6 +3176,7 @@ window.onpopstate = (event) => {
 
         hideMessage();
         disableBtns();
+        mediaUrls = [];
         queryResponse = [];
         selectedMediaType = event.state.media_type;
         // var changeMediaRadioButtonsOnResultsPage=document.getElementsByName("media-type-2");
