@@ -111,9 +111,6 @@ function doTheJobFor900px(matchMedia) {
     document
       .querySelector(".home-page-search-box-search-icon-container")
       .classList.remove("splash-effect");
-
-    // fullScreenIcon.classList.remove("md-36");
-    // fullScreenIcon.classList.add("md-24");
   }
 }
 
@@ -159,16 +156,10 @@ function doTheJobFor1280px(matchMedia) {
 
 // code for nav bar hiding on scroll down and infinite scroll
 // we have moved the following event listener to startSearch()
-// document.addEventListener("scroll", handleScroll);
 
 var prevScrollPos = window.pageYOffset;
 
 function handleScroll() {
-  // console.log("handleScroll()");
-  // console.log(window.pageYOffset);
-  // console.log(window.scrollY+window.innerHeight);
-  // console.log(document.documentElement.scrollHeight);
-
   // code for infinite scroll
   if (
     window.scrollY + window.innerHeight + 480 >=
@@ -190,7 +181,6 @@ function handleScroll() {
     //  than currentscrollpos
     if (prevScrollPos > currentScrollPos) {
       navBar.classList.remove("hidden");
-      // console.log("we are revealing nav bar");
     }
     // when the user scrolls down then prevscrollpos is less than
     // currentscrollpos
@@ -198,9 +188,7 @@ function handleScroll() {
       navBar.classList.add("hidden");
       // console.log("we are hiding nav-bar");
     }
-    // console.log(
-    //   "prevScrollPos:" + prevScrollPos + " currentScrollpos:" + currentScrollPos
-    // );
+
     prevScrollPos = currentScrollPos;
   }
 }
@@ -216,7 +204,7 @@ startListeningToEnterKeyPress();
 listenToButtonClickForSplashEffect();
 
 // starting button background fill effect listener
-listenToButtonHoverForBackgroundFillEffect();
+// listenToButtonHoverForBackgroundFillEffect();
 
 // -------------------------------------------
 
@@ -233,11 +221,11 @@ function getViewportDimensions() {
     // We execute the same script as before
     let vh = window.innerHeight * 0.01;
     let vw = window.innerWidth * 0.01;
-    // console.log(vh);
-    // console.log(vw);
+
     document.documentElement.style.setProperty("--vh", `${vh}px`);
     document.documentElement.style.setProperty("--vw", `${vw}px`);
 
+    // calculates number of columns of grid container
     // const cardsContainer = document.querySelector(".cards-container");
     // var columns = window.getComputedStyle(cardsContainer).gridTemplateColumns;
     // columns = columns.split(" ");
@@ -282,7 +270,6 @@ function listenToButtonHoverForBackgroundFillEffect() {
 
   buttonsBackgroundEffect.forEach((btn) => {
     btn.addEventListener("mouseenter", (event) => {
-      // console.log("mouse enter was fired");
       var elem = btn.getBoundingClientRect();
       var x = event.clientX - elem.left;
       var y = event.clientY - elem.top;
@@ -296,7 +283,6 @@ function listenToButtonHoverForBackgroundFillEffect() {
     });
 
     btn.addEventListener("mouseleave", (event) => {
-      // console.log("mouseleave was fired");
       var item = document.querySelector(".button-background-color");
 
       item.parentNode.removeChild(item);
@@ -308,9 +294,6 @@ function listenToButtonClickForSplashEffect() {
 
   buttons.forEach((btn) => {
     btn.addEventListener("click", function (e) {
-      // console.log(btn.disabled);
-      // if (btn.disabled == false) {
-
       if (btn.classList.contains("splash-effect")) {
         var elem = btn.getBoundingClientRect();
         var x = e.clientX - elem.left;
@@ -369,15 +352,6 @@ function sendHttpRequest(method, url, mode) {
 }
 
 function enableBtns() {
-  // console.log("enableBtns()");
-  // const nextBtn = document.getElementById("nextBtn");
-  // nextBtn.disabled = false;
-  // nextBtn.classList.remove("disabled");
-
-  // const prevBtn = document.getElementById("prevBtn");
-  // prevBtn.disabled = false;
-  // prevBtn.classList.remove("disabled");
-
   const searchBtn = document.getElementById("searchBtn");
   searchBtn.disabled = false;
   searchBtn.classList.remove("disabled");
@@ -401,9 +375,6 @@ function enableBtns() {
 
   const qualitySelector = document.querySelector("#quality-selector");
   qualitySelector.classList.remove("disabled");
-
-  // qualitySelector.disabled = false;
-  // qualitySelector.classList.remove("disabled");
 
   const arrowButton = document.querySelectorAll(".arrow-button");
   arrowButton.forEach((btn) => {
@@ -445,9 +416,6 @@ function disableBtns() {
   const qualitySelector = document.querySelector("#quality-selector");
   qualitySelector.classList.remove("disabled");
 
-  // qualitySelector.disabled = true;
-  // qualitySelector.classList.add("disabled");
-
   const arrowButton = document.querySelectorAll(".arrow-button");
   arrowButton.forEach((btn) => {
     btn.classList.add("disabled");
@@ -471,18 +439,6 @@ function displayVideo() {
 }
 
 function createVideoElement(url) {
-  // console.log("video url:" + url);
-  // var contentSectionWidth = window.innerWidth;
-  // var contentSectionHeight = window.innerHeight * 0.9;
-
-  // console.log("screen height: " + imageHeight + " scren width: " + imageWidth);
-  // console.log(
-  //   "window height: " +
-  //     contentSectionHeight +
-  //     " window width: " +
-  //     contentSectionWidth
-  // );
-
   var mediaContainer = document.getElementById("media-container");
   var vid = document.createElement("video");
   // var source = document.createElement("source");
@@ -492,19 +448,14 @@ function createVideoElement(url) {
   vid.autoplay = true;
   vid.controls = true;
   vid.style.display = "none";
-  // vid.style.width = "100%";
-  // vid.style.maxHeight = contentSectionHeight * 0.95;
-  // vid.style.maxWidth = contentSectionWidth * 0.9;
-  // source.type = "video/mp4";
-  // source.src = "";
 
   mediaContainer.appendChild(vid);
   stopPreviousIvlVideoListeners();
   startIvlVideoListeners();
   vid.src = url;
-  vid.oncanplay = () => {
-    // vid.play();
-  };
+  // vid.oncanplay = () => {
+  // vid.play();
+  // };
 }
 
 function hideVideo() {
@@ -551,13 +502,13 @@ function showMessage(messageString, messageBoxNum) {
   // message inside modal box
   if (messageBoxNum == 0) {
     messageBoxInsideModal.innerText = messageString;
-    // messageBox.style.display = "none";
+
     messageBoxInsideModal.style.display = "inline-block";
   }
   //message outside modal box
   if (messageBoxNum == 1) {
     messageBox.innerText = messageString;
-    // messageBoxInsideModal.style.display = "none";
+
     messageBox.style.display = "inline-block";
   }
   // console.log("we are going out");
@@ -568,12 +519,10 @@ function hideMessage() {
 }
 function isMessageOnDisplay() {
   const messageBoxInsideModal = document.getElementById("messageInsideModal");
-  // console.log(messageBoxInsideModal.style.display);s
+
   if (messageBoxInsideModal.style.display == "inline-block") {
-    // console.log("returning true");
     return true;
   } else {
-    // console.log("returning false");
     return false;
   }
 }
@@ -581,8 +530,6 @@ function showQualitySelector() {
   const selectElem = document.querySelector("#quality-selector");
 
   selectElem.style.display = "inline-block";
-
-  // document.getElementById("quality-selector").style.display = "inline-block";
 }
 function hideQualitySelector() {
   const selectElem = document.querySelector("#quality-selector");
@@ -590,15 +537,7 @@ function hideQualitySelector() {
   selectElem.style.display = "none";
   // document.getElementById("quality-selector").style.display = "none";
 }
-// function listenToMediaChange() {
-//   var buttons = document.getElementsByName("media-type");
-//   for (var i = 0; i < buttons.length; i++) {
-//     buttons[i].onchange = () => {
 
-//       startSearch();
-//     };
-//   }
-// }
 function toggleNavBarMediaTypeToVideo() {
   const toggleVideoIcon1 = document.getElementById("toggle-video-icon");
   const toggleVideoIcon2 = document.getElementById("toggle-video-icon-desktop");
@@ -627,7 +566,7 @@ function toggleNavBarMediaTypeToImage() {
   const toggleVideoIcon2 = document.getElementById("toggle-video-icon-desktop");
   const toggleImageIcon1 = document.getElementById("toggle-image-icon");
   const toggleImageIcon2 = document.getElementById("toggle-image-icon-desktop");
-  // console.log("we are here");
+
   // hiding video icon
   toggleVideoIcon1.classList.add("inactive-media-type");
   toggleVideoIcon2.classList.add("inactive-media-type");
@@ -740,12 +679,10 @@ function calTotalPage() {
     if (queryResponse[0].collection.metadata.total_hits > quotient * 100) {
       quotient += 1;
       totalPage = quotient;
-      //alert(totalPage);
     }
     //if there are 100x total hits.eg: 500
     else {
       totalPage = quotient;
-      // alert(totalPage);
     }
   }
   //when there is only 1 total page
@@ -780,14 +717,10 @@ function downloadPageAndShowMedia(page) {
   var searchUrl = calSearchUrl(page);
   sendHttpRequest(method, searchUrl, mode)
     .then((response) => {
-      // console.log("page " + page + "downloaded");
-      // console.log(response);
       //storing new page in queryResponse
 
       queryResponse[page - 1] = response;
-      // console.log(queryResponse[page - 1]);
-      // hitNum = -1;
-      // nextData();
+
       fetchMediaUrl(hitNum, currentPage);
     })
     .catch((errCode) => {
@@ -837,14 +770,10 @@ function downloadPageAndShowMedia(page) {
     });
 }
 function downloadNextPage(page) {
-  // console.log("downloadNextPage()");
   var searchUrl = calSearchUrl(page);
 
   sendHttpRequest(method, searchUrl, mode)
     .then((response) => {
-      // console.log("new page downloaded");
-      // console.log(response);
-      //storing new page in queryResponse
       queryResponse[page - 1] = response;
       hitNum = -1;
 
@@ -898,13 +827,10 @@ function downloadNextPage(page) {
 }
 
 function downloadPrevPage(page) {
-  // console.log("downloadPrevPage()");
   var searchUrl = calSearchUrl(page);
 
   sendHttpRequest(method, searchUrl, mode)
     .then((response) => {
-      // console.log("new page downloaded");
-      // console.log(response);
       //storing new page in queryResponse
       queryResponse[page - 1] = response;
       hitNum = 100;
@@ -1048,27 +974,18 @@ function nextData() {
       }
     }
 
-    // showMessage(loading, 0);
-    // document.getElementById("pic").src = "loading.gif";
-
-    // showContentModal();
     updateStateOfContentModal();
 
     if (mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)] == undefined) {
-      // console.log("calling fetchMediaUrl");
       fetchMediaUrl(hitNum, currentPage);
     } else {
       showMedia();
     }
-
-    // showNextPrevCards(hitNum, currentPage);
-    // showDescription(hitNum, currentPage);
   }
 }
 
 //tries going to next page. shows error if its already the last page
 function nextPage() {
-  // console.log("we are here");
   //if next page exists
   if (isNextPageAvailable()) {
     // hideImage();
@@ -1093,9 +1010,6 @@ function nextPage() {
   }
   //if the next page does not exist (exceeds total pages)
   else {
-    //        hitNumReset();
-    // document.getElementById("message").innerHTML = "Loading...";
-
     showMessage(lastPage, 0);
 
     enableBtns();
@@ -1108,7 +1022,7 @@ function prevData() {
   disableBtns();
 
   hitNum--;
-  // document.getElementById("message").innerHTML = "";
+
   //if hit number becomes less than 0 then transition to prev page
   if (hitNum < 0) {
     //if previous page is available then go to previous page
@@ -1162,7 +1076,6 @@ function prevData() {
   }
   //else show previous data from the current page
   else {
-    //document.getElementById("message").innerHTML = "Loading...";
     // hideImage();
     pauseVideo();
     hideVideo();
@@ -1178,7 +1091,6 @@ function prevData() {
         if (
           visitedImages[(currentPage - 1) * 100 + parseInt(hitNum)] == undefined
         ) {
-          // console.log("showing media loading animation");
           showMediaLoadingAnimation();
         }
       } else {
@@ -1186,7 +1098,7 @@ function prevData() {
       }
     }
     // showMessage(loading, 0);
-    //document.getElementById("pic").src = "loading.gif";
+
     updateStateOfContentModal();
 
     if (mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)] == undefined) {
@@ -1202,7 +1114,7 @@ function prevData() {
 //tries going to previous page. shows error if its  first page
 function prevPage() {
   currentPage--;
-  // document.getElementById("message").innerHTML = "";
+
   //if the page we are trying to access is less than 1 then throw error
   if (currentPage < 1) {
     // showMessage(firstPage, 0);
@@ -1213,9 +1125,6 @@ function prevPage() {
   }
   //else  fetch data
   else {
-    //        hitNumReset();
-    // document.getElementById("message").src = "Loading...";
-    // hideImage();
     pauseVideo();
     hideVideo();
     if (isContentModalOpen()) {
@@ -1235,7 +1144,6 @@ function prevPage() {
 
 //returns the file extension of current urlNum (url index) of mediaUrls
 function getFileExtension(urlNum) {
-  // console.log("getFileExtension()");
   var urlStr =
     mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][urlNum].href;
   var lastIndex = urlStr.lastIndexOf(".");
@@ -1246,10 +1154,9 @@ function getFileExtension(urlNum) {
 //CREATES QUALITY OPTIONS (SELECT)
 function createMediaQualityOptions() {
   const select = document.querySelector("#quality-selector");
-  // console.log(select);
+
   //contains all the keys inside qualityIndices
   const keys = Object.keys(qualityIndices);
-  //console.log(keys);
 
   //bypass this statement the first time this function is called as there is nothing
   // to remove.
@@ -1275,17 +1182,9 @@ function createMediaQualityOptions() {
     option.text = key;
 
     option.id = key;
-    // const option2 = option;
+
     select.add(option);
-    // console.log(option);
-
-    // elem.add(option);
   });
-
-  //console.log(select.value);
-  // for (var i = 0; i < select.length; i++) {
-  //   console.log(select[i]);
-  // }
 }
 
 //FINDS ALL THE MEDIA QUALITIES AVAILABLE AND THEN STORES IT IN qualityIndices
@@ -1295,7 +1194,6 @@ function findMediaQualities() {
   // console.log("findMediaQualities()");
   qualityIndices = {};
   if (mediaType == "video") {
-    // console.log("we are here");
     for (
       var i = 0;
       i < mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)].length;
@@ -1316,8 +1214,6 @@ function findMediaQualities() {
         qualityIndices[qualityName] = i;
       }
     }
-    // console.log("qualityIndices:");
-    // console.log(qualityIndices);
   }
   //for image
   else {
@@ -1360,17 +1256,15 @@ function findMediaQualities() {
     }
     // console.log(qualityIndices);
   }
-  // console.log("findMediaQualities()");
 }
 function handleVideoLoadingError() {
-  // console.log("handleVideoLoadingError()");
   pauseVideo();
   hideVideo();
   hideImage();
   hideDescription();
 
   removeBlurFromContentSection();
-  // console.log("i was fired");
+
   showMessage(onErrorMessage, 0);
 
   // showing arrow buttons
@@ -1381,20 +1275,16 @@ function handleVideoLoadingError() {
 function stopPreviousIvlVideoListeners() {
   var vid = document.getElementById("vid");
   vid.removeEventListener("error", handleVideoLoadingError);
-  // vid.removeEventListener("loadedmetadata", handleVideoLoadedMetaData);
 }
 function startIvlVideoListeners() {
   var vid = document.getElementById("vid");
 
   vid.addEventListener("error", handleVideoLoadingError);
-  // vid.addEventListener("loadedmetadata", handleVideoLoadedMetaData);
 }
 //SHOWS THE IVL VIDEO
 function showIvlVideo() {
   hideMessage();
   hideMediaLoadingAnimation();
-  // console.log("showIvlVideo()");
-  //console.log(mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][0]);
 
   if (mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)].length > 0) {
     if (qualityIndices.hasOwnProperty("Medium")) {
@@ -1402,7 +1292,6 @@ function showIvlVideo() {
       hideMessage();
       hideLoadingAnimation();
 
-      // vid.src = mediaUrls[qualityIndices["Medium"]].href;
       createVideoElement(
         mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][
           qualityIndices["Medium"]
@@ -1416,12 +1305,11 @@ function showIvlVideo() {
         showDescription(hitNum, currentPage);
       }
       removeBlurFromContentSection();
-      // console.log("Quality: Medium url num: " + qualityIndices["Medium"]);
     } else if (qualityIndices.hasOwnProperty("Large")) {
       document.getElementById("Large").selected = "true";
       hideMessage();
       hideLoadingAnimation();
-      // vid.src = mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][qualityIndices["Large"]].href;
+
       createVideoElement(
         mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][
           qualityIndices["Large"]
@@ -1440,7 +1328,7 @@ function showIvlVideo() {
       document.getElementById("Original").selected = true;
       hideMessage();
       hideLoadingAnimation();
-      // vid.src = mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][qualityIndices["Original"]].href;
+
       createVideoElement(
         mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][
           qualityIndices["Original"]
@@ -1454,12 +1342,10 @@ function showIvlVideo() {
         showDescription(hitNum, currentPage);
       }
       removeBlurFromContentSection();
-      // console.log("Quality: Original url num: " + qualityIndices["Original"]);
     } else if (qualityIndices.hasOwnProperty("Small")) {
       document.getElementById("Small").selected = true;
       hideMessage();
       hideLoadingAnimation();
-      // vid.src = mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][qualityIndices["Small"]].href;
       createVideoElement(
         mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][
           qualityIndices["Small"]
@@ -1473,12 +1359,10 @@ function showIvlVideo() {
         showDescription(hitNum, currentPage);
       }
       removeBlurFromContentSection();
-      // console.log("Quality: Preview url num: " + qualityIndices["Small"]);
     } else if (qualityIndices.hasOwnProperty("Preview")) {
       document.getElementById("Preview").selected = true;
       hideMessage();
       hideLoadingAnimation();
-      // vid.src = mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][qualityIndices["Preview"]].href;
       createVideoElement(
         mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][
           qualityIndices["Preview"]
@@ -1492,12 +1376,10 @@ function showIvlVideo() {
         showDescription(hitNum, currentPage);
       }
       removeBlurFromContentSection();
-      // console.log("Quality: Small url num: " + qualityIndices["Preview"]);
     } else if (qualityIndices.hasOwnProperty("Mobile")) {
       document.getElementById("Mobile").selected = true;
       hideMessage();
       hideLoadingAnimation();
-      // vid.src = mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][qualityIndices["Mobile"]].href;
       createVideoElement(
         mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][
           qualityIndices["Mobile"]
@@ -1511,9 +1393,7 @@ function showIvlVideo() {
         showDescription(hitNum, currentPage);
       }
       removeBlurFromContentSection();
-      // console.log("Quality: Mobile url num: " + qualityIndices["Mobile"]);
     } else {
-      // console.log("we are here hahah");
       removeBlurFromContentSection();
       hideDescription();
       hideLoadingAnimation();
@@ -1524,7 +1404,6 @@ function showIvlVideo() {
       showMessage(notFound404, 0);
     }
   } else {
-    // console.log("we are here hahah 2");
     removeBlurFromContentSection();
     hideDescription();
     hideLoadingAnimation();
@@ -1566,13 +1445,6 @@ function showIvlVideo() {
   }
 }
 
-// function listenToQualityChange() {
-//   var quality = document.getElementById("quality-selector");
-//   quality.onchange = () => {
-//     //alert("we are in listentoqualitychange");
-//     changeMediaQuality(document.getElementById("quality-selector").value);
-//   };
-// }
 function changeMediaQuality(qualityKey) {
   disableBtns();
   // blur content section for image only.
@@ -1597,9 +1469,6 @@ function changeMediaQuality(qualityKey) {
       ].href;
     vid.currentTime = prevTime;
     enableBtns();
-    // console.log(
-    //   "Quality: " + qualityKey + " url num: " + qualityIndices[qualityKey]
-    // );
   }
   //for image
   else {
@@ -1613,38 +1482,8 @@ function changeMediaQuality(qualityKey) {
       ].href;
 
     enableBtns();
-    // console.log(
-    //   "Quality: " + qualityKey + " url num: " + qualityIndices[qualityKey]
-    // );
   }
 }
-// function handleWindowResize() {
-//   //for video
-//   if (mediaType == "video") {
-//     var video = document.getElementById("vid");
-//     if (video != undefined) {
-//       var contentSectionWidth = window.innerWidth;
-//       var contentSectionHeight = window.innerHeight * 0.9;
-//       video.style.maxHeight = contentSectionHeight * 0.95;
-//       video.style.maxWidth = contentSectionWidth * 0.9;
-//     }
-//   }
-
-//   //for image
-//   if (mediaType == "image") {
-//     var image = document.getElementById("pic");
-//     var contentSectionWidth = window.innerWidth;
-//     var contentSectionHeight = window.innerHeight * 0.9;
-//     image.style.maxHeight = contentSectionHeight * 0.95;
-//     image.style.maxWidth = contentSectionWidth * 0.9;
-//   }
-// }
-// function blurContentModal() {
-//   const preBackgroundBlurElement = document.querySelector(
-//     ".pre-background-blur"
-//   );
-//   preBackgroundBlurElement.classList.add("show");
-// }
 
 function showBlurredBackground(href) {
   const backgroundBlurElement = document.querySelector(".background-blur");
@@ -1654,12 +1493,9 @@ function showBlurredBackground(href) {
 }
 function hideBlurredBackground() {
   const backgroundBlurElement = document.querySelector(".background-blur");
-  // const preBackgroundBlurElement = document.querySelector(
-  //   ".pre-background-blur"
-  // );
+
   backgroundBlurElement.src = "";
   backgroundBlurElement.classList.remove("show");
-  // preBackgroundBlurElement.classList.remove("show");
 }
 
 function showIvlImage() {
@@ -1667,8 +1503,6 @@ function showIvlImage() {
   var highestQualityAvailableForBlurredBackgroundUrl;
 
   image.onerror = () => {
-    // pauseVideo();
-    // hideVideo();
     hideImage();
     hideDescription();
     hideLoadingAnimation();
@@ -1716,7 +1550,6 @@ function showIvlImage() {
       image.alt =
         queryResponse[currentPage - 1].collection.items[hitNum].data[0].title;
       highestQualityAvailableForBlurredBackgroundUrl = image.src;
-      // console.log("Quality: Medium url num: " + qualityIndices["Medium"]);
     } else if (qualityIndices.hasOwnProperty("Large")) {
       document.getElementById("Large").selected = "true";
 
@@ -1727,8 +1560,6 @@ function showIvlImage() {
       image.alt =
         queryResponse[currentPage - 1].collection.items[hitNum].data[0].title;
       highestQualityAvailableForBlurredBackgroundUrl = image.src;
-
-      // console.log("Quality: Large url num: " + qualityIndices["Large"]);
     } else if (qualityIndices.hasOwnProperty("Original")) {
       document.getElementById("Original").selected = true;
 
@@ -1739,7 +1570,6 @@ function showIvlImage() {
       image.alt =
         queryResponse[currentPage - 1].collection.items[hitNum].data[0].title;
       highestQualityAvailableForBlurredBackgroundUrl = image.src;
-      // console.log("Quality: Original url num: " + qualityIndices["Original"]);
     } else if (qualityIndices.hasOwnProperty("Small")) {
       document.getElementById("Small").selected = true;
 
@@ -1750,8 +1580,6 @@ function showIvlImage() {
       image.alt =
         queryResponse[currentPage - 1].collection.items[hitNum].data[0].title;
       highestQualityAvailableForBlurredBackgroundUrl = image.src;
-
-      // console.log("Quality: Preview url num: " + qualityIndices["Small"]);
     } else {
       showMessage(notFound404, 0);
     }
@@ -1791,13 +1619,10 @@ function showIvlImage() {
 }
 
 function getCurrentCosmicObjectNum(itemNum, pageNum) {
-  // console.log(
-  //   "itemnum receievd: " + itemNum + " pageNum receieved: " + pageNum
-  // );
   pageNum--;
   itemNum++;
   var cosmicObjectNum = itemNum + pageNum * 100;
-  // console.log(cosmicObjectNum);
+
   return cosmicObjectNum;
 }
 
@@ -1832,23 +1657,11 @@ function showMedia() {
 function hideDescription() {
   document.querySelector(".know-more-data-container").classList.remove("show");
 }
-// function handleKnowMoreClick() {
-//   var dataContainer = document.querySelector(".know-more-data-container");
-//   if (dataContainer.classList.contains("open")) {
-//     dataContainer.classList.remove("open");
-//   } else {
-//     dataContainer.classList.add("open");
-//   }
-// }
+
 function showDescription(itemNum, pageNum) {
   const descriptiveData =
     queryResponse[pageNum - 1].collection.items[itemNum].data[0];
 
-  // document.getElementById("cosmic-object-num").innerHTML =
-  //   "Cosmic Object: " +
-  //   getCurrentCosmicObjectNum(itemNum, pageNum) +
-  //   " / " +
-  //   totalHits;
   const date = new Date(descriptiveData.date_created);
   var months = [
     "January",
@@ -1883,7 +1696,6 @@ function cacheMediaUrl(itemNum, pageNum) {
 
   //  FOR CACHING NEXT ITEMS
   if (mediaUrls[(pageNum - 1) * 100 + parseInt(itemNum) + 5] == undefined) {
-    // console.log("we entered here");
     itemNum++;
 
     // if the itemnum is less than the totals hits of the current page
@@ -1921,7 +1733,6 @@ function cacheMediaUrl(itemNum, pageNum) {
         itemNum = mediaUrls.length - (currentPage - 1) * 100;
 
         if (itemNum < queryResponse[currentPage - 1].collection.items.length) {
-          // console.log("itemNum");
           // console.log(itemNum);
           // console.clear();
           // console.log("CACHING ONE");
@@ -2046,13 +1857,9 @@ function fetchMediaUrl(itemNum, pageNum) {
       //     " Media type:" +
       //     mediaType
       // );
-      // console.log("itemNum: " + itemNum + " " + "pageNum: " + pageNum);
 
-      // console.log(itemNumFormula);
       mediaUrls[(pageNum - 1) * 100 + parseInt(itemNum)] =
         fetchedMediaUrls.collection.items;
-      // console.log(mediaUrls);
-      // showDescription(itemNum, pageNum);
 
       showMedia();
     })
@@ -2101,7 +1908,6 @@ function calSearchUrl(page) {
 
 //retrives user search input
 function startSearch(event) {
-  // document.getElementById("message").innerHTML = "Loading...";
   //get the searching string
 
   // if the user used the search box on the nav bar
@@ -2197,7 +2003,6 @@ function startSearch(event) {
   }
 }
 function handleRadioButtonChange() {
-  // console.log("handleRadiobuttonchange()");
   hideMessage();
   removeResults();
   disableBtns();
@@ -2205,10 +2010,8 @@ function handleRadioButtonChange() {
 
   if (event.target.classList.contains("image-radio-button")) {
     selectedMediaType = "image";
-    // console.log("we are here");
   } else {
     selectedMediaType = "video";
-    // console.log("we are here");
   }
   // selectRadioButtons();
   mediaUrls = [];
@@ -2224,7 +2027,6 @@ function handleRadioButtonChange() {
 
 //gets Ivl initial data, sets total page and fetches media url
 function getIvl(page) {
-  // console.log("getIvl()");
   hideMessage();
   //console.log(search);
   var searchUrl = calSearchUrl(page);
@@ -2268,7 +2070,6 @@ function getIvl(page) {
 
         var runloop = setInterval(() => {
           // console.log(!isBodyOverflowing());
-          // console.log("we are here");
 
           const totalCardsShown = (currentThumbPage - 1) * 100 + thumbNum;
 
@@ -2290,7 +2091,7 @@ function getIvl(page) {
         // while (!isBodyOverflowing()) {
         //   console.log(!isBodyOverflowing());
         //   showResultCards();
-        //   console.log("we are here");
+
         // }
       }
       //if there are no hits
@@ -2416,8 +2217,6 @@ function showResultCards() {
         image.alt = " ";
 
         card.appendChild(image);
-
-        // card.style.backgroundSize = "cover";
 
         // stores resultNum Range:[0-totalHits]
         const resultNum = `result-num:${
@@ -2599,7 +2398,6 @@ function showMediaLoadingAnimation() {
     .classList.remove("hide");
 }
 function hideMediaLoadingAnimation() {
-  // console.log("i was executed");
   document
     .querySelector(".loading-animation-container.media-loading-animation")
     .classList.add("hide");
@@ -3182,28 +2980,18 @@ function handleSwipe(event) {
   if (initialPositionX - x > 40 && Math.abs(initialPositionY - y) < 16) {
     initialPositionX = 0;
     initialPositionY = 0;
-    // console.log(
-    //   "initialPositionX: " +
-    //     initialPositionX +
-    //     " intialPositionY: " +
-    //     initialPositionY
-    // );
+
     if (!isMediaLoadingAnimationShowing()) {
       nextData();
     }
   } else if (x - initialPositionX > 40 && Math.abs(y - initialPositionY) < 16) {
     initialPositionX = window.innerWidth;
     initialPositionY = window.innerHeight;
-    // console.log(
-    //   "initialPositionX: " +
-    //     initialPositionX +
-    //     " intialPositionY: " +
-    //     initialPositionY
-    // );
+
     if (!isMediaLoadingAnimationShowing()) {
       prevData();
     }
   } else {
+    // do nothing
   }
-  // document.getElementById("demo").innerHTML = x + ", " + y;
 }
