@@ -1336,21 +1336,22 @@ input[type="radio"]:checked + label {
   /* margin-left: 12px; */
   /* margin: 10px; */
   border-radius: 4px;
-  /* background-color: transparent; */
+  background-color: transparent;
   color: var(--theme-color);
   font-family: "Open Sans", sans-serif;
   font-size: 1.6rem;
   font-weight: 600;
 
-  border: 2px solid var(--theme-color);
+  /* border: 2px solid var(--theme-color); */
   outline: none;
   cursor: pointer;
-  background-color: transparent;
+
   /* background-color: lawngreen; */
 
   /* font-style: italic; */
-
-  /* box-shadow: 0 0 6px rgba(0, 0, 0.24); */
+  border: none;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.24);
+  /* filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.24)); */
 }
 .select-quality:focus {
   outline: none;
@@ -1819,8 +1820,11 @@ option {
     color: white;
   }
   .select-quality-container .select-quality {
-    color: white;
+    color: var(--white);
+    /* background-color: white; */
     border: 2px solid white;
+    /* border: none; */
+    box-shadow: 0 0px 12px rgba(0, 0, 0, 0.24);
     /* filter: drop-shadow(0 6px 6px rgba(0, 0, 0, 0.24)); */
   }
   .full-screen-icon-container .full-screen-icon {

@@ -470,7 +470,7 @@ function displayVideo() {
 }
 
 function createVideoElement(url) {
-  console.log("video url:" + url);
+  // console.log("video url:" + url);
   // var contentSectionWidth = window.innerWidth;
   // var contentSectionHeight = window.innerHeight * 0.9;
 
@@ -1177,7 +1177,7 @@ function prevData() {
     updateStateOfContentModal();
 
     if (mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)] == undefined) {
-      console.log("calling fetchMediaUrl");
+      // console.log("calling fetchMediaUrl");
       fetchMediaUrl(hitNum, currentPage);
     } else {
       showMedia();
@@ -1303,8 +1303,8 @@ function findMediaQualities() {
         qualityIndices[qualityName] = i;
       }
     }
-    console.log("qualityIndices:");
-    console.log(qualityIndices);
+    // console.log("qualityIndices:");
+    // console.log(qualityIndices);
   }
   //for image
   else {
@@ -1378,6 +1378,7 @@ function startIvlVideoListeners() {
 }
 //SHOWS THE IVL VIDEO
 function showIvlVideo() {
+  hideMessage();
   hideMediaLoadingAnimation();
   // console.log("showIvlVideo()");
   //console.log(mediaUrls[(currentPage - 1) * 100 + parseInt(hitNum)][0]);
@@ -1402,7 +1403,7 @@ function showIvlVideo() {
         showDescription(hitNum, currentPage);
       }
       removeBlurFromContentSection();
-      console.log("Quality: Medium url num: " + qualityIndices["Medium"]);
+      // console.log("Quality: Medium url num: " + qualityIndices["Medium"]);
     } else if (qualityIndices.hasOwnProperty("Large")) {
       document.getElementById("Large").selected = "true";
       hideMessage();
@@ -1421,7 +1422,7 @@ function showIvlVideo() {
         showDescription(hitNum, currentPage);
       }
       removeBlurFromContentSection();
-      console.log("Quality: Large url num: " + qualityIndices["Large"]);
+      // console.log("Quality: Large url num: " + qualityIndices["Large"]);
     } else if (qualityIndices.hasOwnProperty("Original")) {
       document.getElementById("Original").selected = true;
       hideMessage();
@@ -1440,7 +1441,7 @@ function showIvlVideo() {
         showDescription(hitNum, currentPage);
       }
       removeBlurFromContentSection();
-      console.log("Quality: Original url num: " + qualityIndices["Original"]);
+      // console.log("Quality: Original url num: " + qualityIndices["Original"]);
     } else if (qualityIndices.hasOwnProperty("Small")) {
       document.getElementById("Small").selected = true;
       hideMessage();
@@ -1459,7 +1460,7 @@ function showIvlVideo() {
         showDescription(hitNum, currentPage);
       }
       removeBlurFromContentSection();
-      console.log("Quality: Preview url num: " + qualityIndices["Small"]);
+      // console.log("Quality: Preview url num: " + qualityIndices["Small"]);
     } else if (qualityIndices.hasOwnProperty("Preview")) {
       document.getElementById("Preview").selected = true;
       hideMessage();
@@ -1478,7 +1479,7 @@ function showIvlVideo() {
         showDescription(hitNum, currentPage);
       }
       removeBlurFromContentSection();
-      console.log("Quality: Small url num: " + qualityIndices["Preview"]);
+      // console.log("Quality: Small url num: " + qualityIndices["Preview"]);
     } else if (qualityIndices.hasOwnProperty("Mobile")) {
       document.getElementById("Mobile").selected = true;
       hideMessage();
@@ -1497,7 +1498,7 @@ function showIvlVideo() {
         showDescription(hitNum, currentPage);
       }
       removeBlurFromContentSection();
-      console.log("Quality: Mobile url num: " + qualityIndices["Mobile"]);
+      // console.log("Quality: Mobile url num: " + qualityIndices["Mobile"]);
     } else {
       // console.log("we are here hahah");
       removeBlurFromContentSection();
@@ -1872,7 +1873,7 @@ function cacheMediaUrl(itemNum, pageNum) {
       // check if the next mediaurl does not exist. if yes then proceed and cache 5 sets of mediaUrls
       if (mediaUrls[(pageNum - 1) * 100 + parseInt(itemNum)] == undefined) {
         // console.clear();
-        console.log("CACHING NEXT ITEM SET OF 5");
+        console.log("CACHING NEXT 5");
 
         var url;
         var nasa_id =
@@ -1886,7 +1887,7 @@ function cacheMediaUrl(itemNum, pageNum) {
           mediaUrls[(pageNum - 1) * 100 + parseInt(itemNum)] =
             fetchedMediaUrls.collection.items;
 
-          console.log(mediaUrls);
+          // console.log(mediaUrls);
 
           // cache the next 5 sets of mediaUrls
           var limit = parseInt(parseInt(hitNum) + 5);
@@ -1903,9 +1904,9 @@ function cacheMediaUrl(itemNum, pageNum) {
 
         if (itemNum < queryResponse[currentPage - 1].collection.items.length) {
           // console.log("itemNum");
-          console.log(itemNum);
+          // console.log(itemNum);
           // console.clear();
-          console.log("WE ARE GOING TO CACHE ONE NEXT MEDIA URL");
+          console.log("CACHING ONE");
 
           var url;
           var nasa_id =
@@ -1920,7 +1921,7 @@ function cacheMediaUrl(itemNum, pageNum) {
             mediaUrls[(pageNum - 1) * 100 + parseInt(itemNum)] =
               fetchedMediaUrls.collection.items;
 
-            console.log(mediaUrls);
+            // console.log(mediaUrls);
           });
         }
       }
@@ -1939,7 +1940,7 @@ function cacheMediaUrl(itemNum, pageNum) {
       // check if the last  mediaurls does not exist. if yes then proceed and cache 5 sets of mediaUrls
       if (mediaUrls[(pageNum - 1) * 100 + parseInt(itemNum)] == undefined) {
         // console.clear();
-        console.log("WE ARE GOING TO CACHE 5 SET PREV URLS");
+        console.log("CACHING PREV 5");
 
         var url;
         var nasa_id =
@@ -1953,7 +1954,7 @@ function cacheMediaUrl(itemNum, pageNum) {
           mediaUrls[(pageNum - 1) * 100 + parseInt(itemNum)] =
             fetchedMediaUrls.collection.items;
 
-          console.log(mediaUrls);
+          // console.log(mediaUrls);
 
           // cache the previous 5 sets of mediaUrls
           var limit = parseInt(parseInt(hitNum) - 5);
@@ -1977,7 +1978,7 @@ function cacheMediaUrl(itemNum, pageNum) {
 
         // making itemNum equal to the next desirable mediaUrl
         // itemNum = mediaUrls.length - (currentPage - 1) * 100;
-        console.log("WE ARE GOING TO CACHE ONE PREV MEDIA URL");
+        console.log("CACHING ONE PREV");
         var url;
         var nasa_id =
           queryResponse[pageNum - 1].collection.items[itemNum].data[0].nasa_id;
@@ -1987,7 +1988,7 @@ function cacheMediaUrl(itemNum, pageNum) {
         sendHttpRequest(method, url, mode).then((fetchedMediaUrls) => {
           mediaUrls[(pageNum - 1) * 100 + parseInt(itemNum)] =
             fetchedMediaUrls.collection.items;
-          console.log(mediaUrls);
+          // console.log(mediaUrls);
         });
       }
     }
@@ -1996,7 +1997,7 @@ function cacheMediaUrl(itemNum, pageNum) {
 }
 //fetches media urls of a specific hit and calls showIvl()
 function fetchMediaUrl(itemNum, pageNum) {
-  console.log("fetchMediaUrl()");
+  // console.log("fetchMediaUrl()");
 
   var url;
 
@@ -2027,12 +2028,12 @@ function fetchMediaUrl(itemNum, pageNum) {
       //     " Media type:" +
       //     mediaType
       // );
-      console.log("itemNum: " + itemNum + " " + "pageNum: " + pageNum);
+      // console.log("itemNum: " + itemNum + " " + "pageNum: " + pageNum);
 
       // console.log(itemNumFormula);
       mediaUrls[(pageNum - 1) * 100 + parseInt(itemNum)] =
         fetchedMediaUrls.collection.items;
-      console.log(mediaUrls);
+      // console.log(mediaUrls);
       // showDescription(itemNum, pageNum);
 
       showMedia();
@@ -2204,7 +2205,7 @@ function handleRadioButtonChange() {
 
 //gets Ivl initial data, sets total page and fetches media url
 function getIvl(page) {
-  console.log("getIvl()");
+  // console.log("getIvl()");
   hideMessage();
   //console.log(search);
   var searchUrl = calSearchUrl(page);
@@ -2438,7 +2439,7 @@ function showResultCards() {
 
           hitNum = itemNum;
           currentPage = pageNum;
-          console.log("hitnum:" + hitNum + " currentPage:" + currentPage);
+          // console.log("hitnum:" + hitNum + " currentPage:" + currentPage);
           // showDescription(itemNum, pageNum);
           hideImage();
           hideVideo();
