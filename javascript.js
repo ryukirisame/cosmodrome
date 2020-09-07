@@ -10,6 +10,8 @@ var queryResponse = [];
 //mediaUrls is an array of urls of a specific hit media
 var mediaUrls = [];
 
+var visitedImages = [];
+
 // contains an object with key as quality and value as the index number of the url in mediaUrls
 // eg. qualityIndices={"orig":0,"large":1}
 var qualityIndices = {};
@@ -958,6 +960,7 @@ function downloadPrevPage(page) {
 
 function nextData() {
   // console.log("nextDAta()");
+  console.log(visitedImages);
   disableBtns();
 
   hitNum++;
@@ -1034,7 +1037,12 @@ function nextData() {
       hideMessage();
       if (mediaType == "image") {
         hideLoadingAnimation();
-        showMediaLoadingAnimation();
+        if (
+          visitedImages[(currentPage - 1) * 100 + parseInt(hitNum)] == undefined
+        ) {
+          console.log("showing media loading animation");
+          showMediaLoadingAnimation();
+        }
       } else {
         hideArrowButtonContainer();
         hideDescription();
@@ -1097,6 +1105,7 @@ function nextPage() {
 
 function prevData() {
   // console.log("prevData()");
+  console.log(visitedImages);
   disableBtns();
 
   hitNum--;
@@ -1167,7 +1176,12 @@ function prevData() {
       hideMessage();
       if (mediaType == "image") {
         hideLoadingAnimation();
-        showMediaLoadingAnimation();
+        if (
+          visitedImages[(currentPage - 1) * 100 + parseInt(hitNum)] == undefined
+        ) {
+          console.log("showing media loading animation");
+          showMediaLoadingAnimation();
+        }
       } else {
         hideDescription();
       }
@@ -1661,6 +1675,7 @@ function showIvlImage() {
     hideLoadingAnimation();
     hideMediaLoadingAnimation();
     showMessage(onErrorMessage, 0);
+
     // enableBtns();
   };
   image.onload = () => {
@@ -1683,6 +1698,10 @@ function showIvlImage() {
     // showing arrow buttons
     showArrowButtonContainer();
     cacheMediaUrl(hitNum, currentPage);
+
+    // console.log("setting visited images");
+    visitedImages[(currentPage - 1) * 100 + parseInt(hitNum)] = true;
+    // console.log(visitedImages);
     // cacheNextPic(hitNum, currentPage);
     // enableBtns();
   };
@@ -1849,9 +1868,9 @@ function showDescription(itemNum, pageNum) {
   document.getElementById("date").innerText =
     date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
 
-  document.getElementById("title").innerText =
-    hitNum + " " + pageNum + " " + descriptiveData.title;
-  // document.getElementById("title").innerText = descriptiveData.title;
+  // document.getElementById("title").innerText =
+  //   hitNum + " " + pageNum + " " + descriptiveData.title;
+  document.getElementById("title").innerText = descriptiveData.title;
   document.getElementById("description").innerHTML =
     descriptiveData.description;
   // document.getElementById("resolution").innerText = "Calculating...";
@@ -2156,6 +2175,7 @@ function startSearch(event) {
 
     mediaUrls = [];
     queryResponse = [];
+    visitedImages = [];
 
     //get selected media type
     getSelectedMediaType(event);
@@ -2460,17 +2480,17 @@ function showResultCards() {
         const title = document.createElement("p");
         title.classList.add("overlay-title");
 
-        title.innerText =
-          thumbNum +
-          ": " +
-          currentThumbPage +
-          ": " +
-          queryResponse[currentThumbPage - 1].collection.items[thumbNum].data[0]
-            .title;
         // title.innerText =
-        //   queryResponse[currentThumbPage - 1].collection.items[
-        //     thumbNum
-        //   ].data[0].title;
+        //   thumbNum +
+        //   ": " +
+        //   currentThumbPage +
+        //   ": " +
+        //   queryResponse[currentThumbPage - 1].collection.items[thumbNum].data[0]
+        //     .title;
+        title.innerText =
+          queryResponse[currentThumbPage - 1].collection.items[
+            thumbNum
+          ].data[0].title;
         titleOverlay.appendChild(title);
         card.appendChild(titleOverlay);
 

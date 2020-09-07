@@ -896,13 +896,14 @@ body.modal-open {
   flex-direction: row;
   flex-wrap: nowrap;
   align-items: center;
+
   justify-content: center;
   /* position: absolute;
   left: 50%;
   transform: translateX(-50%); */
   padding: 1.6rem 0;
   /* display: inline-block; */
-
+  /* transition: all 2s ease-out; */
   /* background-color: turquoise; */
 }
 .results-container .media-type-radio-buttons-container {
@@ -1004,7 +1005,7 @@ input[type="radio"]:checked + label {
   text-decoration: none;
   /* text-align: center; */
   margin-bottom: 0.4rem;
-  fill: var(--footer-color);
+  fill: var(--secondary-text-color);
   height: 3.2rem;
   width: auto;
   /* background-color: turquoise; */
@@ -1017,7 +1018,7 @@ input[type="radio"]:checked + label {
   font-size: 1.4rem;
   font-weight: 600;
   white-space: nowrap;
-  color: var(--footer-color);
+  color: var(--secondary-text-color);
 }
 
 /* HOME PAGE FOOTER ENDS */
@@ -1074,8 +1075,9 @@ input[type="radio"]:checked + label {
 .card .videoIcon {
   position: absolute;
   z-index: 1;
-  top: 3rem;
-  left: 3rem;
+  display: none;
+  /* top: 3rem; */
+  /* left: 3rem; */
   transform: translate(-50%, -50%);
   color: rgba(255, 255, 255, 0.5);
 }
@@ -1327,6 +1329,7 @@ input[type="radio"]:checked + label {
   height: 3.6rem;
   z-index: 1;
   /* background-color: lawngreen; */
+  /* padding: 0 8px; */
 }
 
 .select-quality-container .select-quality {
@@ -1341,6 +1344,7 @@ input[type="radio"]:checked + label {
   font-family: "Open Sans", sans-serif;
   font-size: 1.6rem;
   font-weight: 600;
+  /* appearance: none; */
 
   /* border: 2px solid var(--theme-color); */
   outline: none;
@@ -1350,12 +1354,13 @@ input[type="radio"]:checked + label {
 
   /* font-style: italic; */
   border: none;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.24);
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.24);
   -webkit-user-select: none; /* Safari */
   -ms-user-select: none; /* IE 10+ and Edge */
   user-select: none; /* Standard syntax */
   /* filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.24)); */
 }
+
 .select-quality:focus {
   outline: none;
 }
@@ -1474,7 +1479,7 @@ option {
   /* background: turquoise; */
   cursor: pointer;
 
-  filter: drop-shadow(0px 0px 4px black);
+  filter: drop-shadow(0px 0px 4px rgba(0, 0, 0, 0.5));
 
   -webkit-user-select: none; /* Safari */
   -ms-user-select: none; /* IE 10+ and Edge */
@@ -1495,7 +1500,7 @@ option {
   /* outline: 1px solid turquoise; */
   transform: rotate(180deg);
   cursor: pointer;
-  filter: drop-shadow(0 0 4px black);
+  filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.5));
   -webkit-user-select: none; /* Safari */
   -ms-user-select: none; /* IE 10+ and Edge */
   user-select: none; /* Standard syntax */
@@ -1562,6 +1567,7 @@ option {
   height: auto;
   max-height: inherit;
   object-fit: contain;
+  /* transition: all 0.3s ease-out; */
 }
 .media-container video {
   width: 100%;
@@ -1606,7 +1612,8 @@ option {
   font-size: 2rem;
   font-weight: 700;
   color: var(--primary-text-color);
-  margin-top: 0.8rem;
+  margin-top: 0.4rem;
+  /* text-shadow: 0 0 9px rgba(0, 0, 0, 0.12); */
 }
 .know-more-data-container #description {
   font-family: "Open Sans", sans-serif;
@@ -1616,14 +1623,24 @@ option {
   /* background: turquoise; */
   text-align: left;
 }
+#description a {
+  color: var(--theme-color);
+}
+#description a:active {
+  color: var(--theme-color);
+}
 .know-more-data-container #date {
   font-family: "Montserrat", sans-serif;
   font-size: 1.4rem;
-  font-weight: 300;
+  font-weight: 400;
   font-style: italic;
   color: var(--secondary-text-color);
+  /* margin-top: 0.4rem; */
   margin-bottom: 0.8rem;
-  /* background-color: khaki; */
+  /* border: 1px solid var(--theme-color); */
+  /* background-color: var(--light-theme-color); */
+  border-radius: 20px;
+  padding: 0.2rem 1rem;
 }
 
 /* RESPONSIVE CODES */
@@ -1781,14 +1798,15 @@ option {
 
   .card .videoIcon {
     opacity: 0;
+    display: inline-block;
     pointer-events: none;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 56px;
     color: rgba(255, 255, 255, 0.8);
-    filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.36));
-    /* transition: opacity 0.1s ease-out; */
+    filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.32));
+    transition: opacity 0.15s ease-out;
   }
   .card:hover .videoIcon {
     opacity: 1;
@@ -1882,7 +1900,7 @@ option {
     /* max-height: calc(var(--vh, 1vh) * 100 - 6.4rem - 2.4rem);*/
     max-height: inherit;
     border-radius: 2px;
-    box-shadow: 0 6px 6px rgba(0, 0, 0, 0.24);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.24);
     /* position: absolute;
     top: 0%; */
     /* max-height: 100%; */
