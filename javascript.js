@@ -319,16 +319,31 @@ function handleArrowKeyPress(event) {
   // console.log("key pressed: " + char);
   if (char == 37) {
     // extra if check to not fire prevData() while the button is disabled (media is still loading)
-    // if (document.getElementById("prevBtn").disabled == false) {
-    prevData();
-    // }
+
+    if (
+      !document
+        .querySelector("#prev-arrow-button")
+        .classList.contains("disabled") &&
+      !document
+        .querySelector("#prev-item-button")
+        .classList.contains("disabled")
+    ) {
+      prevData();
+    }
   }
   if (char == 39) {
     // extra if check to not fire prevData() while the button is disabled (media is still loading)
 
-    // if (document.getElementById("nextBtn").disabled == false) {
-    nextData();
-    // }
+    if (
+      !document
+        .querySelector("#next-arrow-button")
+        .classList.contains("disabled") &&
+      !document
+        .querySelector("#next-item-button")
+        .classList.contains("disabled")
+    ) {
+      nextData();
+    }
   }
 }
 
@@ -382,7 +397,7 @@ function enableBtns() {
     btn.classList.remove("md-inactive");
   });
 
-  // changeItemBtn are the big arrow buttons on desktop
+  // changeItemBtn are the big arrow buttons on desktop version
   const changeItemBtn = document.querySelectorAll(".change-item-icon-button");
   changeItemBtn.forEach((btn) => {
     btn.classList.remove("disabled");
@@ -421,7 +436,7 @@ function disableBtns() {
     btn.classList.add("disabled");
     btn.classList.add("md-inactive");
   });
-  // changeItemBtn are the big arrow buttons on desktop
+  // changeItemBtn are the big arrow buttons on desktop version
   const changeItemBtn = document.querySelectorAll(".change-item-icon-button");
   changeItemBtn.forEach((btn) => {
     btn.classList.add("disabled");
@@ -717,6 +732,7 @@ function downloadPageAndShowMedia(page) {
   var searchUrl = calSearchUrl(page);
   sendHttpRequest(method, searchUrl, mode)
     .then((response) => {
+      console.log(response);
       //storing new page in queryResponse
 
       queryResponse[page - 1] = response;
@@ -774,6 +790,7 @@ function downloadNextPage(page) {
 
   sendHttpRequest(method, searchUrl, mode)
     .then((response) => {
+      console.log(response);
       queryResponse[page - 1] = response;
       hitNum = -1;
 
@@ -831,6 +848,7 @@ function downloadPrevPage(page) {
 
   sendHttpRequest(method, searchUrl, mode)
     .then((response) => {
+      console.log(response);
       //storing new page in queryResponse
       queryResponse[page - 1] = response;
       hitNum = 100;
@@ -1693,6 +1711,7 @@ function showDescription(itemNum, pageNum) {
 // pass current hitNum and currentpage. it will determine itself which ones to cache.
 function cacheMediaUrl(itemNum, pageNum) {
   // console.log(itemNum);
+  // console.log("caching");
 
   //  FOR CACHING NEXT ITEMS
   if (mediaUrls[(pageNum - 1) * 100 + parseInt(itemNum) + 5] == undefined) {
@@ -1703,7 +1722,7 @@ function cacheMediaUrl(itemNum, pageNum) {
       // check if the next mediaurl does not exist. if yes then proceed and cache 5 sets of mediaUrls
       if (mediaUrls[(pageNum - 1) * 100 + parseInt(itemNum)] == undefined) {
         // console.clear();
-        // console.log("CACHING NEXT 5");
+        console.log("CACHING NEXT 5");
 
         var url;
         var nasa_id =
@@ -1735,7 +1754,7 @@ function cacheMediaUrl(itemNum, pageNum) {
         if (itemNum < queryResponse[currentPage - 1].collection.items.length) {
           // console.log(itemNum);
           // console.clear();
-          // console.log("CACHING ONE");
+          console.log("CACHING ONE");
 
           var url;
           var nasa_id =
@@ -1769,7 +1788,7 @@ function cacheMediaUrl(itemNum, pageNum) {
       // check if the last  mediaurls does not exist. if yes then proceed and cache 5 sets of mediaUrls
       if (mediaUrls[(pageNum - 1) * 100 + parseInt(itemNum)] == undefined) {
         // console.clear();
-        // console.log("CACHING PREV 5");
+        console.log("CACHING PREV 5");
 
         var url;
         var nasa_id =
@@ -1807,7 +1826,7 @@ function cacheMediaUrl(itemNum, pageNum) {
 
         // making itemNum equal to the next desirable mediaUrl
         // itemNum = mediaUrls.length - (currentPage - 1) * 100;
-        // console.log("CACHING ONE PREV");
+        console.log("CACHING ONE PREV");
         var url;
         var nasa_id =
           queryResponse[pageNum - 1].collection.items[itemNum].data[0].nasa_id;
@@ -2045,8 +2064,8 @@ function getIvl(page) {
       enableBtns();
       totalHits = response.collection.metadata.total_hits;
 
-      // console.log("Total hits:" + totalHits);
-      // console.log(response);
+      console.log("Total hits:" + totalHits);
+      console.log(response);
       queryResponse[page - 1] = response;
 
       //if there are hits then we are ready to fetch media

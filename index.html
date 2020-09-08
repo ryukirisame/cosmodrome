@@ -541,7 +541,10 @@
           </div>
 
           <!-- back arrow button -->
-          <div class="prev-item-icon change-item-icon-button">
+          <div
+            class="prev-item-icon change-item-icon-button"
+            id="prev-item-button"
+          >
             <span class="material-icons md-36" onclick="prevData();">
               arrow_back_ios
             </span>
@@ -567,6 +570,7 @@
 
               <span
                 class="material-icons arrow-button md-24"
+                id="prev-arrow-button"
                 onclick="prevData()"
               >
                 arrow_back_ios
@@ -577,6 +581,7 @@
               <!-- google icons are messed up. the next button is wider than the prev button -->
               <span
                 class="material-icons arrow-button md-24"
+                id="next-arrow-button"
                 onclick="nextData()"
               >
                 arrow_back_ios
@@ -598,7 +603,10 @@
 
           <!-- next icon-->
           <!-- we have used back arrow. we will rotate it. -->
-          <div class="next-item-icon change-item-icon-button">
+          <div
+            class="next-item-icon change-item-icon-button"
+            id="next-item-button"
+          >
             <span class="material-icons md-36" onclick="nextData();">
               arrow_forward_ios
             </span>
