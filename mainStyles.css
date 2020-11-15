@@ -28,13 +28,38 @@
     /* formula:  --(ballG-height divided by 2) minus 2 */
     --ballG-top: calc(2px - calc(var(--ballG-height) / 2));
   }
-body{
-    background: white;
-    /* background-color: #2f3640; */
-   
 
-    /* background: black; */
-}
+  /* splash effect */
+  .splash-effect {
+    position: relative;
+    overflow: hidden;
+  }
+  .ripple {
+    position: absolute;
+    background-color:rgb(230, 230, 230);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    border-radius: 50%;
+    animation: animate 0.75s ease-out infinite;
+    z-index: 5;
+  }
+  .ripple.hide {
+    display: none;
+  }
+  @keyframes animate {
+    0% {
+      width: 0px;
+      height: 0px;
+      opacity: 0.55;
+    }
+  
+    100% {
+      width: 900px;
+      height: 900px;
+      opacity: 0.1;
+    }
+  }
+
 #all-contents{
     display: grid;
     grid-template-rows: auto 1fr auto;
