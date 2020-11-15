@@ -1,0 +1,1111 @@
+$color: #5a2017;
+$font-family: montserrat;
+$font-size: 22px;
+html {
+  scroll-behavior: smooth;
+}
+body,
+html {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+// fluid typography
+
+.title_head{
+  display: flex;
+  
+  p{
+    font-family: $font-family;
+    font-size: clamp(2.4rem, 5vw, 4rem); 
+    text-align: center;
+    font-weight: 700;
+  }
+}
+
+
+
+body {
+  background-color: $color;
+}
+body.modal-open {
+  position: fixed;
+  width: 100%;
+}
+.Navigation {
+  z-index: 1;
+  background-color: #5a2017;
+  height: 64px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: fixed;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.24);
+  .logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .menu {
+      padding: 8px;
+      transform: scale(0.6);
+      cursor: pointer;
+    }
+    .cosmo_text {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 64px;
+      img {
+        height: 16px;
+      }
+    }
+    .cosmo_logo {
+      display: none;
+    }
+  }
+}
+//intro button svg
+.explore_btn span img {
+  height: 75px;
+}
+
+.ham_menu_links {
+  margin-top: 20px;
+}
+.ham_menu_footer {
+  height: 12vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  img {
+    height: 50px;
+  }
+  p {
+    font-size: 14px;
+    font-weight: 700;
+    font-family: $font-family;
+  }
+}
+// .explore_mars_ham_button{
+// 	background-color:white;
+// 	width: 100%;
+// 	height: 44px;
+// 	z-index: 1000;
+// 	#Explore_mars_ham_button{
+// 		background-color: rgba(255, 255, 255, 0);
+// 		color: $color;
+// 	}
+// }
+
+.ham_menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: $color;
+  height: calc(var(--vh, 1vh) * 100);
+  z-index: 1;
+  position: fixed;
+  width: 68%;
+  transform: translateX(-100%);
+
+  box-shadow: 1px 0 3px rgba(0, 0, 0, 0.12), 1px 0px 2px rgba(0, 0, 0, 0.24);
+  a {
+    border-radius: 4px;
+    padding: 18px 30px;
+    background-color: $color;
+    display: block;
+    text-decoration: none;
+
+    color: white;
+    font-family: "Open Sans", sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+  }
+}
+.ham-active {
+  transform: translateX(0%);
+  transition: all 0.2s ease-in-out;
+}
+.ham-deactive {
+  transform: translateX(-100%);
+  transition: all 0.2s ease-in-out;
+}
+.js-is-hidden {
+  display: none;
+}
+.page_links a {
+  display: none;
+}
+.main_body {
+  background-color: white;
+  height: calc(var(--vh, 1vh) * 100);
+  // max-width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: column;
+  align-items: center;
+  clip-path: polygon(0 0, 100% 0, 100% 91%, 0% 100%);
+  .heading {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: $color;
+    .title {
+      display: flex;
+      font-family: $font-family;
+    }
+    .subtitle {
+      font-size: 25px;
+      font-family: $font-family;
+      font-weight: 400;
+      text-align: center;
+      max-width: 80%;
+    }
+    .title p {
+      font-size: 70px;
+      font-weight: 700;
+      text-align: center;
+    }
+  }
+}
+.roverinfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.roverTitle {
+  display: flex;
+  justify-content: center;
+  font-family: $font-family;
+  color: white;
+}
+.rover_card1 {
+  background-color: #fff;
+  margin: 15px;
+  border-radius: 7px;
+  width: 95%;
+  display: flex;
+  flex-direction: column;
+  .img {
+    border-radius: 5px 5px 0px 0px;
+    height: 260px;
+    width: 100%;
+    overflow: hidden;
+    img {
+      width: 100%;
+    }
+  }
+  .info {
+    display: flex;
+    flex-direction: column;
+    height: 260px;
+    padding: 2px 16px;
+    font-family: $font-family;
+  }
+  .info span {
+    opacity: 0.7;
+  }
+}
+// choose Rover Section
+.choose_rover_section {
+  display: flex;
+  flex-direction: column;
+  .chooseRover {
+    display: flex;
+    justify-content: space-around;
+    color: rgb(255, 255, 255);
+    font-family: $font-family;
+    font-size: 0.8rem;
+  }
+  .select_rover_container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    .select_rover {
+      background-color: white;
+    }
+    .select_rover {
+      margin: 8px;
+      color: white;
+      border-radius: 6px;
+      .rover_img {
+        height: 105px;
+        width: 100px;
+        img {
+          border-radius: 5px 5px 0 0;
+        }
+      }
+      .rover_name {
+        height: 35px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        a {
+          text-decoration: none;
+          color: $color;
+          font-family: $font-family;
+          font-size: 0.7rem;
+          font-weight: 700;
+        }
+      }
+    }
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+// Choose date section
+#choose_date_page {
+  height: 170px;
+  width: 100%;
+  display: none;
+}
+.choose_date_page {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  .choose_date_heading {
+    display: flex;
+    justify-content: space-around;
+    color: rgb(255, 255, 255);
+    font-family: $font-family;
+    font-size: 1.1rem;
+  }
+  .choose_date_box {
+    display: flex;
+    flex-direction: row;
+    // justify-content: space-around;
+    // padding: 8px;
+    padding-top: 10px;
+    // padding-left: 8px;
+    justify-content: center;
+    height: 100px;
+    #day,
+    #month,
+    #year {
+      border: none;
+      border-radius: 3px;
+      width: 66px;
+      height: 30px;
+      outline: none;
+      overflow-y: 100px;
+      background-color: #fff;
+      color: $color;
+      font-family: $font-family;
+      font-weight: 700;
+    }
+    button {
+      height: 30px;
+      border: none;
+      outline: none;
+      border-radius: 3px;
+      font-family: $font-family;
+      color: $color;
+      background-color: #fff;
+      font-weight: 700;
+      font-size: 12px;
+    }
+  }
+  #search_btn {
+    margin-left: 8px;
+  }
+}
+//Date Range of Rovers
+.dateRangeOfRovers_heading {
+  display: flex;
+  justify-content: center;
+  margin-left: 13px;
+  color: white;
+  font-family: $font-family;
+  padding: 5px;
+  font-size: 14px;
+}
+.dateRangeOfRovers {
+  padding: 5px;
+  display: flex;
+  justify-content: center;
+  margin-left: 13px;
+  color: rgb(255, 255, 255);
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+  font-size: 12px;
+}
+.Curiosity_date_range {
+  display: none;
+}
+.Opportunity_date_range {
+  display: none;
+}
+.Spirit_date_range {
+  display: none;
+}
+.Curiosity_date_range_active {
+  display: inline;
+}
+.Opportunity_date_range_active {
+  display: inline;
+}
+.Spirit_date_range_active {
+  display: inline;
+}
+//Camera angle section
+.wrapper_div_camera_angle {
+  position: absolute;
+  width: 100%;
+  height: 100px;
+  background-color: cyan;
+}
+.camera_angles_section {
+  width: 95%;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  padding-left: 4px;
+  .camera_angles {
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    .camera_heading {
+      margin: 5px;
+      display: flex;
+      justify-content: start;
+      // padding-left: 8px;
+    }
+    .camera_heading h3 {
+      font-family: $font-family;
+      font-size: 16px;
+      color: white;
+    }
+    .cameras {
+      display: flex;
+      justify-content: start;
+      align-items: center;
+      flex-wrap: wrap;
+      width: 100%;
+      // margin-left: 4px;
+      .rover_button {
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19),
+          0 6px 6px rgba(0, 0, 0, 0.23);
+        height: 30px;
+        width: 77px;
+        border: none;
+        outline: none;
+        border-radius: 3px;
+        margin: 5px;
+        cursor: pointer;
+        color: $color;
+        font-family: "Montserrat", sans-serif;
+        font-weight: 800;
+        font-size: 12px;
+        background-color: white;
+      }
+    }
+  }
+}
+//Modal Header section
+// #modalHeader {
+//     #next,
+//     #prev {
+//       fill: white;
+//       height: 32px;
+//       width: 32px;
+//     }
+//   #closeDiv {
+//     /* margin-right: 25px; *///     position: absolute;
+//     top: 10px;
+//     right: 10px;
+//     height: 52px;
+//     border-radius: 100px;
+//     border: 1px solid transparent;
+//   }
+//   #closeDiv:hover {
+//     border-color: #fff;
+//     transition: all 0.25s ease-out;
+//   }
+//   .close {
+//     fill: white;
+//     transform: scale(1.7);
+//   }
+//   #close {
+//     padding: 10px;
+//     background-color: transparent;
+//     height: 52px;
+//     width: 52px;
+//     border: 2px solid transparent;
+//   }
+// }
+// #modalHeader{
+//   position: absolute;
+//   height: 100vh;
+//   width: 100%;
+//   top: 0;
+//   display: none;
+// }
+// #modalHeader.active {
+//   background-color: blue;
+//   height: 100px;
+//   width: 100%;
+//   animation: modalImageOpenAnimation 0.3s linear;
+//   .button-container{
+//     background-color: red;
+//     .button{
+//       border: 5px solid white;
+//     }
+//   }
+// }
+#box {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  z-index: 1000;
+  display: none;
+}
+#box.active {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#box img {
+  max-width: 100%;
+  max-height: 80%;
+  animation: modalImageOpenAnimation 0.3s linear;
+}
+#modalHeader {
+  position: absolute;
+  height: 100vh;
+  width: 100%;
+  top: 0;
+  display: none;
+}
+#modalHeader.active {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  // animation: modalImageOpenAnimation 0.3s linear;
+}
+#closeDiv {
+  /* margin-right: 25px; */
+  top: 10px;
+  right: 15px;
+  height: 52px;
+  border-radius: 100px;
+  border: 1px solid transparent;
+  background-color: transparent;
+  position: absolute;
+}
+// #closeDiv:hover {
+//   border-color: #fff;
+//   transition: all 0.25s ease-out;
+// }
+#close {
+  background-color: transparent;
+  height: 42px;
+  width: 42px;
+  border: 2px solid transparent;
+  .close {
+    color: white;
+    // font-size: 32px;
+  }
+}
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  background-color: transparent;
+  width: 100%;
+}
+.button {
+  outline: none;
+  cursor: pointer;
+  border-radius: 50%;
+  border: none;
+  background-color: rgba(0, 0, 0, 0);
+  height: 45px;
+  width: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  #next,
+  #prev {
+    color: white;
+    font-size: 32px;
+    transform: scale(0.5);
+    outline: none;
+    user-select: none;
+  }
+}
+button:focus {
+  outline: 0;
+}
+// if there are no images
+.footer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.footer_heading {
+  h3 {
+    color: white;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+    font-size: 12px;
+  }
+}
+.footer_logo a img {
+  height: 40px;
+}
+.notFound {
+  height: 80px;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  h1 {
+    color: white;
+    font-family: $font-family;
+    font-size: 14px;
+  }
+}
+// OLD CSS CODE
+[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.dateBox {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 1080px;
+  background: linear-gradient(45deg, orange, red);
+  z-index: 1;
+  position: absolute;
+}
+.imageContainer {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-grow: 1;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  
+}
+.card {
+  margin: auto;
+  overflow: hidden;
+}
+.cardImage {
+  transition: all 0.2s ease-in-out;
+  margin: 10px auto;
+  height: 240px;
+  width: 360px;
+  border-radius: 8px;
+  cursor: pointer;
+  justify-content: center;
+}
+// .cardImage:hover {
+//   transform: scale(1.03);
+// }
+@keyframes modalImageOpenAnimation {
+  0% {
+    transform: scale(0.8);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes modalImageCloseAnimation {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0.8);
+  }
+}
+.lrb.active {
+  fill: black;
+}
+.lrb.inactive {
+  fill: white;
+}
+.btn {
+  margin-top: 8px;
+  margin-left: 10px;
+  margin-right: 10px;
+  border: none;
+  background: none;
+  position: relative;
+  display: inline-block;
+  color: #fff;
+  text-transform: uppercase;
+  font-size: 18px;
+  letter-spacing: 2px;
+  border-radius: 5px;
+  overflow: hidden;
+}
+.btn:focus {
+  outline: 0;
+}
+.btn:hover {
+  background: linear-gradient(90deg, #0162c8, #55e8fc);
+  cursor: pointer;
+}
+@keyframes animate {
+  0% {
+    width: 0px;
+    height: 0px;
+    opacity: 0.1;
+  }
+  100% {
+    width: 500px;
+    height: 500px;
+    opacity: 0;
+  }
+}
+#Top {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+}
+#mybtn {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 30px;
+  z-index: 99;
+  font-size: 18px;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  color: white;
+  cursor: pointer;
+  padding: 15px;
+  height: 50px;
+  width: 50px;
+  border-radius: 100px;
+  background-color: rgb(255, 0, 0);
+  opacity: 0.8;
+  box-shadow: 1px 1px 5px black;
+}
+#mybtn:hover {
+  background-color: white;
+  color: black;
+  transition: 0.5s;
+  opacity: 1;
+}
+#mybtn i {
+  filter: drop-shadow(2px 3px 2px rgb(26, 26, 26));
+}
+// OLD CSS CODE
+#loading_bar {
+  display: none;
+}
+.loading_bar {
+  display: inline;
+}
+
+//media query codes
+@media all and (min-width: 768px) {
+  .main_body {
+    height: 568px;
+    .heading {
+      .title {
+        p {
+          color: $color;
+          font-size: 3.3rem;
+        }
+      }
+      .subtitle p {
+        font-size: clamp(1rem,3vw,1.3rem);
+      }
+    }
+  }
+
+  //intro button
+  .explore_btn:hover {
+    transform: translateY(10%);
+    transition: all 0.5s ease-out;
+  }
+  //Desktop roverinfo section
+  .roverinfo {
+    display: none;
+  }
+  #rover_section {
+    #rovers_intro_heading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100px;
+      color: white;
+      font-family: "Montserrat", sans-serif;
+      font-weight: 600;
+      font-size: 30px;
+    }
+    #curiosity_intro,
+    #opportunity_intro,
+    #spirit_intro {
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+    #opportunity_intro {
+      flex-direction: row-reverse;
+    }
+    #choose_rover_section {
+      padding-top: 160px;
+      background-color: transparent;
+      width: 100%;
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+    }
+    .mars_rovers_header {
+      color: white;
+      font-size: 1rem;
+      padding: 16px;
+      font-family: $font-family;
+      font-weight: 350;
+      width: 580px;
+      h2 {
+        color: white;
+        font-size: 2rem;
+      }
+    }
+    .rover {
+      display: flex;
+      flex-direction: column;
+      width: 300px;
+      margin: 25px;
+    }
+    .rover img {
+      height: 400px;
+      border-radius: 2px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+    }
+  }
+  //Desktop roverinfo section
+  .Navigation {
+    .logo {
+      .menu {
+        display: none;
+      }
+      .cosmo_logo {
+        display: block;
+        padding: 10px;
+      }
+    }
+  }
+  .ham_menu a {
+    display: none;
+  }
+  .Navigation {
+    .cosmo_logo {
+      display: inline;
+    }
+  }
+  .page_links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .page_links span {
+    margin: 5px;
+    height: 40px;
+    display: flex;
+    border-radius: 4px;
+  }
+  .page_links a {
+    text-decoration: none;
+    display: inline;
+    padding: 8px;
+    color: white;
+    font-family: $font-family;
+    font-size: 19px;
+  }
+  //rover info image
+  .choose_rover_section {
+    display: flex;
+    flex-direction: column;
+    .chooseRover {
+      display: flex;
+      justify-content: space-around;
+      color: rgb(255, 255, 255);
+      font-family: $font-family;
+      font-size: 0.8rem;
+    }
+    .select_rover_container {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      .select_rover {
+        background-color: white;
+      }
+      .select_rover {
+        margin: 8px;
+        color: white;
+        border-radius: 6px;
+        .rover_img {
+          height: 205px;
+          width: 220px;
+          img {
+            border-radius: 5px 5px 0 0;
+          }
+        }
+        .rover_name {
+          height: 45px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          a {
+            text-decoration: none;
+            color: $color;
+            font-family: $font-family;
+            font-size: 0.9rem;
+            font-weight: 700;
+          }
+        }
+      }
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+  // choose Date select boxex
+  .choose_date_page {
+    .choose_date_box {
+      padding-top: 10px;
+      // padding-left: 42px;
+      justify-content: center;
+      height: 100px;
+      .choose_date_selector {
+        width: 216px;
+        display: flex;
+        justify-content: space-between;
+      }
+      #search_btn {
+        margin-left: 10px;
+      }
+    }
+  }
+  .camera_angles_section {
+    padding-left: 38px;
+    .camera_angles {
+      .camera_heading {
+        margin: 5px;
+      }
+    }
+  }
+}
+@media all and (max-width: 768px) {
+  .main_body {
+    .heading {
+      .title p {
+        font-family: $font-family;
+        font-size: 2.5rem;
+      }
+      .subtitle {
+        display: none;
+      }
+    }
+  }
+  .roverinfo {
+    display: flex;
+  }
+  #rover_section {
+    display: none;
+  }
+}
+@media all and (min-width: 1200px) {
+  .mars_rovers_header {
+    color: white;
+    font-size: 1rem;
+    padding: 16px;
+    font-family: $font-family;
+    font-weight: 350;
+    width: 580px;
+    h2 {
+      color: white;
+      font-size: 2rem;
+    }
+    p {
+      font-size: 1.3rem;
+    }
+  }
+  // choose rover section for laptops
+  .choose_rover_section {
+    display: flex;
+    flex-direction: column;
+    .chooseRover {
+      display: flex;
+      justify-content: space-around;
+      color: rgb(255, 255, 255);
+      font-family: $font-family;
+      font-size: 18px;
+      height: 140px;
+    }
+    .select_rover_container {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      .select_rover {
+        background-color: white;
+      }
+      .select_rover {
+        margin: 8px;
+        color: white;
+        border-radius: 6px;
+        .rover_img {
+          height: 405px;
+          width: 320px;
+          img {
+            border-radius: 5px 5px 0 0;
+          }
+        }
+        .rover_name {
+          height: 75px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          a {
+            text-decoration: none;
+            color: $color;
+            font-family: $font-family;
+            font-size: 1.4rem;
+            font-weight: 700;
+          }
+        }
+      }
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+}
+@media all and (min-width: 1900px) {
+  .main_body {
+    height: 1000px;
+  }
+
+  // intro button
+  .explore_btn:hover {
+    transform: translateY(10%);
+    transition: all 0.5s ease-out;
+  }
+
+  .mars_rovers_header {
+    color: white;
+    font-size: 1rem;
+    padding: 16px;
+    font-family: $font-family;
+    font-weight: 350;
+    width: 580px;
+    h2 {
+      color: white;
+      font-size: 2rem;
+    }
+    p {
+      font-size: 1.3rem;
+    }
+  }
+}
+// media query for specially galaxy fold
+@media all and (max-width: 280px) {
+  .choose_rover_section {
+    .select_rover_container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .select_rover {
+        transform: scale(0.8);
+        width: 80px;
+        .rover_img {
+          height: 90px;
+          width: 80px;
+        }
+        .rover_name {
+          a {
+            font-size: 8px;
+          }
+        }
+      }
+    }
+  }
+  .choose_date_box {
+    display: flex;
+    flex-direction: row;
+    // justify-content: space-around;
+    // padding: 8px;
+    padding-top: 10px;
+    // padding-left: 8px;
+    justify-content: center;
+    height: 100px;
+    #day,
+    #month,
+    #year {
+      border: none;
+      border-radius: 3px;
+      width: 66px;
+      height: 30px;
+      outline: none;
+      overflow-y: 100px;
+      background-color: #fff;
+      color: $color;
+      font-family: $font-family;
+      font-weight: 700;
+    }
+    button {
+      height: 30px;
+      border: none;
+      outline: none;
+      border-radius: 3px;
+      font-family: $font-family;
+      color: $color;
+      background-color: #fff;
+      font-weight: 700;
+      font-size: 12px;
+    }
+    .rover_card1 {
+      background-color: #fff;
+      // margin: 15px;
+      border-radius: 7px;
+      width: 95%;
+      display: flex;
+      flex-direction: column;
+      .img {
+        border-radius: 5px 5px 0px 0px;
+        height: 200px;
+        width: 100%;
+        overflow: hidden;
+        img {
+          width: 100%;
+        }
+      }
+      .info {
+        display: flex;
+        flex-direction: column;
+        height: 280px;
+        font-family: $font-family;
+      }
+      .info span {
+        opacity: 0.7;
+      }
+    }
+  }
+}

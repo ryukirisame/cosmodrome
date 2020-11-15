@@ -4,38 +4,34 @@
 <head>
   <meta charset="UTF-8" />
 
-  <meta name="keywords"
-    content="NASA, image library, video library, nasa image library, nasa video libray, nasa image and video library, nasa image & video library" />
-
-  <meta name="description" content="Explore Image and Videos from NASA." />
-
-  <meta name="author" content="Siddharth Kumar" />
-
   <!-- viewport -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- browser theming -->
   <meta name="theme-color" content="#0D47A1" />
 
-  <!-- favicon -->
-  <link rel="apple-touch-icon" sizes="180x180" href="./assets/apple-touch-icon.png" />
-  <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32x32.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="./assets/favicon-16x16.png" />
-  <link rel="manifest" href="./assets/site.webmanifest" />
-
   <!-- css file -->
   <link rel="stylesheet" type="text/css" href="ivlstyles.css" />
 
   <!-- fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather&family=Nanum+Gothic&display=swap" rel="stylesheet">
   <link
     href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:wght@300;400;600;700;800&display=swap"
     rel="stylesheet" />
-
+  <link
+    href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,700&family=Nunito:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,400&display=swap"
+    rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@1,300;1,400&display=swap" rel="stylesheet" />
   <!-- Icons -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="desktopstyle.css">
 
-  <title>NASA Image &amp; Video Library | Cosmodrome</title>
+  <link rel="icon" href="fav.ico">
+  <title>DSCOVR: EPIC</title>
+
+  <!--Favicon-->
+
 </head>
 
 <body>
@@ -52,25 +48,25 @@
       <div class="sidebar-menu-modal" onclick="hideSideBar(event);">
         <div class="sidebar-menu">
           <!-- links section -->
-          <nav class="links-section">
+          <div class="links-section">
             <a href="../index.html">
               <div class="links" id="home">home</div>
             </a>
-            <a href="../epic/index.html">
-              <div class="links" id="epic">epic</div>
+            <a href="./index.html">
+              <div class="links" id="ivl">epic</div>
             </a>
             <a href="../MarsRover/index.html">
               <div class="links" id="explore mars">explore mars</div>
             </a>
-            <a href="./index.html">
-              <div class="links" id="ivl">image &amp; videos</div>
+            <a href="../ivl/index.html">
+              <div class="links" id="epic">image &amp; videos</div>
             </a>
-          </nav>
+          </div>
           <!-- footer section -->
           <div class="sidebar-footer-section">
             <div class="footer-contents">
               <div class="social-links">
-                <a href="https://github.com/ryukirisame/cosmodrome">
+                <a href="../ivl/index.html">
                   <svg width="24.51" height="24" viewBox="0 0 24.51 24">
                     <g id="github" transform="translate(0 -5.329)">
                       <g id="Group_26" data-name="Group 26" transform="translate(0 5.329)">
@@ -117,145 +113,150 @@
         </a>
       </div>
 
-      <!-- nav bar search box desktop -->
-      <div class="nav-bar-search-section-desktop">
-        <div class="nav-search-box-container desktop">
-          <input type="text" id="nav-search-box-desktop" placeholder="Search" />
-          <span id="nav-start-search-icon-button-desktop"
-            class="material-icons md-24 nav-start-search-icon-button splash-effect" onclick="startSearch(event);">search
-          </span>
-        </div>
 
-        <!--nav search bar toggle media type -->
-        <div class="toggle-media-type-container splash-effect" onclick="toggleNavBarMediaType()">
-          <!-- image search -->
-
-          <span id="toggle-image-icon-desktop" class="material-icons md-24 media-icon">
-            image_search
-          </span>
-
-          <!-- video search -->
-
-          <svg id="toggle-video-icon-desktop" class="media-icon inactive-media-type" width="24" height="24"
-            viewBox="0 0 24 24">
-            <path id="Path_52" data-name="Path 52" d="M0,0H24V24H0Z" fill="none" />
-            <path id="Path_53" data-name="Path 53"
-              d="M21,3H3A1.993,1.993,0,0,0,1,5V17a2,2,0,0,0,2,2H21a2,2,0,0,0,1.99-2L23,5A2,2,0,0,0,21,3Zm0,14H3V5H21Zm-5-6L9,15V7Z"
-              transform="translate(0 1)" />
-          </svg>
-        </div>
-      </div>
     </div>
 
     <div class="nav-bar-right-side">
       <!-- links section (landscape tablet and desktop) -->
-      <nav class="links-section">
+      <div class="links-section">
         <a href="../index.html">
           <div class="links" id="home-desktop">home</div>
         </a>
-        <a href="../epic/index.html">
-          <div class="links" id="epic-desktop">epic</div>
+        <a href="./index.html">
+          <div class="links" id="ivl-nav-bar-desktop">epic</div>
         </a>
         <a href="../MarsRover/index.html">
           <div class="links" id="explore mars-desktop">explore mars</div>
         </a>
-        <a href="./index.html">
-          <div class="links" id="ivl-nav-bar-desktop">
+        <a href="../ivl/index.html">
+          <div class="links" id="epic-desktop">
             image &amp; videos
           </div>
         </a>
-      </nav>
-
-      <!-- search icon (mobile & portrait tablet) -->
-      <div class="search-icon-container" onclick="openNavSearchBar();">
-        <span class="material-icons md-24 search-icon">search </span>
       </div>
+
+
     </div>
-
-    <!-- NAV SEARCH BAR -->
-    <div class="nav-search-bar">
-      <!-- close button -->
-      <div class="close-nav-search-bar-container" onclick="closeNavSearchBar()">
-        <span class="material-icons md-24 close-nav-search-bar-icon">
-          close
-        </span>
-      </div>
-
-      <!-- search section -->
-      <div class="nav-search-section">
-        <div class="nav-search-box-container">
-          <input type="text" id="nav-search-box" placeholder="Search" />
-          <span id="nav-start-search-icon-button"
-            class="material-icons md-24 nav-start-search-icon-button splash-effect" onclick="startSearch(event);">search
-          </span>
-        </div>
-        <!--nav search bar toggle media type -->
-        <div class="toggle-media-type-container splash-effect" onclick="toggleNavBarMediaType()">
-          <!-- image search -->
-
-          <span id="toggle-image-icon" class="material-icons md-24 media-icon">
-            image_search
-          </span>
-
-          <!-- video search -->
-
-          <svg id="toggle-video-icon" class="media-icon inactive-media-type" width="24" height="24" viewBox="0 0 24 24">
-            <path id="Path_52" data-name="Path 52" d="M0,0H24V24H0Z" fill="none" />
-            <path id="Path_53" data-name="Path 53"
-              d="M21,3H3A1.993,1.993,0,0,0,1,5V17a2,2,0,0,0,2,2H21a2,2,0,0,0,1.99-2L23,5A2,2,0,0,0,21,3Zm0,14H3V5H21Zm-5-6L9,15V7Z"
-              transform="translate(0 1)" />
-          </svg>
-        </div>
-      </div>
-    </div>
-    <!-- NAV SEARCH BAR ENDS -->
+  </div>
   </div>
   <!-- NAV BAR ENDS -->
 
   <!-- HOME PAGE MODAL -->
   <div class="home-page-modal">
     <!-- Page Description Section -->
+
     <div class="page-description-container">
       <div class="page-description-text">
         <p>
-          nasa image and <br />
-          video library
+          dscovr: epic
+        <p class="title2">earth polychromatic imaging camera</p>
         </p>
-        <p>Explore Image and Videos from NASA.</p>
+        <p>Images of Earth taken by DSCOVR.</p>
       </div>
     </div>
     <!-- PAGE DESCRIPTION SECTION ENDS -->
 
-    <!-- HOME PAGE SEARCH SECTION -->
 
-    <div class="home-page-search-section">
-      <!-- Search Box -->
-      <div class="home-page-search-box-container">
-        <input tye="text" id="home-page-search-box" placeholder="Search" autocomplete="off" />
-        <div class="home-page-search-box-search-icon-container splash-effect">
-          <span class="material-icons" id="searchBtn" onclick="console.clear();startSearch(event);">
-            search
-          </span>
+
+    <div class="image-container">
+
+      <div class="image-box">
+
+        <!--DATE INPUT CONTAINER-->
+        <div class="date-box">
+          <i class="material-icons date-icon md-28">date_range</i>
+          <input id="date" class="date" type="date" onchange="getPic();" value="">
+
+        </div>
+        <!--DATE INPUT CONAINER END-->
+
+        <!--IMAGE SECTION  -->
+        <div class="image-body">
+
+          <img id="pic" class="image" src="" alt="">
+          <img src="" id="hidden-image" alt="" style="display: none;">
+        </div>
+        <!--IMAGE SECTION END-->
+
+        <!--NEXT AND PREVIOUS BUTTON CONTAINER-->
+        <div class="button-container" id="btn">
+          <!--PREVIOUS BUTTON-->
+          <div class="btn-left">
+            <button onclick="prev();" class="button splash-effect button-background-color-splash" id="prev_button"> <svg
+                id="prev" viewBox="1.734 6.746 41.703 64.585">
+                <path id="prevIcon"
+                  d="M 3.154016494750977 35.60912704467773 L 30.59421348571777 8.16893196105957 C 32.49081420898438 6.272332191467285 35.55765914916992 6.272332191467285 37.43408584594727 8.16893196105957 L 41.99399948120117 12.72884750366211 C 43.89060974121094 14.62544918060303 43.89060974121094 17.69229698181152 41.99399948120117 19.56871795654297 L 22.56391906738281 39.03915023803711 L 42.0141716003418 58.48940658569336 C 43.91078186035156 60.38601684570312 43.91078186035156 63.45285797119141 42.0141716003418 65.32929229736328 L 37.45426559448242 69.90937042236328 C 35.55765914916992 71.80597686767578 32.49081420898438 71.80597686767578 30.61438941955566 69.90937042236328 L 3.174195051193237 42.46917724609375 C 1.257416486740112 40.57257080078125 1.257416486740112 37.50572967529297 3.15401816368103 35.60912704467773 Z">
+                </path>
+              </svg> </button>
+          </div>
+          <!--NEXT BUTTON-->
+          <div class="btn-right" id="btn_rg">
+            <button onclick="next();" class="button splash-effect button-background-color-splash" id="next_button">
+              <svg id="next" class="lrb" viewBox="1.74 6.746 41.7 64.59">
+                <path id="nextIcon"
+                  d="M 42.01969146728516 42.47175598144531 L 14.56789398193359 69.91393280029297 C 12.67049217224121 71.8106689453125 9.602348327636719 71.8106689453125 7.7251296043396 69.91393280029297 L 3.163286924362183 65.35369110107422 C 1.265883207321167 63.45695495605469 1.265883207321167 60.3898811340332 3.163286924362183 58.51332092285156 L 22.62176704406738 39.0616569519043 L 3.163286924362183 19.61000442504883 C 1.265883207321167 17.71326446533203 1.265883207321167 14.64619541168213 3.163286924362183 12.76963710784912 L 7.704946041107178 8.169036865234375 C 9.602350234985352 6.272300720214844 12.67049217224121 6.272300720214844 14.5477123260498 8.169036865234375 L 41.99950790405273 35.61120986938477 C 43.91709899902344 37.50795745849609 43.91709899902344 40.57501602172852 42.01969528198242 42.47175598144531 Z">
+                </path>
+              </svg>
+            </button>
+          </div>
+
         </div>
 
-        <!-- <button id="searchBtn" onclick="console.clear();startSearch();">
-              Search
-            </button> -->
-      </div>
+        <!--NEXT AND BUTTON CONTAINER ENDS-->
 
-      <!-- media type radio buttons -->
-      <div class="media-type-radio-buttons-container">
-        <div class="media-type-radio-buttons-container-for-border">
-          <input type="radio" name="media-type-1" id="image-radio-button-1" class="image-radio-button" value="image"
-            checked onchange="toggleNavBarMediaType()" />
-          <label for="image-radio-button-1" class="radio-button-label">Image</label>
-          <input type="radio" name="media-type-1" id="video-radio-button-1" class="video-radio-button" value="video"
-            onchange="toggleNavBarMediaType()" />
-          <label for="video-radio-button-1" class="radio-button-label">Video</label>
-        </div>
+
+
       </div>
     </div>
-    <!-- HOME PAGE SEARCH SECTION ENDS -->
+
+
+    <!--Image details container-->
+    <div class="container">
+      <h3>Image Details</h3>
+
+      <div>Date</div>
+      <div>
+        <p id="txtdt"></p>
+      </div>
+      <div>Latitude</div>
+      <div>
+        <p id="txtlat"></p>
+      </div>
+      <div>Longitude</div>
+      <div>
+        <p id="txtlon"></p>
+      </div>
+      <div>Distance to Sun</div>
+      <div>
+        <p id="txtdts"></p>
+      </div>
+      <div>Distance to Moon</div>
+      <div>
+        <p id="txtdtm"></p>
+      </div>
+
+    </div>
+    <!--DSCOVR DETAILS CONTAINER-->
+    <div class="dscovr-details">
+      <div class="dscovr-image">
+        <img src="dscovr.png" alt="DSCOVR" class="dscovr-jpg">
+      </div>
+      <div class="dscovr-info">
+        <h2>DSCOVR (DEEP SPACE CLIMATE OVSERVATORY)</h2>
+        <Em class="launch-date">Launch date February 11, 2015, 23:03:02 UTC</Em>
+        <em class="entered-date">Entered service June 2015</em>
+        <br>
+        <p>
+          The EPIC API provides information on the daily imagery collected by DSCOVR's Earth Polychromatic Imaging
+          Camera (EPIC) instrument. Uniquely positioned at the Earth-Sun
+          Lagrange point, EPIC provides full disc imagery of the Earth and captures unique perspectives of certain
+          astronomical events such as lunar transits using a 2048x2048
+          pixel CCD (Charge Coupled Device) detector coupled to a 30-cm aperture Cassegrain telescope.
+          <a href="https://en.wikipedia.org/wiki/Deep_Space_Climate_Observatory" class="read-more">Read more.</a>
+        </p>
+      </div>
+    </div>
+    <!--DSCOVR DETAILS CONTAIER END-->
 
     <!-- HOME PAGE FOOTER SECTION -->
     <div class="home-page-footer-section">
@@ -275,7 +276,7 @@
         </div>
 
         <div class="project-info-footer">
-          <p>The Cosmodrome Project 1.0</p>
+          <p>The Cosmodrome Project v1.0</p>
         </div>
       </div>
     </div>
@@ -283,181 +284,9 @@
     <!-- HOME PAGE FOOTER SECTION ENDS -->
   </div>
   <!-- HOME PAGE MODAL ENDS -->
-
-  <!-- Main body section (search results section) -->
-  <!-- loading animation -->
-  <div class="loading-animation-container hide">
-    <div class="bowlG">
-      <div class="bowl_ringG">
-        <div class="ball_holderG">
-          <div class="ballG"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- contains result -->
-  <div class="results-container">
-    <div class="change-media-container">
-      <div class="media-type-radio-buttons-container">
-        <div class="media-type-radio-buttons-container-for-border">
-          <input type="radio" id="image-radio-button-2" class="image-radio-button" name="media-type-2" value="image"
-            onchange="handleRadioButtonChange()" />
-          <label for="image-radio-button-2" class="radio-button-label">Image</label>
-          <input type="radio" id="video-radio-button-2" class="video-radio-button" name="media-type-2" value="video"
-            onchange="handleRadioButtonChange()" />
-          <label for="video-radio-button-2" class="radio-button-label">Video</label>
-        </div>
-      </div>
-    </div>
-
-    <div class="cards-container" id="cards-container"></div>
-
-    <div class="loading-animation-container page-loading-animation">
-      <div class="bowlG">
-        <div class="bowl_ringG">
-          <div class="ball_holderG">
-            <div class="ballG"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="page-loading-error-message-section">
-      <div class="page-loading-error-message">Error loading page</div>
-      <button id="retryLoadingPageButton" class="retry-loading-page-button" onclick="retryLoadingPage()">
-        Retry
-      </button>
-    </div>
-  </div>
-
-  <!-- result section ends -->
-  <!-- Main body section (in which the result section is) ends -->
-
-  <!-- content modal start-->
-  <div class="content-modal-container">
-    <!-- background blur effect -->
-
-    <img src="" class="background-blur" />
-
-    <div id="contentModal" class="content-modal">
-      <!--  media loading animation -->
-      <div class="loading-animation-container card-click hide">
-        <div class="bowlG">
-          <div class="bowl_ringG">
-            <div class="ball_holderG">
-              <div class="ballG"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- -------------------------------- -->
-
-      <p class="message" id="messageInsideModal"></p>
-
-      <!-- ------------------ -->
-
-      <div class="content-modal-grid">
-        <!-- close button -->
-        <div class="back-button-container">
-          <span class="material-icons md-24" onclick="handleBackButtonClick()">
-            close
-          </span>
-        </div>
-
-        <!-- quality selector -->
-        <div class="select-quality-container">
-          <select id="quality-selector" class="select-quality"
-            onchange="changeMediaQuality(document.getElementById('quality-selector').value);"></select>
-        </div>
-
-        <!-- full screen icon -->
-        <div class="full-screen-icon-container">
-          <span class="material-icons md-24 full-screen-icon" onclick="openFullScreen();">
-            open_in_full
-          </span>
-        </div>
-
-        <!-- back arrow button -->
-        <div class="prev-item-icon change-item-icon-button" id="prev-item-button">
-          <span class="material-icons md-36" onclick="prevData();">
-            arrow_back_ios
-          </span>
-        </div>
-
-        <!-- Content Section -->
-        <div class="content-section">
-          <!--  media loading animation -->
-          <div class="loading-animation-container hide media-loading-animation">
-            <div class="bowlG">
-              <div class="bowl_ringG">
-                <div class="ball_holderG">
-                  <div class="ballG"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Arrow buttons -->
-          <div class="arrow-button-container hide">
-            <!-- Prev Button -->
-
-            <span class="material-icons arrow-button md-24" id="prev-arrow-button" onclick="prevData()">
-              arrow_back_ios
-            </span>
-
-            <!-- next button -->
-            <!-- we have used the back button and rotated it 180 deg to maintain icon experience -->
-            <!-- google icons are messed up. the next button is wider than the prev button -->
-            <span class="material-icons arrow-button md-24" id="next-arrow-button" onclick="nextData()">
-              arrow_back_ios
-            </span>
-          </div>
-
-          <!-- content (pic/video) -->
-          <div id="media-container" class="media-container">
-            <img id="pic" ontouchmove="handleSwipe(event);" ontouchstart="setInitialPosition(event);" />
-          </div>
-
-          <!-- message -->
-        </div>
-        <!-- Content Section End -->
-
-        <!-- next icon-->
-        <!-- we have used back arrow. we will rotate it. -->
-        <div class="next-item-icon change-item-icon-button" id="next-item-button">
-          <span class="material-icons md-36" onclick="nextData();">
-            arrow_forward_ios
-          </span>
-        </div>
-
-        <!-- Know More Data -->
-        <div class="know-more-data-container">
-          <!-- <div id="cosmic-object-num" class="modal-text"></div> -->
-          <!-- <div id="resolution" class="modal-text"></div> -->
-
-          <!-- dummy divs to fill the grid. DONT DELETE THEM! -->
-          <div></div>
-          <div class="description-card">
-            <div id="title" class="modal-text"></div>
-            <div id="date" class="modal-text"></div>
-            <div id="description" class="modal-text"></div>
-          </div>
-          <div></div>
-        </div>
-      </div>
-
-      <!-- </div> -->
-    </div>
-    <!-- content modal end -->
-  </div>
-
-  <!-- displays message -->
-
-  <span class="message" id="message"></span>
-
   <!-- script -->
   <script src="javascript.js"></script>
+  <script src="script.js"></script>
 </body>
 
 </html>
